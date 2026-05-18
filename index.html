@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> CVC Camp</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Sarabun', sans-serif; background-color: #f0f9ff; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="p-4 md:p-8 flex justify-center items-center min-h-screen">
+
+    <div class="bg-white p-6 md:p-10 rounded-2xl shadow-xl w-full max-w-lg border-t-8 border-blue-600">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">ฟอร์มลงทะเบียนค่าย</h2>
+        <p class="text-center text-sm text-blue-600 font-semibold mb-6" id="profileName">กำลังเชื่อมต่อระบบ LINE...</p>
+
+        <form id="regForm" class="space-y-4">
+            
+            <div>
+                <label class="block text-sm font-semibold text-gray-700">ภาคพันธกิจ / สังกัดหลัก <span class="text-red-500">*</span></label>
+                <select id="region" class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white" required>
+                    <option value="">-- กำลังโหลดข้อมูล... --</option>
+                </select>
+            </div>
+
+            <div id="churchDiv" class="hidden">
+                <label class="block text-sm font-semibold text-gray-700">คริสตจักร / หน่วย (แขวง) <span class="text-red-500">*</span></label>
+                <select id="church" class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white"></select>
+            </div>
+
+            <div id="otherChurchDiv" class="hidden">
+                <label class="block text-sm font-semibold text-gray-700">โปรดระบุชื่อคริสตจักร <span class="text-red-500">*</span></label>
+                <input type="text" id="churchOther" class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400" placeholder="พิมพ์ชื่อคริสตจักรของท่าน">
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700">ผู้กรอกข้อมูล (ชื่อ-นามสกุล) <span class="text-red-500">*</span></label>
+                <input type="text" id="submitterName" class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500" required>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700">เบอร์โทรศัพท์ผู้กรอก <span class="text-red-500">*</span></label>
+                <input type="tel" id="submitterPhone" class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500" required>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700">จำนวนผู้สมัคร <span class="text-red-500">*</span></label>
+                    <select id="totalMembers" class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg bg-white" required>
+                        <option value="">-- เลือก --</option>
+                        <option value="1">1 คน</option>
+                        <option value="2">2 คน</option>
+                        <option value="3">3 คน</option>
+                        <option value="4">4 คน</option>
+                        <option value="5">5 คน</option>
+                        <option value="6">6 คน</option>
+                        <option value="7">7 คน</option>
+                        <option value="8">8 คน</option>
+                        <option value="9">9 คน</option>
+                        <option value="10">10 คน</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700">ยอดเงินรวม (บาท) <span class="text-red-500">*</span></label>
+                    <input type="number" id="totalAmount" class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg bg-gray-100 text-blue-700 font-bold" readonly required>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700">ระบุชื่อผู้เข้าค่ายเพื่อตรวจสอบง่ายๆ <span class="text-red-500">*</span></label>
+                <textarea id="memberNames" rows="3" class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500" placeholder="เช่น 1. ส้มหวาน (สถาบัน)&#10;2. น้องเอบี" required></textarea>
+            </div>
+
+            <button type="submit" id="btnSubmit" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-lg hover:bg-blue-700 transition mt-6 disabled:bg-gray-400 shadow-md">
+                บันทึกการลงทะเบียน
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // ==========================================
+        // 🚨 แก้ไข 2 บรรทัดนี้ให้เป็นข้อมูลของคุณเพลง 🚨
+        // ==========================================
+        const MY_LIFF_ID = "2010100436-6Fs5ge58"; 
+        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwVa25uq8LCTvpgfIAWEdHkFuVucwbiPcTA0HIyGg1NyC4c1o3Y3HdA5ly8F8ayBZUibA/exec"; 
+        const PRICE_PER_PERSON = 350; // <-- แก้ไขราคาค่าค่ายต่อคนตรงนี้ได้เลยครับ
+        // ==========================================
+
+        let liffUid = "";
+        let churchData = {}; // เก็บข้อมูลที่ดึงมาจาก Sheet
+
+        // 1. เริ่มต้น LIFF
+        async function main() {
+            try {
+                await liff.init({ liffId: MY_LIFF_ID });
+                if (liff.isLoggedIn()) {
+                    const profile = await liff.getProfile();
+                    liffUid = profile.userId;
+                    document.getElementById("profileName").innerText = "สวัสดีคุณ " + profile.displayName;
+                    
+                    // เรียกฟังก์ชันโหลด Dropdown หลังจากล๊อกอินเสร็จ
+                    fetchDropdownData();
+                } else {
+                    liff.login();
+                }
+            } catch (err) {
+                console.error("LIFF Init Error: ", err);
+                document.getElementById("profileName").innerText = "ไม่สามารถเชื่อมต่อ LINE ได้";
+                document.getElementById("profileName").classList.replace("text-blue-600", "text-red-500");
+            }
+        }
+        main();
+
+        // 2. ดึงข้อมูล ภาค และ คริสตจักร จาก GAS
+        async function fetchDropdownData() {
+            try {
+                const res = await fetch(GAS_WEB_APP_URL);
+                churchData = await res.json();
+                
+                const regionSelect = document.getElementById("region");
+                regionSelect.innerHTML = '<option value="">-- เลือกภาคพันธกิจ/สังกัด --</option>';
+                
+                for (const region in churchData) {
+                    let opt = document.createElement("option");
+                    opt.value = region;
+                    opt.textContent = region;
+                    regionSelect.appendChild(opt);
+                }
+            } catch (error) {
+                console.error("Fetch Data Error:", error);
+                document.getElementById("region").innerHTML = '<option value="">เกิดข้อผิดพลาดในการโหลดข้อมูล</option>';
+            }
+        }
+
+        // 3. Logic เมื่อเปลี่ยนภาคพันธกิจ ให้โชว์คริสตจักรที่ตรงกัน
+        document.getElementById("region").addEventListener("change", function() {
+            const region = this.value;
+            const churchDiv = document.getElementById("churchDiv");
+            const churchSelect = document.getElementById("church");
+            const otherChurchDiv = document.getElementById("otherChurchDiv");
+            
+            // รีเซ็ตค่า
+            churchSelect.innerHTML = '<option value="">-- เลือกคริสตจักร/หน่วย --</option>';
+            otherChurchDiv.classList.add("hidden");
+            document.getElementById("churchOther").value = "";
+
+            if (region && churchData[region]) {
+                churchDiv.classList.remove("hidden");
+                churchSelect.required = true;
+                churchData[region].forEach(church => {
+                    let opt = document.createElement("option");
+                    opt.value = church;
+                    opt.textContent = church;
+                    churchSelect.appendChild(opt);
+                });
+            } else {
+                churchDiv.classList.add("hidden");
+                churchSelect.required = false;
+            }
+        });
+
+        // 4. Logic เมื่อเลือก "อื่นๆ" ให้โชว์ช่องพิมพ์ชื่อ
+        document.getElementById("church").addEventListener("change", function() {
+            const otherChurchDiv = document.getElementById("otherChurchDiv");
+            const churchOtherInput = document.getElementById("churchOther");
+            
+            if (this.value && this.value.includes("อื่นๆ")) {
+                otherChurchDiv.classList.remove("hidden");
+                churchOtherInput.required = true;
+            } else {
+                otherChurchDiv.classList.add("hidden");
+                churchOtherInput.required = false;
+                churchOtherInput.value = "";
+            }
+        });
+
+        // 5. คำนวณยอดเงินอัตโนมัติ
+        document.getElementById("totalMembers").addEventListener("change", function() {
+            const amount = this.value ? parseInt(this.value) * PRICE_PER_PERSON : 0;
+            document.getElementById("totalAmount").value = amount;
+        });
+
+        // 6. กดปุ่มยืนยันเพื่อส่งข้อมูลไป GAS
+        document.getElementById("regForm").addEventListener("submit", async function(e) {
+            e.preventDefault(); // ป้องกันการรีเฟรชหน้าเว็บ
+            
+            const btn = document.getElementById("btnSubmit");
+            btn.disabled = true;
+            btn.innerText = "⏳ กำลังบันทึกข้อมูล...";
+
+            // จัดเตรียมข้อมูลเป็นก้อน (JSON)
+            const payload = {
+                uid: liffUid,
+                region: document.getElementById("region").value,
+                church: document.getElementById("church").value,
+                unit: (document.getElementById("region").value === "คริสตจักรแห่งนิมิตพิษณุโลก") ? document.getElementById("church").value : "",
+                churchOther: document.getElementById("churchOther").value,
+                submitterName: document.getElementById("submitterName").value,
+                submitterPhone: document.getElementById("submitterPhone").value,
+                totalMembers: document.getElementById("totalMembers").value,
+                totalAmount: document.getElementById("totalAmount").value,
+                memberNames: document.getElementById("memberNames").value
+            };
+
+            try {
+                // ยิงข้อมูลไปที่ GAS doPost()
+                const response = await fetch(GAS_WEB_APP_URL, {
+                    method: "POST",
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+
+                if (result.result === "success") {
+                    // ใช้ SweetAlert โชว์ป๊อปอัปสวยๆ แจ้งว่าสำเร็จ
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'ลงทะเบียนสำเร็จ!',
+                        text: 'รหัสอ้างอิงของคุณคือ: ' + result.regId,
+                        confirmButtonColor: '#2563eb',
+                        confirmButtonText: 'รับทราบ (ปิดหน้าต่าง)',
+                        allowOutsideClick: false
+                    }).then(() => {
+                        liff.closeWindow(); // สั่งปิด LIFF เด้งกลับไปหน้าแชท LINE
+                    });
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'ไม่สามารถบันทึกข้อมูลได้ กรุณาลองใหม่อีกครั้ง'
+                });
+                btn.disabled = false;
+                btn.innerText = "บันทึกการลงทะเบียน";
+            }
+        });
+    </script>
+</body>
+</html>
