@@ -193,12 +193,16 @@
             btn.disabled = true;
             btn.innerText = "⏳ กำลังบันทึกข้อมูล...";
 
-            // จัดเตรียมข้อมูลเป็นก้อน (JSON)
+            // ดึงค่าจากหน้าฟอร์มมาตรวจสอบก่อน
+            const selectedRegion = document.getElementById("region").value;
+            const selectedDropdown2 = document.getElementById("church").value;
+
+            // จัดเตรียมข้อมูลเป็นก้อน (JSON) โดยมีเงื่อนไขแยกคริสตจักร/หน่วยให้ชัดเจน
             const payload = {
                 uid: liffUid,
-                region: document.getElementById("region").value,
-                church: document.getElementById("church").value,
-                unit: (document.getElementById("region").value === "คริสตจักรแห่งนิมิตพิษณุโลก") ? document.getElementById("church").value : "",
+                region: selectedRegion,
+                church: (selectedRegion === "คริสตจักรแห่งนิมิตพิษณุโลก") ? "คริสตจักรแห่งนิมิตพิษณุโลก" : selectedDropdown2,
+                unit: (selectedRegion === "คริสตจักรแห่งนิมิตพิษณุโลก") ? selectedDropdown2 : "",
                 churchOther: document.getElementById("churchOther").value,
                 submitterName: document.getElementById("submitterName").value,
                 submitterPhone: document.getElementById("submitterPhone").value,
