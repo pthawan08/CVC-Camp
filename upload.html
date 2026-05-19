@@ -56,18 +56,23 @@
         uploadBtn.disabled = true;
         uploadBtn.innerText = "⏳ กำลังส่งข้อมูล...";
 
-        fetch('https://script.google.com/macros/s/AKfycbwTyrctnpfYMOg6mGtZmAn_xO7fMjruAA01pJwgP0eqYpLRYl2P_oSXn-tsA-vjh2gM9g/exec', {
-          method: 'POST',
-          mode: 'no-cors',
-          body: JSON.stringify({
-            image: base64Image,
-            userId: new URLSearchParams(window.location.search).get('uid')
-          })
-        }).then(() => {
-          uploadBtn.innerText = "✅ ส่งสำเร็จแล้ว!";
-          setTimeout(() => { location.href = "https://line.me/R/nv/chat"; }, 1500);
-        });
-      };
+        fetch('https://script.google.com/macros/s/AKfycbz7wxYiZ4P9kQGDVIsoobnBdnl1vWbST_hkA9ameBSxNGfx5ffgk7LKmORImD5isgoFiQ/exec', {
+  method: 'POST',
+  mode: 'no-cors',
+  body: JSON.stringify({
+    image: base64Image,
+    userId: new URLSearchParams(window.location.search).get('uid')
+  })
+}).then(() => {
+  uploadBtn.innerText = "✅ ส่งสำเร็จแล้ว!";
+  setTimeout(() => { 
+    // ไม้ตาย: พยายามปิดทุกทาง
+    try { liff.closeWindow(); } catch(e) {}
+    window.close(); 
+    // ถ้าปิดไม่ได้จริงๆ ให้เด้งกลับไปหน้าแชท
+    location.href = "https://line.me/R/nv/chat"; 
+  }, 1000);
+});
       reader.readAsDataURL(file);
     });
   </script>
