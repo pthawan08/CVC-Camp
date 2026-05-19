@@ -386,8 +386,6 @@
                     }).then(() => {
                         // ลองปิดทุกวิธี
                         try { liff.closeWindow(); } catch(e) {}
-                        window.close();
-                        location.href = "https://line.me/R/nv/chat";
                     });
                 } else {
                     throw new Error(result.message);
