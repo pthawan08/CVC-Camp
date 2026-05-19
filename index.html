@@ -138,24 +138,23 @@
 
         // 2. ดึงข้อมูล ภาค และ คริสตจักร จาก GAS
         async function fetchDropdownData() {
-            try {
-                const res = await fetch(GAS_WEB_APP_URL);
-                churchData = await res.json();
-                
-                const regionSelect = document.getElementById("region");
-                regionSelect.innerHTML = '<option value="">-- เลือกภาคพันธกิจ/สังกัด --</option>';
-                
-                for (const region in churchData) {
-                    let opt = document.createElement("option");
-                    opt.value = region;
-                    opt.textContent = region;
-                    regionSelect.appendChild(opt);
-                }
-            } catch (error) {
-                console.error("Fetch Data Error:", error);
-                document.getElementById("region").innerHTML = '<option value="">เกิดข้อผิดพลาดในการโหลดข้อมูล</option>';
-            }
+    const regionSelect = document.getElementById("region");
+    regionSelect.innerHTML = '<option value="">-- กำลังโหลดข้อมูล... --</option>';
+    
+    try {
+        const res = await fetch(GAS_WEB_APP_URL);
+        churchData = await res.json();
+        
+        regionSelect.innerHTML = '<option value="">-- เลือกภาคพันธกิจ/สังกัด --</option>';
+        for (const region in churchData) {
+            let opt = document.createElement("option");
+            opt.value = region; opt.textContent = region;
+            regionSelect.appendChild(opt);
         }
+    } catch (error) {
+        regionSelect.innerHTML = '<option value="">โหลดข้อมูลล้มเหลว</option>';
+    }
+}
 
         // 3. Logic เมื่อเปลี่ยนภาคพันธกิจ ให้โชว์คริสตจักรที่ตรงกัน
         document.getElementById("region").addEventListener("change", function() {
