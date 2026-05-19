@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> CVC Camp</title>
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <title>CVC Camp</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Sarabun', sans-serif; background-color: #f0f9ff; }
@@ -20,14 +20,13 @@
         <p class="text-center text-sm text-blue-600 font-semibold mb-6" id="profileName">กำลังเชื่อมต่อระบบ LINE...</p>
 
         <form id="regForm" class="space-y-4">
-            
             <div>
                 <label class="block text-sm font-semibold text-gray-700">ภาคพันธกิจ / สังกัดหลัก <span class="text-red-500">*</span></label>
                 <select id="region" class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white" required>
-                    <option value="">-- กำลังโหลดข้อมูล... --</option>
+                    <option value="">-- เลือกภาคพันธกิจ/สังกัด --</option>
                 </select>
             </div>
-
+            
             <div id="churchDiv" class="hidden">
                 <label class="block text-sm font-semibold text-gray-700">คริสตจักร / หน่วย (แขวง) <span class="text-red-500">*</span></label>
                 <select id="church" class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white"></select>
@@ -63,26 +62,6 @@
                         <option value="8">8 คน</option>
                         <option value="9">9 คน</option>
                         <option value="10">10 คน</option>
-                        <option value="1">11 คน</option>
-                        <option value="2">12 คน</option>
-                        <option value="3">13 คน</option>
-                        <option value="4">14 คน</option>
-                        <option value="5">15 คน</option>
-                        <option value="6">16 คน</option>
-                        <option value="7">17 คน</option>
-                        <option value="8">18 คน</option>
-                        <option value="9">19 คน</option>
-                        <option value="10">20 คน</option>
-                        <option value="1">21 คน</option>
-                        <option value="2">22 คน</option>
-                        <option value="3">23 คน</option>
-                        <option value="4">24 คน</option>
-                        <option value="5">25 คน</option>
-                        <option value="6">26 คน</option>
-                        <option value="7">27 คน</option>
-                        <option value="8">28 คน</option>
-                        <option value="9">29 คน</option>
-                        <option value="10">30 คน</option>
                     </select>
                 </div>
                 <div>
@@ -103,18 +82,199 @@
     </div>
 
     <script>
-        // ==========================================
-        // 🚨 แก้ไข 2 บรรทัดนี้ให้เป็นข้อมูลของคุณเพลง 🚨
-        // ==========================================
         const MY_LIFF_ID = "2010100436-6Fs5ge58"; 
-        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxC4QbLFMo-qaKSHw1rpKaU4dth1NVYhWXfqpoDzEO70MFiT8z6HeRK5iKQZoQ-crrwaw/exec"; 
-        const PRICE_PER_PERSON = 350; // <-- แก้ไขราคาค่าค่ายต่อคนตรงนี้ได้เลยครับ
-        // ==========================================
-
+        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz7wxYiZ4P9kQGDVIsoobnBdnl1vWbST_hkA9ameBSxNGfx5ffgk7LKmORImD5isgoFiQ/exec"; 
+        const PRICE_PER_PERSON = 350;
+        
         let liffUid = "";
-        let churchData = {}; // เก็บข้อมูลที่ดึงมาจาก Sheet
+        
+        // 🌟 ฝังข้อมูลคริสตจักรไว้ที่นี่เลย โหลดปุ๊บมาปั๊บ!
+   const churchData = {
+    "คริสตจักรแห่งนิมิตพิษณุโลก": [
+        "BeOne",
+        "BeTwo",
+        "RU",
+        "CL",
+        "NU 1",
+        "NU 2",
+        "NU 3",
+        "NewSeason A",
+        "NewSeason B",
+        "NGP A",
+        "NGP B",
+        "NGP C",
+        "V-Gen A1",
+        "V-Gen A2",
+        "V-Gen B1",
+        "V-Gen B2",
+        "V-Gen B3",
+        "Acts A",
+        "Acts B",
+        "Acts C",
+        "Acts D",
+        "เยรูซาเลม1",
+        "เยรูซาเลม2",
+        "Power Eagle 1",
+        "Power Eagle 2",
+        "Power Eagle 3",
+        "Happiness 1",
+        "Happiness 2",
+        "Unity 1  ",
+        "Unity 2"
+    ],
+    "ภาคพันธกิจที่ 1 (อ.อำนวย เจริญเรือง)": [
+        "คริสตจักรแห่งนิมิตลำพูน",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตบ้านโฮ่ง",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตบ้านธิ",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตเวียงหนองล่อง",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตป่าซาง",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตทิพเนตร",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตแม่ฮ่องสอน",
+        "คริสตจักรแห่งนิมิตแม่สะเรียง",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตขุนยวม",
+        "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตสบเมย",
+        "คริสตจักรแห่งนิมิตนครเชียงใหม่",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตนครลำปาง",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิตวังเหนือ",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตแม่ทา",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตเมืองปาน",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตลี้",
+        "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"
+    ],
+    "ภาคพันธกิจที่ 2 (อ.มีชัย ว่องวรวิทย์)": [
+        "คริสตจักรแห่งนิมิตเชียงราย",
+        "คริสตจักรแห่งนิมิตแม่สรวย",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตห้วยนากาด",
+        "คริสตจักรแห่งนิมิตเวียงป่าเป้า",
+        "คริสตจักรแห่งนิมิตเชียงคำ",
+        "คริสตจักรแห่งนิมิตพะเยา",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตพะเยา 2",
+        "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตน่าน",
+        "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตแม่สาย",
+        "ศูนย์สร้างสรรชีวิตแพร่",
+        "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"
+    ],
+    "ภาคพันธกิจที่ 3 (อ.ยศไกร เกล็ดจีน)": [
+        "คริสตจักรแห่งนิมิตบางระกำ",
+        "คริสตจักรแห่งนิมิตพรหมพิราม",
+        "คริสตจักรแห่งนิมิตบางกระทุ่ม",
+        "คริสตจักรแห่งนิมิตวังทอง",
+        "คริสตจักรแห่งนิมิตนครไทย",
+        "คริสตจักรแห่งนิมิตบ้านแยง",
+        "คริสตจักรแห่งนิมิตชาตระการ",
+        "คริสตจักรแห่งนิมิตวัดโบสถ์",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตชุมชุนชาวแพ",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตโตกำแพง",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตเขาไร่",
+        "ศูนย์สร้างสรรค์ชีวิตเนินมะปราง",
+        "ศูนย์สร้างสรรค์ชีวิตทรัพย์ไพรวัลย์",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตเขาค้อ (ไฮแลนด์)",
+        "คริสตจักรแห่งนิมิตอุตรดิตถ์",
+        "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"
+    ],
+    "ภาคพันธกิจที่ 4 (อ.วันชัย คำฟู)": [
+        "คริสตจักรแห่งนิมิตนครแม่สอด",
+        "คริสตจักรแห่งนิมิตห้วยกะโหลก",
+        "คริสตจักรแห่งนิมิตนครสวรรค์",
+        "คริสตจักรแห่งนิมิตลาดยาว",
+        "คริสตจักรแห่งนิมิตอุทัยธานี",
+        "คริสตจักรแห่งนิมิตน้ำรอบ",
+        "คริสตจักรแห่งนิมิตลานสัก",
+        "กลุ่มบุกเบิกแห่งนิมิตชัยนาท",
+        "คริสตจักรแห่งนิมิตสุพรรณบุรี",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตพบพระ",
+        "กลุ่มบุกเบิกแห่งนิมิตอุ้มผาง",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตหนองบัว",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตวังน้ำขาว",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตบ้านหมี่",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตบางพล้อ",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตบรรพต",
+        "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตโกรกพระ",
+        "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตตาคลี",
+        "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตตากฟ้า",
+        "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตชุมตาบง",
+        "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตแม่วงก์",
+        "กลุ่มบุกเบิกแห่งนิมิตแม่เปิน",
+        "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตอยุธยา",
+        "กลุ่มบุกเบิกแห่งนิมิตแม่ละมาด",
+        "กลุ่มบุกเบิกแห่งนิมิต อ.เมือง ตาก",
+        "กลุ่มบุกเบิกแห่งนิมิตท่าสองยาง",
+        "กลุ่มสร้างสรรค์ชีวิตสว่างอารมภ์",
+        "ศูนย์สร้างสรรค์ชีวิตเมืองอุทัยธานี",
+        "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"
+    ],
+    "ภาคพันธกิจที่ 5 Zone A (อ.ปรเมศวร์ รัตนเวฬุ)": [
+        "คริสตจักรแห่งนิมิต กำแพงเพชร",
+        "คริสตจักรแห่งนิมิต ขาณุวรลักษณ์",
+        "คริสตจักรแห่งนิมิต ไทรพัฒนา",
+        "คริสตจักรแห่งนิมิต เพชรบูรณ์",
+        "คริสตจักรแห่งนิมิต บ้านน้ำร้อน",
+        "คริสตจักรแห่งนิมิต สุโขทัย",
+        "คริสตจักรแห่งนิมิต กงไกรลาศ",
+        "คริสตจักรแห่งนิมิต พิจิตร",
+        "คริสตจักรแห่งนิมิต สามง่าม",
+        "คริสตจักรแห่งนิมิต บึงนารา",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต คลองขลุง",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต สากเหล็ก",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต เขาทราย",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต เข็กน้อย",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต วิเชียรบุรี",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต บ้านแม่ท่าแพ",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต บ้านห้วยหยวก",
+        "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิต ห้วยมะนาว",
+        "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิต สวรรคโลก",
+        "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิต ไผ่ท่าโพธิ์",
+        "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"
+    ],
+    "ภาคพันธกิจที่ 5 Zone B (อ.บวรทรนง จิรทรัพย์เจริญ)": [
+        "คริสตจักรแห่งนิมิตห้วยแย้",
+        "ศูนย์สร้างสรรค์แห่งนิมิตโคราช",
+        "คริสตจักรแห่งนิมิตกลางหมื่น",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตขอนแก่น",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตอุดรธานี",
+        "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตหนองคาย",
+        "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"
+    ],
+    "ภาคพันธกิจที่ 5 Zone C (อ.อัจจณา ปราณี)": [
+        "คริสตจักรแห่งนิมิต กรุงเทพมหานคร",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต สมุทปราการ",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต กบินทร์บุรี (จ.ปราจีนบุรี)",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต ชลบุรี",
+        "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"
+    ],
+    "ภาคพันธกิจที่ 5 Zone D (อ.กาญจนา นาทศิโรรัตน์)": [
+        "คริสตจักรแห่งนิมิต เกาะสมุย (จ.สุราษฏร์ธานี)",
+        "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต มาบอำมฤต (จ.ชุมพร)",
+        "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิต โป๊ะหมอ (หาดใหญ่)",
+        "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิต ปราณบุรี (ประจวบคีรีขันธ์)",
+        "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"
+    ],
+    "ภาคพันธกิจที่ 5 Zone E (อ.พัณณิตา บุญย่านยาว)": [
+        "กบบ. แห่งนิมิต สเปน (บาเซโลน่า)",
+        "กบบ. แห่งนิมิต นอร์เวย์ ( ออสโล )",
+        "กสช. แห่งนิมิต เบียล ( สวิตเซอร์แลนด์ )",
+        "กบบ. แห่งนิมิต บาเซิล ( สวิตเซอร์แลนด์ )",
+        "กบบ. แห่งนิมิต ธูน ( สวิตเซอร์แลนด์ )",
+        "คจ. แห่งนิมิต นครหลวงเวียงจันทร์",
+        "คสช. แห่งนิมิต หลัก 32 ( อุดมไซ ลาว )",
+        "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"
+    ]
+};
 
-        // 1. เริ่มต้น LIFF
+        // เรียกใช้ฟังก์ชันทันทีที่โหลดหน้าเว็บเสร็จ
+        document.addEventListener("DOMContentLoaded", function() {
+            initDropdown();
+            // รอให้ LIFF SDK โหลดเสร็จก่อนค่อยเรียกใช้
+            window.addEventListener('load', function() {
+                if (window.liff) {
+                    main();
+                } else {
+                     document.getElementById("profileName").innerText = "ระบบไม่รองรับ";
+                     document.getElementById("profileName").classList.replace("text-blue-600", "text-red-500");
+                }
+            });
+        });
+        
         async function main() {
             try {
                 await liff.init({ liffId: MY_LIFF_ID });
@@ -122,48 +282,30 @@
                     const profile = await liff.getProfile();
                     liffUid = profile.userId;
                     document.getElementById("profileName").innerText = "สวัสดีคุณ " + profile.displayName;
-                    
-                    // เรียกฟังก์ชันโหลด Dropdown หลังจากล๊อกอินเสร็จ
-                    fetchDropdownData();
                 } else {
                     liff.login();
                 }
             } catch (err) {
-                console.error("LIFF Init Error: ", err);
                 document.getElementById("profileName").innerText = "ไม่สามารถเชื่อมต่อ LINE ได้";
                 document.getElementById("profileName").classList.replace("text-blue-600", "text-red-500");
             }
         }
-        main();
 
-        // 2. ดึงข้อมูล ภาค และ คริสตจักร จาก GAS
-        async function fetchDropdownData() {
-    const regionSelect = document.getElementById("region");
-    regionSelect.innerHTML = '<option value="">-- กำลังโหลดข้อมูล... --</option>';
-    
-    try {
-        const res = await fetch(GAS_WEB_APP_URL);
-        churchData = await res.json();
-        
-        regionSelect.innerHTML = '<option value="">-- เลือกภาคพันธกิจ/สังกัด --</option>';
-        for (const region in churchData) {
-            let opt = document.createElement("option");
-            opt.value = region; opt.textContent = region;
-            regionSelect.appendChild(opt);
+        function initDropdown() {
+            const regionSelect = document.getElementById("region");
+            for (const region in churchData) {
+                let opt = document.createElement("option");
+                opt.value = region; opt.textContent = region;
+                regionSelect.appendChild(opt);
+            }
         }
-    } catch (error) {
-        regionSelect.innerHTML = '<option value="">โหลดข้อมูลล้มเหลว</option>';
-    }
-}
 
-        // 3. Logic เมื่อเปลี่ยนภาคพันธกิจ ให้โชว์คริสตจักรที่ตรงกัน
         document.getElementById("region").addEventListener("change", function() {
             const region = this.value;
             const churchDiv = document.getElementById("churchDiv");
             const churchSelect = document.getElementById("church");
             const otherChurchDiv = document.getElementById("otherChurchDiv");
             
-            // รีเซ็ตค่า
             churchSelect.innerHTML = '<option value="">-- เลือกคริสตจักร/หน่วย --</option>';
             otherChurchDiv.classList.add("hidden");
             document.getElementById("churchOther").value = "";
@@ -183,12 +325,11 @@
             }
         });
 
-        // 4. Logic เมื่อเลือก "อื่นๆ" ให้โชว์ช่องพิมพ์ชื่อ
         document.getElementById("church").addEventListener("change", function() {
             const otherChurchDiv = document.getElementById("otherChurchDiv");
             const churchOtherInput = document.getElementById("churchOther");
             
-            if (this.value && this.value.includes("อื่นๆ")) {
+            if (this.value === "อื่นๆ") {
                 otherChurchDiv.classList.remove("hidden");
                 churchOtherInput.required = true;
             } else {
@@ -198,25 +339,21 @@
             }
         });
 
-        // 5. คำนวณยอดเงินอัตโนมัติ
         document.getElementById("totalMembers").addEventListener("change", function() {
             const amount = this.value ? parseInt(this.value) * PRICE_PER_PERSON : 0;
             document.getElementById("totalAmount").value = amount;
         });
 
-        // 6. กดปุ่มยืนยันเพื่อส่งข้อมูลไป GAS
         document.getElementById("regForm").addEventListener("submit", async function(e) {
-            e.preventDefault(); // ป้องกันการรีเฟรชหน้าเว็บ
+            e.preventDefault(); 
             
             const btn = document.getElementById("btnSubmit");
             btn.disabled = true;
             btn.innerText = "⏳ กำลังบันทึกข้อมูล...";
 
-            // ดึงค่าจากหน้าฟอร์มมาตรวจสอบก่อน
             const selectedRegion = document.getElementById("region").value;
             const selectedDropdown2 = document.getElementById("church").value;
 
-            // จัดเตรียมข้อมูลเป็นก้อน (JSON) โดยมีเงื่อนไขแยกคริสตจักร/หน่วยให้ชัดเจน
             const payload = {
                 uid: liffUid,
                 region: selectedRegion,
@@ -231,7 +368,6 @@
             };
 
             try {
-                // ยิงข้อมูลไปที่ GAS doPost()
                 const response = await fetch(GAS_WEB_APP_URL, {
                     method: "POST",
                     body: JSON.stringify(payload)
@@ -240,7 +376,6 @@
                 const result = await response.json();
 
                 if (result.result === "success") {
-                    // ใช้ SweetAlert โชว์ป๊อปอัปสวยๆ แจ้งว่าสำเร็จ
                     Swal.fire({
                         icon: 'success',
                         title: 'ลงทะเบียนสำเร็จ!',
@@ -249,7 +384,10 @@
                         confirmButtonText: 'รับทราบ (ปิดหน้าต่าง)',
                         allowOutsideClick: false
                     }).then(() => {
-                        liff.closeWindow(); // สั่งปิด LIFF เด้งกลับไปหน้าแชท LINE
+                        // ลองปิดทุกวิธี
+                        try { liff.closeWindow(); } catch(e) {}
+                        window.close();
+                        location.href = "https://line.me/R/nv/chat";
                     });
                 } else {
                     throw new Error(result.message);
