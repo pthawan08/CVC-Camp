@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>อัปโหลดสลิปค่าย CVC Camp </title>
+  <title>อัปโหลดสลิปค่าย One Youth</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 flex flex-col items-center p-6 text-gray-800">
@@ -29,6 +30,14 @@
   </div>
 
   <script>
+    const MY_LIFF_ID = "2010100436-ttka2NTF"; // รหัส LIFF ของหน้าอัปโหลด (ถ้าไม่ตรงรบกวนแก้ให้ตรงนะครับ)
+
+    // เริ่มต้นใช้งาน LIFF
+    async function main() {
+        await liff.init({ liffId: MY_LIFF_ID });
+    }
+    main();
+
     const fileInput = document.getElementById('fileInput');
     const uploadBtn = document.getElementById('uploadBtn');
     const previewContainer = document.getElementById('previewContainer');
@@ -57,22 +66,25 @@
         uploadBtn.innerText = "⏳ กำลังส่งข้อมูล...";
 
         fetch('https://script.google.com/macros/s/AKfycbxC4QbLFMo-qaKSHw1rpKaU4dth1NVYhWXfqpoDzEO70MFiT8z6HeRK5iKQZoQ-crrwaw/exec', {
-  method: 'POST',
-  mode: 'no-cors',
-  body: JSON.stringify({
-    image: base64Image,
-    userId: new URLSearchParams(window.location.search).get('uid')
-  })
-}).then(() => {
-  uploadBtn.innerText = "✅ ส่งสำเร็จแล้ว!";
-  setTimeout(() => { 
-    // ไม้ตาย: พยายามปิดทุกทาง
-    try { liff.closeWindow(); } catch(e) {}
-    window.close(); 
-    // ถ้าปิดไม่ได้จริงๆ ให้เด้งกลับไปหน้าแชท
-    location.href = "https://line.me/R/nv/chat"; 
-  }, 1000);
-});
+          method: 'POST',
+          mode: 'no-cors',
+          body: JSON.stringify({
+            image: base64Image,
+            userId: new URLSearchParams(window.location.search).get('uid')
+          })
+        }).then(() => {
+          uploadBtn.innerText = "✅ ส่งสำเร็จแล้ว!";
+          setTimeout(() => { 
+            // พยายามปิดหน้าต่างทุกวิธีที่มี
+            if (liff.isApiAvailable('closeWindow')) {
+                liff.closeWindow();
+            } else {
+                window.close();
+                location.href = "https://line.me/R/nv/chat"; 
+            }
+          }, 1500);
+        });
+      };
       reader.readAsDataURL(file);
     });
   </script>
