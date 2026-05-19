@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>อัปโหลดสลิปค่าย One Youth</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex flex-col items-center p-6 text-gray-800">
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 mt-10">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="bg-blue-100 text-blue-600 p-3 rounded-xl">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+      </div>
+      <h1 class="text-2xl font-bold text-gray-900">อัปโหลดสลิปโอนเงิน</h1>
+    </div>
+
+    <p class="text-sm text-gray-600 mb-6 bg-blue-50 p-4 rounded-xl">📍 กรุณาเลือกรูปภาพสลิปที่ต้องการอัปโหลด เพื่อให้ทีมงานตรวจสอบความถูกต้องค่ะ</p>
+
+    <input type="file" id="fileInput" accept="image/jpeg, image/png" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer mb-6" />
+
+    <div id="previewContainer" class="hidden mb-6 border border-gray-200 rounded-xl p-2 bg-gray-50">
+      <img id="imagePreview" src="" class="max-w-full h-auto rounded-lg" />
+    </div>
+
+    <button id="uploadBtn" disabled class="w-full bg-gray-300 text-gray-600 font-bold py-3.5 px-6 rounded-2xl text-lg transition duration-300">📤 ส่งสลิปโอนเงิน</button>
+
+    <p class="text-xs text-gray-400 mt-5 text-center">(หน้าเว็ปจะปิดลงอัตโนมัติเมื่อส่งสำเร็จ)</p>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const previewContainer = document.getElementById('previewContainer');
+    const imagePreview = document.getElementById('imagePreview');
+
+    fileInput.addEventListener('change', function(e) {
+      if (e.target.files.length > 0) {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => imagePreview.src = e.target.result;
+        reader.readAsDataURL(file);
+        previewContainer.classList.remove('hidden');
+        uploadBtn.disabled = false;
+        uploadBtn.className = "w-full bg-blue-600 text-white font-bold py-3.5 px-6 rounded-2xl text-lg hover:bg-blue-700 transition duration-300";
+      }
+    });
+
+    uploadBtn.addEventListener('click', function() {
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const base64Image = e.target.result.split(',')[1];
+        uploadBtn.disabled = true;
+        uploadBtn.innerText = "⏳ กำลังส่งข้อมูล...";
+
+        fetch('https://script.google.com/macros/s/ใส่_WEB_APP_URL_ของคุณเพลง/exec', {
+          method: 'POST',
+          mode: 'no-cors',
+          body: JSON.stringify({
+            image: base64Image,
+            userId: new URLSearchParams(window.location.search).get('uid')
+          })
+        }).then(() => {
+          uploadBtn.innerText = "✅ ส่งสำเร็จแล้ว!";
+          setTimeout(() => { location.href = "https://line.me/R/nv/chat"; }, 1500);
+        });
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
+</body>
+</html>
