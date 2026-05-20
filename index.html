@@ -44,7 +44,7 @@
 
             <div>
                 <label class="block text-sm font-semibold text-gray-700">เบอร์โทรศัพท์ผู้กรอก <span class="text-red-500">*</span></label>
-                <input type="tel" id="submitterPhone" class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500" required>
+                <input type="tel" id="submitterPhone" class="mt-1 block w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500" placeholder="เช่น 0812345678" maxlength="10" pattern="[0-9]{10}" required>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
@@ -211,10 +211,24 @@
 
         memberInput.addEventListener("input", updateAmount);
 
-        document.getElementById("regForm").addEventListener("submit", async function(e) {
+       document.getElementById("regForm").addEventListener("submit", async function(e) {
             e.preventDefault(); 
             
             const btn = document.getElementById("btnSubmit");
+
+            // 🌟 จุดที่ 2: สกัดจับตรวจสอบเบอร์โทรศัพท์ 10 หลัก
+            const phoneInput = document.getElementById("submitterPhone").value;
+            if (!/^[0-9]{10}$/.test(phoneInput)) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'เบอร์โทรศัพท์ไม่ถูกต้อง',
+                    text: 'กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก (ตัวเลขติดกัน ไม่ต้องเว้นวรรค)',
+                    confirmButtonColor: '#2563eb'
+                });
+                return; // สั่งให้หยุดทำงานตรงนี้ ไม่ส่งข้อมูลไป GAS
+            }
+
+            // ถ้าเบอร์โทรถูกต้อง ค่อยให้ปุ่มเปลี่ยนเป็นกำลังบันทึก
             btn.disabled = true;
             btn.innerText = "⏳ กำลังบันทึกข้อมูล...";
 
@@ -228,7 +242,7 @@
                 unit: (selectedRegion === "คริสตจักรแห่งนิมิตพิษณุโลก") ? selectedDropdown2 : "",
                 churchOther: document.getElementById("churchOther").value,
                 submitterName: document.getElementById("submitterName").value,
-                submitterPhone: document.getElementById("submitterPhone").value,
+                submitterPhone: phoneInput, // ใช้ตัวแปร phoneInput ที่เช็คแล้ว
                 totalMembers: document.getElementById("totalMembers").value,
                 totalAmount: document.getElementById("totalAmount").value,
                 memberNames: document.getElementById("memberNames").value
