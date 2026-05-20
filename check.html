@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตรวจสอบรายชื่อ CVC Camp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Sarabun', sans-serif; background-color: #f8fafc; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="p-4 md:p-8 flex flex-col items-center min-h-screen">
+
+    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg w-full max-w-2xl border-t-8 border-indigo-600 mb-6">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">🔍 ตรวจสอบรายชื่อผู้สมัคร</h2>
+        <p class="text-center text-sm text-gray-500 mb-6">เลือกภาคและคริสตจักร เพื่อดูสถานะการลงทะเบียนของสมาชิก</p>
+
+        <form id="searchForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700">ภาคพันธกิจ / สังกัดหลัก</label>
+                <select id="region" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 bg-white" required>
+                    <option value="">-- เลือกภาคพันธกิจ/สังกัด --</option>
+                </select>
+            </div>
+            
+            <div id="churchDiv" class="hidden">
+                <label class="block text-sm font-semibold text-gray-700">คริสตจักร / หน่วย (แขวง)</label>
+                <select id="church" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 bg-white"></select>
+            </div>
+
+            <button type="submit" id="btnSearch" class="w-full bg-indigo-600 text-white font-bold py-3.5 rounded-lg hover:bg-indigo-700 transition mt-6 disabled:bg-gray-400 shadow-md">
+                ค้นหารายชื่อ
+            </button>
+        </form>
+    </div>
+
+    <div id="resultContainer" class="w-full max-w-2xl hidden">
+        <div class="flex justify-between items-end mb-4 px-2">
+            <h3 class="text-lg font-bold text-gray-800">ผลการค้นหา</h3>
+            <span id="totalCount" class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full">พบ 0 รายการ</span>
+        </div>
+        
+        <div id="resultList" class="space-y-4"></div>
+    </div>
+
+    <script>
+        // ⚠️ อย่าลืมแก้ URL ให้เป็นอันเดียวกับหน้า index.html นะครับ!
+        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxC4QbLFMo-qaKSHw1rpKaU4dth1NVYhWXfqpoDzEO70MFiT8z6HeRK5iKQZoQ-crrwaw/exec"; 
+
+        const churchData = {
+            "คริสตจักรแห่งนิมิตพิษณุโลก": ["BeOne", "BeTwo", "RU", "CL", "NU 1", "NU 2", "NU 3", "NewSeason A", "NewSeason B", "NGP A", "NGP B", "NGP C", "V-Gen A1", "V-Gen A2", "V-Gen B1", "V-Gen B2", "V-Gen B3", "Acts A", "Acts B", "Acts C", "Acts D", "เยรูซาเลม1", "เยรูซาเลม2", "Power Eagle 1", "Power Eagle 2", "Power Eagle 3", "Happiness 1", "Happiness 2", "Unity 1  ", "Unity 2"],
+            "ภาคพันธกิจที่ 1 (อ.อำนวย เจริญเรือง)": ["คริสตจักรแห่งนิมิตลำพูน", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตบ้านโฮ่ง", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตบ้านธิ", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตเวียงหนองล่อง", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตป่าซาง", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตทิพเนตร", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตแม่ฮ่องสอน", "คริสตจักรแห่งนิมิตแม่สะเรียง", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตขุนยวม", "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตสบเมย", "คริสตจักรแห่งนิมิตนครเชียงใหม่", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตนครลำปาง", "ศูนย์สร้างสรรค์ชีวิตแห่งนิตวังเหนือ", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตแม่ทา", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตเมืองปาน", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตลี้", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"],
+            "ภาคพันธกิจที่ 2 (อ.มีชัย ว่องวรวิทย์)": ["คริสตจักรแห่งนิมิตเชียงราย", "คริสตจักรแห่งนิมิตแม่สรวย", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตห้วยนากาด", "คริสตจักรแห่งนิมิตเวียงป่าเป้า", "คริสตจักรแห่งนิมิตเชียงคำ", "คริสตจักรแห่งนิมิตพะเยา", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตพะเยา 2", "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตน่าน", "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตแม่สาย", "ศูนย์สร้างสรรชีวิตแพร่", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"],
+            "ภาคพันธกิจที่ 3 (อ.ยศไกร เกล็ดจีน)": ["คริสตจักรแห่งนิมิตบางระกำ", "คริสตจักรแห่งนิมิตพรหมพิราม", "คริสตจักรแห่งนิมิตบางกระทุ่ม", "คริสตจักรแห่งนิมิตวังทอง", "คริสตจักรแห่งนิมิตนครไทย", "คริสตจักรแห่งนิมิตบ้านแยง", "คริสตจักรแห่งนิมิตชาตระการ", "คริสตจักรแห่งนิมิตวัดโบสถ์", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตชุมชุนชาวแพ", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตโตกำแพง", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตเขาไร่", "ศูนย์สร้างสรรค์ชีวิตเนินมะปราง", "ศูนย์สร้างสรรค์ชีวิตทรัพย์ไพรวัลย์", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตเขาค้อ (ไฮแลนด์)", "คริสตจักรแห่งนิมิตอุตรดิตถ์", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"],
+            "ภาคพันธกิจที่ 4 (อ.วันชัย คำฟู)": ["คริสตจักรแห่งนิมิตนครแม่สอด", "คริสตจักรแห่งนิมิตห้วยกะโหลก", "คริสตจักรแห่งนิมิตนครสวรรค์", "คริสตจักรแห่งนิมิตลาดยาว", "คริสตจักรแห่งนิมิตอุทัยธานี", "คริสตจักรแห่งนิมิตน้ำรอบ", "คริสตจักรแห่งนิมิตลานสัก", "กลุ่มบุกเบิกแห่งนิมิตชัยนาท", "คริสตจักรแห่งนิมิตสุพรรณบุรี", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตพบพระ", "กลุ่มบุกเบิกแห่งนิมิตอุ้มผาง", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตหนองบัว", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตวังน้ำขาว", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตบ้านหมี่", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตบางพล้อ", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตบรรพต", "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตโกรกพระ", "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตตาคลี", "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตตากฟ้า", "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตชุมตาบง", "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตแม่วงก์", "กลุ่มบุกเบิกแห่งนิมิตแม่เปิน", "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตอยุธยา", "กลุ่มบุกเบิกแห่งนิมิตแม่ละมาด", "กลุ่มบุกเบิกแห่งนิมิต อ.เมือง ตาก", "กลุ่มบุกเบิกแห่งนิมิตท่าสองยาง", "กลุ่มสร้างสรรค์ชีวิตสว่างอารมภ์", "ศูนย์สร้างสรรค์ชีวิตเมืองอุทัยธานี", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"],
+            "ภาคพันธกิจที่ 5 Zone A (อ.ปรเมศวร์ รัตนเวฬุ)": ["คริสตจักรแห่งนิมิต กำแพงเพชร", "คริสตจักรแห่งนิมิต ขาณุวรลักษณ์", "คริสตจักรแห่งนิมิต ไทรพัฒนา", "คริสตจักรแห่งนิมิต เพชรบูรณ์", "คริสตจักรแห่งนิมิต บ้านน้ำร้อน", "คริสตจักรแห่งนิมิต สุโขทัย", "คริสตจักรแห่งนิมิต กงไกรลาศ", "คริสตจักรแห่งนิมิต พิจิตร", "คริสตจักรแห่งนิมิต สามง่าม", "คริสตจักรแห่งนิมิต บึงนารา", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต คลองขลุง", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต สากเหล็ก", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต เขาทราย", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต เข็กน้อย", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต วิเชียรบุรี", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต บ้านแม่ท่าแพ", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต บ้านห้วยหยวก", "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิต ห้วยมะนาว", "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิต สวรรคโลก", "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิต ไผ่ท่าโพธิ์", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"],
+            "ภาคพันธกิจที่ 5 Zone B (อ.บวรทรนง จิรทรัพย์เจริญ)": ["คริสตจักรแห่งนิมิตห้วยแย้", "ศูนย์สร้างสรรค์แห่งนิมิตโคราช", "คริสตจักรแห่งนิมิตกลางหมื่น", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตขอนแก่น", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิตอุดรธานี", "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิตหนองคาย", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"],
+            "ภาคพันธกิจที่ 5 Zone C (อ.อัจจณา ปราณี)": ["คริสตจักรแห่งนิมิต กรุงเทพมหานคร", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต สมุทปราการ", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต กบินทร์บุรี (จ.ปราจีนบุรี)", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต ชลบุรี", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"],
+            "ภาคพันธกิจที่ 5 Zone D (อ.กาญจนา นาทศิโรรัตน์)": ["คริสตจักรแห่งนิมิต เกาะสมุย (จ.สุราษฏร์ธานี)", "ศูนย์สร้างสรรค์ชีวิตแห่งนิมิต มาบอำมฤต (จ.ชุมพร)", "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิต โป๊ะหมอ (หาดใหญ่)", "กลุ่มสร้างสรรค์ชีวิตแห่งนิมิต ปราณบุรี (ประจวบคีรีขันธ์)", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"],
+            "ภาคพันธกิจที่ 5 Zone E (อ.พัณณิตา บุญย่านยาว)": ["กบบ. แห่งนิมิต สเปน (บาเซโลน่า)", "กบบ. แห่งนิมิต นอร์เวย์ ( ออสโล )", "กสช. แห่งนิมิต เบียล ( สวิตเซอร์แลนด์ )", "กบบ. แห่งนิมิต บาเซิล ( สวิตเซอร์แลนด์ )", "กบบ. แห่งนิมิต ธูน ( สวิตเซอร์แลนด์ )", "คจ. แห่งนิมิต นครหลวงเวียงจันทร์", "คสช. แห่งนิมิต หลัก 32 ( อุดมไซ ลาว )", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"]
+        };
+
+        // ระบบ Dropdown
+        document.addEventListener("DOMContentLoaded", function() {
+            const regionSelect = document.getElementById("region");
+            for (const region in churchData) {
+                let opt = document.createElement("option");
+                opt.value = region; opt.textContent = region;
+                regionSelect.appendChild(opt);
+            }
+        });
+
+        document.getElementById("region").addEventListener("change", function() {
+            const region = this.value;
+            const churchDiv = document.getElementById("churchDiv");
+            const churchSelect = document.getElementById("church");
+            churchSelect.innerHTML = '<option value="">-- เลือกคริสตจักร/หน่วย --</option>';
+
+            if (region && churchData[region]) {
+                churchDiv.classList.remove("hidden");
+                churchSelect.required = true;
+                churchData[region].forEach(church => {
+                    let opt = document.createElement("option");
+                    opt.value = church; opt.textContent = church;
+                    churchSelect.appendChild(opt);
+                });
+            } else {
+                churchDiv.classList.add("hidden");
+                churchSelect.required = false;
+            }
+        });
+
+        // ค้นหาข้อมูลเมื่อกดปุ่ม
+        document.getElementById("searchForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById("btnSearch");
+            const resultContainer = document.getElementById("resultContainer");
+            const resultList = document.getElementById("resultList");
+            const totalCount = document.getElementById("totalCount");
+
+            btn.disabled = true;
+            btn.innerText = "⏳ กำลังค้นหาข้อมูล...";
+            resultContainer.classList.add("hidden");
+            resultList.innerHTML = "";
+
+            const selectedRegion = document.getElementById("region").value;
+            let selectedChurch = document.getElementById("church").value;
+            
+            // ปรับข้อมูลให้ตรงกับตารางตอนบันทึก
+            if (selectedRegion === "คริสตจักรแห่งนิมิตพิษณุโลก") {
+                selectedChurch = document.getElementById("church").value;
+            }
+
+            try {
+                const response = await fetch(GAS_WEB_APP_URL, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        action: "checkNames",
+                        region: selectedRegion,
+                        church: selectedChurch
+                    })
+                });
+                
+                const res = await response.json();
+
+                if (res.result === "success") {
+                    const data = res.data;
+                    totalCount.innerText = "พบ " + data.length + " รายการ";
+                    
+                    if (data.length === 0) {
+                        resultList.innerHTML = `<div class="bg-white p-6 rounded-xl text-center shadow text-gray-500">ไม่พบรายชื่อผู้สมัครจากคริสตจักรนี้</div>`;
+                    } else {
+                        data.forEach(item => {
+                            // จัดการสีของสถานะ
+                            let statusColor = "bg-orange-100 text-orange-700 border-orange-200";
+                            if (item.status === "รอตรวจสอบ") statusColor = "bg-blue-100 text-blue-700 border-blue-200";
+                            if (item.status === "ยืนยันแล้ว") statusColor = "bg-green-100 text-green-700 border-green-200";
+
+                            const card = `
+                                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h4 class="font-bold text-gray-800 text-lg">ผู้กรอก: ${item.submitter}</h4>
+                                            <p class="text-sm text-gray-500">ยอดผู้สมัครรวม: <span class="font-bold text-gray-700">${item.members} คน</span></p>
+                                        </div>
+                                        <span class="text-xs font-bold px-3 py-1.5 rounded-lg border ${statusColor}">${item.status}</span>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100 text-sm text-gray-600 whitespace-pre-wrap">${item.names}</div>
+                                </div>
+                            `;
+                            resultList.innerHTML += card;
+                        });
+                    }
+                    resultContainer.classList.remove("hidden");
+                }
+            } catch (error) {
+                alert("เกิดข้อผิดพลาดในการดึงข้อมูล โปรดลองใหม่อีกครั้ง");
+            }
+
+            btn.disabled = false;
+            btn.innerText = "ค้นหารายชื่อ";
+        });
+    </script>
+</body>
+</html>
