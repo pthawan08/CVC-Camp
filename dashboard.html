@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สรุปยอดผู้สมัคร CVC Camp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Sarabun', sans-serif; background-color: #f4f7f6; }
+        .pastel-blue { background-color: #B0C4DE; }
+        .text-pastel-blue { color: #8FA8C8; }
+    </style>
+</head>
+<body class="p-4 md:p-8 flex flex-col items-center min-h-screen">
+
+    <!-- Header สรุปยอดรวม -->
+    <div class="w-full max-w-4xl bg-white rounded-3xl shadow-sm border border-gray-100 p-8 mb-8 text-center relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-3 pastel-blue"></div>
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">📊 ภาพรวมยอดผู้สมัครค่าย</h1>
+        <p class="text-gray-500 mb-8">อัปเดตข้อมูลแบบเรียลไทม์จากระบบลงทะเบียน</p>
+        
+        <div class="flex justify-center items-center">
+            <div class="bg-blue-50 p-8 rounded-3xl w-full md:w-1/2 border border-blue-100 shadow-inner">
+                <p class="text-lg font-semibold text-blue-600 mb-2">ยอดผู้สมัครรวมทั้งหมด</p>
+                <div class="flex items-baseline justify-center gap-2">
+                    <p class="text-6xl font-bold text-gray-800" id="totalActual">0</p>
+                    <p class="text-xl font-semibold text-gray-500">คน</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid แสดงแยกตามภาค -->
+    <div id="loading" class="text-gray-500 text-lg my-10 animate-pulse flex flex-col items-center">
+        <span class="text-4xl mb-3">⏳</span>
+        กำลังดึงข้อมูลล่าสุด...
+    </div>
+    
+    <div class="w-full max-w-4xl mb-4 pl-2 hidden" id="titleRegions">
+        <h2 class="text-xl font-bold text-gray-700">📌 ยอดผู้สมัครแยกตามภาค/พันธกิจ</h2>
+    </div>
+
+    <div id="regionsContainer" class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4 hidden">
+        <!-- การ์ดภาคต่างๆ จะถูกสร้างขึ้นที่นี่อัตโนมัติ -->
+    </div>
+
+    <script>
+        // ⚠️ อย่าลืมนำ URL ของ Web App อันล่าสุดมาใส่ตรงนี้นะครับ
+        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzt3qj7QYYuKRG2b_o5jw9p06hSylXVQOCK9ef-UJ7C2B-n_289fS0ErYvI7uhDROJbcQ/exec"; 
+
+        async function fetchSummary() {
+            try {
+                const response = await fetch(GAS_WEB_APP_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ action: "getSummary" })
+                });
+                
+                const res = await response.json();
+                if (res.result === "success") {
+                    renderDashboard(res.data);
+                }
+            } catch (error) {
+                document.getElementById("loading").innerText = "❌ ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่อีกครั้ง";
+            }
+        }
+
+        function renderDashboard(data) {
+            document.getElementById("loading").classList.add("hidden");
+            document.getElementById("titleRegions").classList.remove("hidden");
+            const container = document.getElementById("regionsContainer");
+            container.classList.remove("hidden");
+            container.innerHTML = ""; // เคลียร์ข้อความโหลด
+
+            // อัปเดตตัวเลขรวมด้านบน
+            document.getElementById("totalActual").innerText = data.totalActual || 0;
+
+            // ดึงรายชื่อภาคที่มีคนสมัครแล้วมาเรียงลำดับ
+            const regions = Object.keys(data.regions).sort();
+
+            if (regions.length === 0) {
+                container.innerHTML = `<div class="col-span-1 md:col-span-2 text-center text-gray-500 py-8 bg-white rounded-2xl border border-gray-100">ยังไม่มีข้อมูลผู้สมัครในระบบขณะนี้</div>`;
+                return;
+            }
+
+            // วาดการ์ดแต่ละภาค
+            regions.forEach(regionName => {
+                const actual = data.regions[regionName];
+                const cardHTML = `
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition duration-300 flex justify-between items-center">
+                        <h3 class="font-semibold text-gray-700 text-lg pr-4">${regionName}</h3>
+                        <div class="pastel-blue text-white font-bold px-5 py-2 rounded-xl text-xl flex items-baseline gap-1 whitespace-nowrap shadow-sm">
+                            ${actual} <span class="text-sm font-normal opacity-80">คน</span>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+        }
+
+        // โหลดข้อมูลทันทีที่เปิดหน้าเว็บ
+        window.onload = fetchSummary;
+    </script>
+</body>
+</html>
