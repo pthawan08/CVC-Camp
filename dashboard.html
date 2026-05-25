@@ -20,23 +20,40 @@
         <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">📊 ภาพรวมยอดผู้สมัครค่าย</h1>
         <p class="text-gray-500 mb-8">อัปเดตข้อมูลแบบเรียลไทม์จากระบบลงทะเบียน</p>
         
-        <div class="flex justify-center items-center">
-            <div class="bg-blue-50 p-8 rounded-3xl w-full md:w-1/2 border border-blue-100 shadow-inner">
-                <p class="text-lg font-semibold text-blue-600 mb-2">ยอดผู้สมัครรวมทั้งหมด</p>
-                <div class="flex items-baseline justify-center gap-2">
-                    <p class="text-6xl font-bold text-gray-800" id="totalActual">0</p>
-                    <p class="text-xl font-semibold text-gray-500">คน</p>
-                </div>
+        <!-- กล่องตัวเลขสรุป 3 ช่อง -->
+        <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-8">
+            <div class="bg-gray-50 p-6 rounded-2xl w-full md:w-1/3 border border-gray-100">
+                <p class="text-sm font-semibold text-gray-500 mb-1">เป้าหมายรวม</p>
+                <p class="text-4xl font-bold text-gray-700">1,800</p>
             </div>
+            <div class="bg-blue-50 p-6 rounded-2xl w-full md:w-1/3 border border-blue-100 shadow-sm relative">
+                <div class="absolute -top-3 -right-3 text-2xl">🔥</div>
+                <p class="text-sm font-semibold text-blue-600 mb-1">ยอดสมัครจริง</p>
+                <p class="text-5xl font-bold text-gray-800" id="totalActual">0</p>
+            </div>
+            <div class="bg-pink-50 p-6 rounded-2xl w-full md:w-1/3 border border-pink-100">
+                <p class="text-sm font-semibold text-pink-600 mb-1">ยังขาดอีก</p>
+                <p class="text-4xl font-bold text-gray-700" id="totalDiff">0</p>
+            </div>
+        </div>
+
+        <!-- หลอด Progress Bar รวม -->
+        <div class="text-left mb-1">
+            <span class="text-sm font-semibold text-gray-600">ความคืบหน้าสู่เป้าหมาย</span>
+            <span class="text-sm font-bold text-blue-500 float-right" id="progressText">0%</span>
+        </div>
+        <div class="w-full bg-gray-100 rounded-full h-4 overflow-hidden shadow-inner">
+            <div id="globalProgressBar" class="pastel-blue h-4 rounded-full transition-all duration-1000" style="width: 0%"></div>
         </div>
     </div>
 
-    <!-- Grid แสดงแยกตามภาค -->
+    <!-- แถบโหลดข้อมูล -->
     <div id="loading" class="text-gray-500 text-lg my-10 animate-pulse flex flex-col items-center">
         <span class="text-4xl mb-3">⏳</span>
         กำลังดึงข้อมูลล่าสุด...
     </div>
     
+    <!-- กล่องแสดงแยกตามภาค -->
     <div class="w-full max-w-4xl mb-4 pl-2 hidden" id="titleRegions">
         <h2 class="text-xl font-bold text-gray-700">📌 ยอดผู้สมัครแยกตามภาค/พันธกิจ</h2>
     </div>
@@ -48,6 +65,9 @@
     <script>
         // ⚠️ อย่าลืมนำ URL ของ Web App อันล่าสุดมาใส่ตรงนี้นะครับ
         const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzt3qj7QYYuKRG2b_o5jw9p06hSylXVQOCK9ef-UJ7C2B-n_289fS0ErYvI7uhDROJbcQ/exec"; 
+        
+        // 🎯 ตั้งเป้าหมายรวมที่นี่
+        const GLOBAL_TARGET = 1800;
 
         async function fetchSummary() {
             try {
@@ -70,10 +90,30 @@
             document.getElementById("titleRegions").classList.remove("hidden");
             const container = document.getElementById("regionsContainer");
             container.classList.remove("hidden");
-            container.innerHTML = ""; // เคลียร์ข้อความโหลด
+            container.innerHTML = ""; 
 
-            // อัปเดตตัวเลขรวมด้านบน
-            document.getElementById("totalActual").innerText = data.totalActual || 0;
+            // คำนวณตัวเลขเป้าหมายรวม
+            const totalActual = data.totalActual || 0;
+            let diff = GLOBAL_TARGET - totalActual;
+            if (diff < 0) diff = 0; // ถ้าทะลุเป้าให้แสดงเป็น 0
+            
+            let percent = (totalActual / GLOBAL_TARGET) * 100;
+            let displayPercent = percent > 100 ? 100 : percent;
+
+            // อัปเดตตัวเลขบนหน้าจอ
+            document.getElementById("totalActual").innerText = totalActual.toLocaleString();
+            document.getElementById("totalDiff").innerText = diff.toLocaleString();
+            document.getElementById("progressText").innerText = percent.toFixed(1) + "%";
+            
+            const progressBar = document.getElementById("globalProgressBar");
+            progressBar.style.width = displayPercent + "%";
+            // ถ้าทะลุ 100% ให้เปลี่ยนหลอดเป็นสีเขียว
+            if (percent >= 100) {
+                progressBar.classList.remove("pastel-blue");
+                progressBar.classList.add("bg-green-400");
+                document.getElementById("progressText").classList.add("text-green-500");
+                document.getElementById("progressText").innerText = "🎉 ทะลุเป้าหมาย! (" + percent.toFixed(1) + "%)";
+            }
 
             // ดึงรายชื่อภาคที่มีคนสมัครแล้วมาเรียงลำดับ
             const regions = Object.keys(data.regions).sort();
@@ -90,7 +130,7 @@
                     <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition duration-300 flex justify-between items-center">
                         <h3 class="font-semibold text-gray-700 text-lg pr-4">${regionName}</h3>
                         <div class="pastel-blue text-white font-bold px-5 py-2 rounded-xl text-xl flex items-baseline gap-1 whitespace-nowrap shadow-sm">
-                            ${actual} <span class="text-sm font-normal opacity-80">คน</span>
+                            ${actual.toLocaleString()} <span class="text-sm font-normal opacity-80">คน</span>
                         </div>
                     </div>
                 `;
