@@ -23,6 +23,7 @@
         <p class="text-gray-500 text-sm">✨ ค่ายคริสตจักรที่ขับเคลื่อนด้วยการอธิษฐาน ✨</p>
     </div>
 
+    <!-- Step 1: เลือกสังกัดของคุณ -->
     <div class="w-full max-w-xl bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mb-6">
         <h2 class="font-bold text-gray-700 mb-4 flex items-center"><span class="bg-blue-100 text-blue-600 rounded-full w-6 h-6 inline-flex items-center justify-center mr-2 text-sm">1</span> เลือกสังกัดของคุณ</h2>
         
@@ -40,6 +41,7 @@
         </div>
     </div>
 
+    <!-- Step 2: ระบุจำนวนคนเข้าเรียน -->
     <div class="w-full max-w-xl bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mb-6">
         <div class="flex justify-between items-center mb-4">
             <h2 class="font-bold text-gray-700 flex items-center"><span class="bg-blue-100 text-blue-600 rounded-full w-6 h-6 inline-flex items-center justify-center mr-2 text-sm">2</span> ระบุจำนวนคนเข้าเรียน</h2>
@@ -141,7 +143,7 @@
                     </div>
                     <div>
                         <h3 class="font-bold text-gray-800 text-lg">5. YOUTH (เยาวชน)</h3>
-                        <p class="text-sm text-gray-500 mt-1">กิจกรรมกลุ่มสถาบัน องค์กรคริสตจักร</p>
+                        <p class="text-sm text-gray-500 mt-1">ออกแบบมาเพื่อวัยรุ่นโดยเฉพาะ</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-2 shrink-0 bg-gray-50 p-2 rounded-xl border border-gray-100">
@@ -178,7 +180,7 @@
         // ⚠️ สำคัญมาก: เอา URL Web App ของคุณเพลงมาวางทับข้อความตรงนี้ครับ ⚠️
         const scriptUrl = "https://script.google.com/macros/s/AKfycbzt3qj7QYYuKRG2b_o5jw9p06hSylXVQOCK9ef-UJ7C2B-n_289fS0ErYvI7uhDROJbcQ/exec"; 
         
-        let fetchedTotal = 0; // เก็บยอดผู้สมัครรวมของหน่วยนั้นๆ
+        let fetchedTotal = 0; 
 
         window.onload = () => {
             for (let region in churchData) {
@@ -194,6 +196,13 @@
             churchSelect.innerHTML = '<option value="">-- กรุณาเลือกคริสตจักร/หน่วย --</option>'; 
             document.getElementById("totalMembersDisplay").classList.add("hidden");
             
+            // รีเซ็ตช่องกรอกให้ว่างเปล่า
+            document.getElementById("w1").value = "";
+            document.getElementById("w2").value = "";
+            document.getElementById("w3").value = "";
+            document.getElementById("w4").value = "";
+            document.getElementById("w5").value = "";
+
             if (selectedRegion) {
                 churchSelect.disabled = false;
                 churchData[selectedRegion].forEach(church => {
@@ -207,11 +216,11 @@
             }
         }
 
-        // 🎯 ดึงยอดจาก Google Sheets มาโชว์
+        // 🎯 ดึงยอดสมัคร และข้อมูลที่เคยกรอกไว้มาโชว์
         function fetchTotalMembers() {
             const church = churchSelect.value;
             const display = document.getElementById("totalMembersDisplay");
-            fetchedTotal = 0; // รีเซ็ตยอดใหม่
+            fetchedTotal = 0; 
             
             if (!church) {
                 display.classList.add("hidden");
@@ -219,7 +228,7 @@
             }
 
             display.classList.remove("hidden");
-            display.innerHTML = "⏳ <i>กำลังดึงข้อมูลยอดผู้สมัคร...</i>";
+            display.innerHTML = "⏳ <i>กำลังดึงข้อมูลจากระบบ...</i>";
 
             fetch(scriptUrl, {
                 method: 'POST',
@@ -229,20 +238,28 @@
             .then(data => {
                 if(data.result === "success"){
                     fetchedTotal = data.total;
-                    calculateCurrentTotal(); // เรียกฟังก์ชันบวกเลขโชว์
+                    
+                    // 🌟 ถ้าระบบเจอว่าเคยกรอกไว้ ให้เติมตัวเลขเก่าลงช่องอัตโนมัติ
+                    document.getElementById("w1").value = data.w1 > 0 ? data.w1 : "";
+                    document.getElementById("w2").value = data.w2 > 0 ? data.w2 : "";
+                    document.getElementById("w3").value = data.w3 > 0 ? data.w3 : "";
+                    document.getElementById("w4").value = data.w4 > 0 ? data.w4 : "";
+                    document.getElementById("w5").value = data.w5 > 0 ? data.w5 : "";
+
+                    calculateCurrentTotal(); // บวกรวมยอดทันที
                 } else {
-                    display.innerHTML = "❌ ไม่สามารถดึงยอดได้ กรุณากรอกตามจำนวนจริง";
+                    display.innerHTML = "❌ ไม่สามารถดึงข้อมูลได้ กรุณากรอกตามจำนวนจริง";
                 }
             })
             .catch(error => {
-                display.innerHTML = "❌ ระบบขัดข้อง ไม่สามารถดึงยอดได้ (แต่ยังบันทึกคลาสได้ปกตินะครับ)";
+                display.innerHTML = "❌ ระบบขัดข้อง ไม่สามารถดึงข้อมูลได้ (แต่ยังบันทึกคลาสได้ปกตินะครับ)";
             });
         }
 
         // 🎯 ฟังก์ชันบวกเลขให้ดูแบบเรียลไทม์
         function calculateCurrentTotal() {
             const display = document.getElementById("totalMembersDisplay");
-            if (fetchedTotal === 0) return; // ถ้ายอดยังไม่มา ไม่ต้องโชว์อะไร
+            if (fetchedTotal === 0) return;
 
             const w1 = parseInt(document.getElementById("w1").value) || 0;
             const w2 = parseInt(document.getElementById("w2").value) || 0;
@@ -259,7 +276,7 @@
             `;
         }
 
-        // 🎯 ส่งข้อมูลไปที่ Google Sheets
+        // 🎯 ส่งข้อมูลไปอัปเดตที่ Google Sheets
         function submitWorkshop() {
             const region = regionSelect.value;
             const church = churchSelect.value;
