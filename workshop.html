@@ -10,7 +10,6 @@
         body { font-family: 'Sarabun', sans-serif; background-color: #f4f7f6; }
         .pastel-blue { background-color: #B0C4DE; }
         .text-pastel-blue { color: #8FA8C8; }
-        /* ซ่อนลูกศรในช่องกรอกตัวเลข */
         input[type="number"]::-webkit-inner-spin-button, 
         input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
@@ -37,120 +36,121 @@
             <option value="">-- กรุณาเลือกคริสตจักร/หน่วย --</option>
         </select>
 
-        <div id="totalMembersDisplay" class="mt-4 text-sm text-gray-700 hidden bg-blue-50 p-4 rounded-xl border border-blue-100 leading-relaxed">
-        </div>
+        <div id="totalMembersDisplay" class="mt-4 text-sm text-gray-700 hidden bg-blue-50 p-4 rounded-xl border border-blue-100 leading-relaxed"></div>
     </div>
 
-    <!-- Step 2: ระบุจำนวนคนเข้าเรียน -->
+    <!-- Step 2: ระบุจำนวนและรายชื่อ -->
     <div class="w-full max-w-xl bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mb-6">
         <div class="flex justify-between items-center mb-4">
-            <h2 class="font-bold text-gray-700 flex items-center"><span class="bg-blue-100 text-blue-600 rounded-full w-6 h-6 inline-flex items-center justify-center mr-2 text-sm">2</span> ระบุจำนวนคนเข้าเรียน</h2>
+            <h2 class="font-bold text-gray-700 flex items-center"><span class="bg-blue-100 text-blue-600 rounded-full w-6 h-6 inline-flex items-center justify-center mr-2 text-sm">2</span> ระบุจำนวนคนและรายชื่อ</h2>
         </div>
         
         <div class="space-y-4" id="workshopList">
             
             <!-- ชั้นที่ 1 -->
-            <div class="border border-gray-200 rounded-2xl p-4 flex flex-col sm:flex-row justify-between sm:items-center gap-4 hover:border-blue-300 hover:shadow-md transition bg-white">
-                <div class="flex items-start gap-4 flex-1">
-                    <div class="w-12 h-12 shrink-0 bg-green-50 text-green-600 rounded-full flex items-center justify-center shadow-sm border border-green-100">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-                        </svg>
+            <div class="border border-gray-200 rounded-2xl p-4 flex flex-col gap-4 hover:border-blue-300 hover:shadow-md transition bg-white">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                    <div class="flex items-start gap-4 flex-1">
+                        <div class="w-12 h-12 shrink-0 bg-green-50 text-green-600 rounded-full flex items-center justify-center shadow-sm border border-green-100">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-lg">1. การอธิษฐาน : ชีวิตที่สนิทสนมฯ</h3>
+                            <p class="text-sm text-gray-600 mt-1 font-semibold">ผู้สอน: อ.วรพักตร์ และทีม</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="font-bold text-gray-800 text-lg">1. การอธิษฐาน : ชีวิตที่สนิทสนมกับพระเจ้า</h3>
-                        <p class="text-sm text-gray-600 mt-1 font-semibold">ผู้สอน: อ.วรพักตร์ และทีม</p>
-                        <p class="text-xs text-gray-500 mt-1">เข้าใจการอธิษฐานแบบพระคัมภีร์ ฝึกอธิษฐานและเติบโตกับพระเจ้า</p>
+                    <div class="flex items-center space-x-2 shrink-0 bg-gray-50 p-2 rounded-xl border border-gray-100">
+                        <label class="text-sm font-semibold text-gray-600">จำนวน</label>
+                        <input type="number" id="w1" min="0" placeholder="0" oninput="calculateCurrentTotal()" class="w-16 text-center border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 font-bold text-lg text-blue-600">
+                        <span class="text-sm text-gray-500">คน</span>
                     </div>
                 </div>
-                <div class="flex items-center space-x-2 shrink-0 bg-gray-50 p-2 rounded-xl border border-gray-100">
-                    <label class="text-sm font-semibold text-gray-600">จำนวน</label>
-                    <input type="number" id="w1" min="0" placeholder="0" oninput="calculateCurrentTotal()" class="w-16 text-center border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 font-bold text-lg text-blue-600">
-                    <span class="text-sm text-gray-500">คน</span>
-                </div>
+                <!-- ช่องกรอกชื่อ -->
+                <input type="text" id="w1_names" placeholder="📝 ระบุชื่อผู้เข้าเรียน (เว้นวรรคหรือลูกน้ำคั่น)" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 text-gray-700">
             </div>
 
             <!-- ชั้นที่ 2 -->
-            <div class="border border-gray-200 rounded-2xl p-4 flex flex-col sm:flex-row justify-between sm:items-center gap-4 hover:border-blue-300 hover:shadow-md transition bg-white">
-                <div class="flex items-start gap-4 flex-1">
-                    <div class="w-12 h-12 shrink-0 bg-orange-50 text-orange-500 rounded-full flex items-center justify-center shadow-sm border border-orange-100">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                        </svg>
+            <div class="border border-gray-200 rounded-2xl p-4 flex flex-col gap-4 hover:border-blue-300 hover:shadow-md transition bg-white">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                    <div class="flex items-start gap-4 flex-1">
+                        <div class="w-12 h-12 shrink-0 bg-orange-50 text-orange-500 rounded-full flex items-center justify-center shadow-sm border border-orange-100">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-lg">2. การอธิษฐานเพื่อการรักษาโรค</h3>
+                            <p class="text-sm text-gray-600 mt-1 font-semibold">ผู้สอน: อ.ทศพักตร์, อ.สรรเสริญ และทีม</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="font-bold text-gray-800 text-lg">2. การอธิษฐานเพื่อการรักษาโรค</h3>
-                        <p class="text-sm text-gray-600 mt-1 font-semibold">ผู้สอน: อ.ทศพักตร์, อ.สรรเสริญ และทีม</p>
-                        <p class="text-xs text-gray-500 mt-1">เข้าใจพระเจ้าผู้ทรงรักษา เรียนรู้การวางมืออธิษฐานด้วยความเชื่อ</p>
+                    <div class="flex items-center space-x-2 shrink-0 bg-gray-50 p-2 rounded-xl border border-gray-100">
+                        <label class="text-sm font-semibold text-gray-600">จำนวน</label>
+                        <input type="number" id="w2" min="0" placeholder="0" oninput="calculateCurrentTotal()" class="w-16 text-center border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 font-bold text-lg text-blue-600">
+                        <span class="text-sm text-gray-500">คน</span>
                     </div>
                 </div>
-                <div class="flex items-center space-x-2 shrink-0 bg-gray-50 p-2 rounded-xl border border-gray-100">
-                    <label class="text-sm font-semibold text-gray-600">จำนวน</label>
-                    <input type="number" id="w2" min="0" placeholder="0" oninput="calculateCurrentTotal()" class="w-16 text-center border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 font-bold text-lg text-blue-600">
-                    <span class="text-sm text-gray-500">คน</span>
-                </div>
+                <input type="text" id="w2_names" placeholder="📝 ระบุชื่อผู้เข้าเรียน (เว้นวรรคหรือลูกน้ำคั่น)" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 text-gray-700">
             </div>
 
             <!-- ชั้นที่ 3 -->
-            <div class="border border-gray-200 rounded-2xl p-4 flex flex-col sm:flex-row justify-between sm:items-center gap-4 hover:border-blue-300 hover:shadow-md transition bg-white">
-                <div class="flex items-start gap-4 flex-1">
-                    <div class="w-12 h-12 shrink-0 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center shadow-sm border border-blue-100">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" />
-                        </svg>
+            <div class="border border-gray-200 rounded-2xl p-4 flex flex-col gap-4 hover:border-blue-300 hover:shadow-md transition bg-white">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                    <div class="flex items-start gap-4 flex-1">
+                        <div class="w-12 h-12 shrink-0 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center shadow-sm border border-blue-100">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" /></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-lg">3. การอธิษฐานที่เปลี่ยนชีวิต</h3>
+                            <p class="text-sm text-gray-600 mt-1 font-semibold">ผู้สอน: อ.กาญจนา, อ.พันทิวา, อ.สำลี</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="font-bold text-gray-800 text-lg">3. การอธิษฐานที่เปลี่ยนชีวิต</h3>
-                        <p class="text-sm text-gray-600 mt-1 font-semibold">ผู้สอน: อ.กาญจนา, อ.พันทิวา, อ.สำลี และทีม</p>
-                        <p class="text-xs text-gray-500 mt-1">เรียนรู้การอธิษฐานเพื่อการเยียวยา รื้อฟื้น และปล่อยวางอดีต</p>
+                    <div class="flex items-center space-x-2 shrink-0 bg-gray-50 p-2 rounded-xl border border-gray-100">
+                        <label class="text-sm font-semibold text-gray-600">จำนวน</label>
+                        <input type="number" id="w3" min="0" placeholder="0" oninput="calculateCurrentTotal()" class="w-16 text-center border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 font-bold text-lg text-blue-600">
+                        <span class="text-sm text-gray-500">คน</span>
                     </div>
                 </div>
-                <div class="flex items-center space-x-2 shrink-0 bg-gray-50 p-2 rounded-xl border border-gray-100">
-                    <label class="text-sm font-semibold text-gray-600">จำนวน</label>
-                    <input type="number" id="w3" min="0" placeholder="0" oninput="calculateCurrentTotal()" class="w-16 text-center border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 font-bold text-lg text-blue-600">
-                    <span class="text-sm text-gray-500">คน</span>
-                </div>
+                <input type="text" id="w3_names" placeholder="📝 ระบุชื่อผู้เข้าเรียน (เว้นวรรคหรือลูกน้ำคั่น)" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 text-gray-700">
             </div>
 
             <!-- ชั้นที่ 4 -->
-            <div class="border border-gray-200 rounded-2xl p-4 flex flex-col sm:flex-row justify-between sm:items-center gap-4 hover:border-blue-300 hover:shadow-md transition bg-white">
-                <div class="flex items-start gap-4 flex-1">
-                    <div class="w-12 h-12 shrink-0 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center shadow-sm border border-purple-100">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                        </svg>
+            <div class="border border-gray-200 rounded-2xl p-4 flex flex-col gap-4 hover:border-blue-300 hover:shadow-md transition bg-white">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                    <div class="flex items-start gap-4 flex-1">
+                        <div class="w-12 h-12 shrink-0 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center shadow-sm border border-purple-100">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-lg">4. การทำยุทธอธิษฐาน</h3>
+                            <p class="text-sm text-gray-600 mt-1 font-semibold">ผู้สอน: ศจ.ลี ซัง ฮี และ ทีมเกาหลี</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="font-bold text-gray-800 text-lg">4. การทำยุทธอธิษฐาน</h3>
-                        <p class="text-sm text-gray-600 mt-1 font-semibold">ผู้สอน: ศจ.ลี ซัง ฮี และ ทีมเกาหลี</p>
-                        <p class="text-xs text-gray-500 mt-1">เข้าใจสงครามฝ่ายวิญญาณ และการอธิษฐานเชิงยุทธศาสตร์</p>
+                    <div class="flex items-center space-x-2 shrink-0 bg-gray-50 p-2 rounded-xl border border-gray-100">
+                        <label class="text-sm font-semibold text-gray-600">จำนวน</label>
+                        <input type="number" id="w4" min="0" placeholder="0" oninput="calculateCurrentTotal()" class="w-16 text-center border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 font-bold text-lg text-blue-600">
+                        <span class="text-sm text-gray-500">คน</span>
                     </div>
                 </div>
-                <div class="flex items-center space-x-2 shrink-0 bg-gray-50 p-2 rounded-xl border border-gray-100">
-                    <label class="text-sm font-semibold text-gray-600">จำนวน</label>
-                    <input type="number" id="w4" min="0" placeholder="0" oninput="calculateCurrentTotal()" class="w-16 text-center border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 font-bold text-lg text-blue-600">
-                    <span class="text-sm text-gray-500">คน</span>
-                </div>
+                <input type="text" id="w4_names" placeholder="📝 ระบุชื่อผู้เข้าเรียน (เว้นวรรคหรือลูกน้ำคั่น)" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 text-gray-700">
             </div>
 
             <!-- ชั้นที่ 5 -->
-            <div class="border border-gray-200 rounded-2xl p-4 flex flex-col sm:flex-row justify-between sm:items-center gap-4 hover:border-blue-300 hover:shadow-md transition bg-white">
-                <div class="flex items-start gap-4 flex-1">
-                    <div class="w-12 h-12 shrink-0 bg-pink-50 text-pink-500 rounded-full flex items-center justify-center shadow-sm border border-pink-100">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
-                        </svg>
+            <div class="border border-gray-200 rounded-2xl p-4 flex flex-col gap-4 hover:border-blue-300 hover:shadow-md transition bg-white">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                    <div class="flex items-start gap-4 flex-1">
+                        <div class="w-12 h-12 shrink-0 bg-pink-50 text-pink-500 rounded-full flex items-center justify-center shadow-sm border border-pink-100">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-lg">5. YOUTH (เยาวชน)</h3>
+                            <p class="text-sm text-gray-500 mt-1">ออกแบบมาเพื่อวัยรุ่นโดยเฉพาะ</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="font-bold text-gray-800 text-lg">5. YOUTH (เยาวชน)</h3>
-                        <p class="text-sm text-gray-500 mt-1">ออกแบบมาเพื่อวัยรุ่นโดยเฉพาะ</p>
+                    <div class="flex items-center space-x-2 shrink-0 bg-gray-50 p-2 rounded-xl border border-gray-100">
+                        <label class="text-sm font-semibold text-gray-600">จำนวน</label>
+                        <input type="number" id="w5" min="0" placeholder="0" oninput="calculateCurrentTotal()" class="w-16 text-center border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 font-bold text-lg text-blue-600">
+                        <span class="text-sm text-gray-500">คน</span>
                     </div>
                 </div>
-                <div class="flex items-center space-x-2 shrink-0 bg-gray-50 p-2 rounded-xl border border-gray-100">
-                    <label class="text-sm font-semibold text-gray-600">จำนวน</label>
-                    <input type="number" id="w5" min="0" placeholder="0" oninput="calculateCurrentTotal()" class="w-16 text-center border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 font-bold text-lg text-blue-600">
-                    <span class="text-sm text-gray-500">คน</span>
-                </div>
+                <input type="text" id="w5_names" placeholder="📝 ระบุชื่อผู้เข้าเรียน (เว้นวรรคหรือลูกน้ำคั่น)" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 text-gray-700">
             </div>
 
         </div>
@@ -184,9 +184,7 @@
 
         window.onload = () => {
             for (let region in churchData) {
-                let option = document.createElement("option");
-                option.value = region;
-                option.textContent = region;
+                let option = document.createElement("option"); option.value = region; option.textContent = region;
                 regionSelect.appendChild(option);
             }
         };
@@ -196,19 +194,13 @@
             churchSelect.innerHTML = '<option value="">-- กรุณาเลือกคริสตจักร/หน่วย --</option>'; 
             document.getElementById("totalMembersDisplay").classList.add("hidden");
             
-            // รีเซ็ตช่องกรอกให้ว่างเปล่า
-            document.getElementById("w1").value = "";
-            document.getElementById("w2").value = "";
-            document.getElementById("w3").value = "";
-            document.getElementById("w4").value = "";
-            document.getElementById("w5").value = "";
+            // รีเซ็ตตัวเลขและชื่อ
+            ["w1","w2","w3","w4","w5", "w1_names","w2_names","w3_names","w4_names","w5_names"].forEach(id => document.getElementById(id).value = "");
 
             if (selectedRegion) {
                 churchSelect.disabled = false;
                 churchData[selectedRegion].forEach(church => {
-                    let option = document.createElement("option");
-                    option.value = church;
-                    option.textContent = church;
+                    let option = document.createElement("option"); option.value = church; option.textContent = church;
                     churchSelect.appendChild(option);
                 });
             } else {
@@ -216,16 +208,12 @@
             }
         }
 
-        // 🎯 ดึงยอดสมัคร และข้อมูลที่เคยกรอกไว้มาโชว์
         function fetchTotalMembers() {
             const church = churchSelect.value;
             const display = document.getElementById("totalMembersDisplay");
             fetchedTotal = 0; 
             
-            if (!church) {
-                display.classList.add("hidden");
-                return;
-            }
+            if (!church) { display.classList.add("hidden"); return; }
 
             display.classList.remove("hidden");
             display.innerHTML = "⏳ <i>กำลังดึงข้อมูลจากระบบ...</i>";
@@ -239,71 +227,60 @@
                 if(data.result === "success"){
                     fetchedTotal = data.total;
                     
-                    // 🌟 ถ้าระบบเจอว่าเคยกรอกไว้ ให้เติมตัวเลขเก่าลงช่องอัตโนมัติ
+                    // ดึงตัวเลขและรายชื่อเก่ามาใส่
                     document.getElementById("w1").value = data.w1 > 0 ? data.w1 : "";
                     document.getElementById("w2").value = data.w2 > 0 ? data.w2 : "";
                     document.getElementById("w3").value = data.w3 > 0 ? data.w3 : "";
                     document.getElementById("w4").value = data.w4 > 0 ? data.w4 : "";
                     document.getElementById("w5").value = data.w5 > 0 ? data.w5 : "";
 
-                    calculateCurrentTotal(); // บวกรวมยอดทันที
-                } else {
-                    display.innerHTML = "❌ ไม่สามารถดึงข้อมูลได้ กรุณากรอกตามจำนวนจริง";
-                }
+                    document.getElementById("w1_names").value = data.w1n || "";
+                    document.getElementById("w2_names").value = data.w2n || "";
+                    document.getElementById("w3_names").value = data.w3n || "";
+                    document.getElementById("w4_names").value = data.w4n || "";
+                    document.getElementById("w5_names").value = data.w5n || "";
+
+                    calculateCurrentTotal(); 
+                } else { display.innerHTML = "❌ ไม่สามารถดึงข้อมูลได้ กรุณากรอกตามจำนวนจริง"; }
             })
-            .catch(error => {
-                display.innerHTML = "❌ ระบบขัดข้อง ไม่สามารถดึงข้อมูลได้ (แต่ยังบันทึกคลาสได้ปกตินะครับ)";
-            });
+            .catch(error => { display.innerHTML = "❌ ระบบขัดข้อง ไม่สามารถดึงข้อมูลได้ (แต่ยังบันทึกคลาสได้ปกตินะครับ)"; });
         }
 
-        // 🎯 ฟังก์ชันบวกเลขให้ดูแบบเรียลไทม์
         function calculateCurrentTotal() {
             const display = document.getElementById("totalMembersDisplay");
             if (fetchedTotal === 0) return;
 
-            const w1 = parseInt(document.getElementById("w1").value) || 0;
-            const w2 = parseInt(document.getElementById("w2").value) || 0;
-            const w3 = parseInt(document.getElementById("w3").value) || 0;
-            const w4 = parseInt(document.getElementById("w4").value) || 0;
-            const w5 = parseInt(document.getElementById("w5").value) || 0;
-            
-            const currentSum = w1 + w2 + w3 + w4 + w5;
+            const currentSum = ["w1","w2","w3","w4","w5"].reduce((sum, id) => sum + (parseInt(document.getElementById(id).value) || 0), 0);
             
             display.innerHTML = `
                 📌 สมัครค่ายไว้ทั้งหมด: <b class="text-lg text-blue-700">${fetchedTotal}</b> คน<br>
                 ✅ เลือกลงคลาสไปแล้ว: <b class="text-lg ${currentSum > fetchedTotal ? 'text-red-500' : 'text-green-600'}">${currentSum}</b> คน<br>
-                <span class="text-xs text-gray-500 mt-1 block">*หากตัวเลขไม่ครบเพราะมีคนติดธุระ สามารถกดบันทึกได้เลยครับ ไม่บังคับยอดครับ</span>
+                <span class="text-xs text-gray-500 mt-1 block">*หากตัวเลขไม่ครบ สามารถกดบันทึกได้เลยครับ ไม่บังคับยอดครับ</span>
             `;
         }
 
-        // 🎯 ส่งข้อมูลไปอัปเดตที่ Google Sheets
         function submitWorkshop() {
-            const region = regionSelect.value;
-            const church = churchSelect.value;
-            
-            if (!region || !church) {
-                alert("⚠️ กรุณาเลือกภาคพันธกิจ และ คริสตจักร/หน่วย ให้ครบถ้วนครับ");
-                return;
-            }
-
-            const w1 = document.getElementById("w1").value || 0;
-            const w2 = document.getElementById("w2").value || 0;
-            const w3 = document.getElementById("w3").value || 0;
-            const w4 = document.getElementById("w4").value || 0;
-            const w5 = document.getElementById("w5").value || 0;
+            const region = regionSelect.value; const church = churchSelect.value;
+            if (!region || !church) { alert("⚠️ กรุณาเลือกภาคพันธกิจ และ คริสตจักร/หน่วย ให้ครบถ้วนครับ"); return; }
 
             const btn = document.getElementById("submitBtn");
-            btn.innerHTML = "⏳ กำลังบันทึกข้อมูล...";
-            btn.disabled = true;
-            btn.classList.add("opacity-50", "cursor-not-allowed");
+            btn.innerHTML = "⏳ กำลังบันทึกข้อมูล..."; btn.disabled = true; btn.classList.add("opacity-50", "cursor-not-allowed");
 
             fetch(scriptUrl, {
                 method: 'POST',
                 body: JSON.stringify({
                     action: "saveWorkshop",
-                    region: region,
-                    church: church,
-                    w1: w1, w2: w2, w3: w3, w4: w4, w5: w5
+                    region: region, church: church,
+                    w1: document.getElementById("w1").value || 0,
+                    w2: document.getElementById("w2").value || 0,
+                    w3: document.getElementById("w3").value || 0,
+                    w4: document.getElementById("w4").value || 0,
+                    w5: document.getElementById("w5").value || 0,
+                    w1n: document.getElementById("w1_names").value,
+                    w2n: document.getElementById("w2_names").value,
+                    w3n: document.getElementById("w3_names").value,
+                    w4n: document.getElementById("w4_names").value,
+                    w5n: document.getElementById("w5_names").value
                 })
             })
             .then(response => response.json())
@@ -313,16 +290,12 @@
                     window.location.reload(); 
                 } else {
                     alert("❌ เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
-                    btn.innerHTML = "บันทึกข้อมูล Workshop";
-                    btn.disabled = false;
-                    btn.classList.remove("opacity-50", "cursor-not-allowed");
+                    btn.innerHTML = "บันทึกข้อมูล Workshop"; btn.disabled = false; btn.classList.remove("opacity-50", "cursor-not-allowed");
                 }
             })
             .catch(error => {
                 alert("❌ ระบบขัดข้อง กรุณาลองใหม่อีกครั้ง");
-                btn.innerHTML = "บันทึกข้อมูล Workshop";
-                btn.disabled = false;
-                btn.classList.remove("opacity-50", "cursor-not-allowed");
+                btn.innerHTML = "บันทึกข้อมูล Workshop"; btn.disabled = false; btn.classList.remove("opacity-50", "cursor-not-allowed");
             });
         }
     </script>
