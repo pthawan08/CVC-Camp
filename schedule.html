@@ -3,206 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>โปรแกรมค่าย CVC Prayer #12</title>
+    <title>ตารางค่าย CVC Prayer #12</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Sarabun', sans-serif; background-color: #f4f7f6; }
-        .pastel-blue { background-color: #B0C4DE; }
-        .text-pastel-blue { color: #8FA8C8; }
-        .border-pastel-blue { border-color: #B0C4DE; }
+        .tab-active { background-color: #2563EB; color: white; border-color: #2563EB; }
+        .tab-inactive { background-color: white; color: #4B5563; border-color: #E5E7EB; }
+        /* ซ่อน Scrollbar ด้านล่างของปุ่มวัน */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="p-4 md:p-8 flex flex-col items-center min-h-screen pb-20">
+<body class="pb-20">
 
-    <!-- ส่วนหัว -->
-    <div class="w-full max-w-2xl bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mb-6 text-center relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-3 pastel-blue"></div>
-        <h1 class="text-xl md:text-2xl font-bold text-gray-800 mb-2">โปรแกรมค่ายคริสตจักรแห่งนิมิต # 12 "Prayer"</h1>
-        <p class="text-gray-500 font-semibold mb-1">📅 30 ก.ค. - 2 ส.ค. 2026</p>
-        <p class="text-gray-500 text-sm mb-6">📍 ณ มหาวิทยาลัยราชภัฏพิบูลสงคราม จ.พิษณุโลก</p>
-        
-        <!-- 🪑 ปุ่มสำหรับดูผังที่นั่ง (เตรียมไว้สำหรับอนาคต) -->
-        <!-- วิธีแก้เมื่อผังเสร็จ: เปลี่ยนค่า href="..." เป็นลิงก์รูปภาพผังที่นั่ง และเปลี่ยนข้อความด้านในปุ่ม -->
-        <a href="#" id="seatingPlanBtn" class="inline-block w-full md:w-auto px-6 py-3 rounded-full font-bold text-sm transition-all duration-300 bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200">
-            🪑 ผังที่นั่ง (รอประกาศหลังจัดโซนเสร็จ)
-        </a>
+    <!-- Header -->
+    <div class="bg-blue-600 shadow-md text-white px-4 py-6 rounded-b-3xl relative overflow-hidden">
+        <div class="absolute -right-10 -top-10 w-32 h-32 bg-white opacity-10 rounded-full"></div>
+        <div class="absolute -left-10 -bottom-10 w-24 h-24 bg-white opacity-10 rounded-full"></div>
+        <h1 class="text-2xl font-bold text-center relative z-10">ตารางค่าย CVC Prayer #12</h1>
+        <p class="text-blue-100 text-sm text-center mt-1 relative z-10">วันที่ 30 ก.ค. - 2 ส.ค. 2026</p>
+        <p class="text-blue-200 text-xs text-center mt-1 relative z-10">ณ ม.ราชภัฏพิบูลสงคราม จ.พิษณุโลก</p>
     </div>
 
-    <!-- เมนูเลือกวัน (จะถูกสร้างอัตโนมัติ) -->
-    <div id="daySelector" class="w-full max-w-2xl flex overflow-x-auto gap-2 mb-6 pb-2 snap-x">
-        <!-- ปุ่มเลือกวันจะมาอยู่ตรงนี้ -->
+    <!-- Tabs วันที่ -->
+    <div class="max-w-md mx-auto mt-4 px-4 sticky top-4 z-50">
+        <div class="flex space-x-2 overflow-x-auto no-scrollbar py-2">
+            <button id="btn-day1" onclick="switchTab('day1')" class="tab-active flex-shrink-0 px-4 py-2 rounded-full font-bold text-sm shadow-sm transition-all border border-transparent whitespace-nowrap">พฤ. 30 ก.ค.</button>
+            <button id="btn-day2" onclick="switchTab('day2')" class="tab-inactive flex-shrink-0 px-4 py-2 rounded-full font-bold text-sm shadow-sm transition-all border whitespace-nowrap">ศ. 31 ก.ค.</button>
+            <button id="btn-day3" onclick="switchTab('day3')" class="tab-inactive flex-shrink-0 px-4 py-2 rounded-full font-bold text-sm shadow-sm transition-all border whitespace-nowrap">ส. 1 ส.ค.</button>
+            <button id="btn-day4" onclick="switchTab('day4')" class="tab-inactive flex-shrink-0 px-4 py-2 rounded-full font-bold text-sm shadow-sm transition-all border whitespace-nowrap">อา. 2 ส.ค.</button>
+        </div>
     </div>
 
-    <!-- พื้นที่แสดงผลกำหนดการ -->
-    <div id="scheduleContainer" class="w-full max-w-2xl">
-        <!-- ข้อมูลรายการจะมาอยู่ตรงนี้ -->
+    <!-- Content รายการกำหนดการ -->
+    <div class="max-w-md mx-auto mt-4 px-4 pb-10" id="schedule-container">
+        <!-- ข้อมูลตารางจะถูกโหลดมาใส่ตรงนี้ด้วย Javascript -->
     </div>
 
     <script>
-        // 📝 ฐานข้อมูลกำหนดการทั้งหมด 4 วัน
-        const scheduleData = [
-            {
-                id: "day1",
-                date: "วันที่ 30 กรกฎาคม 2026",
-                shortName: "30 ก.ค.",
-                items: [
-                    { time: "15:00 - 18:30", title: "ลงทะเบียน" },
-                    { time: "17:30 - 18:30", title: "อาหารเย็น" },
-                    { time: "18:30 - 18:45", title: "VTR Title งาน" },
-                    { time: "18:45 - 19:00", title: "กล่าวต้อนรับ" },
-                    { time: "19:00 - 19:30", title: "พิธีเปิด" },
-                    { time: "19:30 - 20:00", title: "นมัสการ" },
-                    { time: "20:00 - 20:15", title: "Moving in the Holy Spirit" },
-                    { time: "20:15 - 21:00", title: "บรรยากาศ CVC Prayer Night" },
-                    { time: "21:00 - 21:10", title: "ประกาศข่าว/อธิษฐานปิด" },
-                    { time: "21:10 - 21:15", title: "ร้องเพลงสรรเสริญ" }
-                ]
-            },
-            {
-                id: "day2",
-                date: "วันที่ 31 กรกฎาคม 2026",
-                shortName: "31 ก.ค.",
-                items: [
-                    { time: "08:00 - 08:30", title: "Devotion ร่วมกัน" },
-                    { time: "08:30 - 09:10", title: "นมัสการ" },
-                    { time: "09:10 - 09:20", title: "เคลื่อนไหวใน HS" },
-                    { time: "09:20 - 09:25", title: "ถวายทรัพย์ 1" },
-                    { time: "09:25 - 09:30", title: "คำพยานชีวิต 1" },
-                    { time: "09:30 - 10:40", title: "สอน 1" },
-                    { time: "10:40 - 10:50", title: "Share Small Group" },
-                    { time: "10:50 - 12:00", title: "สอน 2" },
-                    { time: "12:00 - 12:10", title: "Share Small Group" },
-                    { time: "12:10 - 12:15", title: "ประกาศข่าว" },
-                    { time: "12:15 - 14:00", title: "รับประทานอาหาร" },
-                    { time: "14:00 - 16:00", title: "CVC Sport Game ณ ห้องประชุม" },
-                    { time: "16:00 - 18:30", title: "อาหารเย็น/ พักผ่อนตามอัธยาศัย" },
-                    { time: "18:30 - 18:40", title: "VTR Title งาน" },
-                    { time: "18:40 - 19:20", title: "นมัสการ" },
-                    { time: "19:20 - 19:30", title: "Moving in the Holy Spirit" },
-                    { time: "19:30 - 19:40", title: "ถวายทรัพย์ 2" },
-                    { time: "19:40 - 19:50", title: "การแสดงวัฒนธรรม" },
-                    { time: "19:50 - 19:55", title: "VTR vision night" },
-                    { time: "19:55 - 20:40", title: "เทศนาฟื้นฟู 1" },
-                    { time: "20:40 - 21:10", title: "ตอบสนอง" },
-                    { time: "21:10 - 21:15", title: "ประกาศข่าว" }
-                ]
-            },
-            {
-                id: "day3",
-                date: "วันที่ 1 สิงหาคม 2026",
-                shortName: "1 ส.ค.",
-                items: [
-                    { time: "08:00 - 08:30", title: "Devotion ร่วมกัน" },
-                    { time: "08:30 - 09:10", title: "นมัสการ" },
-                    { time: "09:10 - 09:20", title: "เคลื่อนไหวใน HS" },
-                    { time: "09:20 - 09:25", title: "ถวายทรัพย์ 3" },
-                    { time: "09:25 - 09:30", title: "คำพยานชีวิต 2" },
-                    { time: "09:30 - 09:50", title: "มอบวุฒิบัตร" },
-                    { time: "09:50 - 11:00", title: "สอน 3" },
-                    { time: "11:00 - 12:10", title: "สอน 4" },
-                    { time: "12:10 - 12:20", title: "Share Small Group" },
-                    { time: "12:20 - 12:25", title: "ประกาศข่าว" },
-                    { time: "12:25 - 13:30", title: "รับประทานอาหาร" },
-                    { time: "13:30 - 16:00", title: "workshop/ กลุ่มคนคล้าย STB" },
-                    { time: "16:00 - 18:30", title: "อาหารเย็น /พักผ่อนตามอัธยาศัย" },
-                    { time: "18:30 - 18:40", title: "VTR Title งาน" },
-                    { time: "18:40 - 19:20", title: "นมัสการ" },
-                    { time: "19:20 - 19:30", title: "Moving in the Holy Spirit" },
-                    { time: "19:30 - 19:40", title: "ถวายทรัพย์ 4" },
-                    { time: "19:40 - 19:50", title: "การแสดงวัฒนธรรม" },
-                    { time: "19:50 - 19:55", title: "VTR เกี่ยวกับการ อธ, ความเชื่อ" },
-                    { time: "19:55 - 20:40", title: "เทศนาฟื้นฟู 2" },
-                    { time: "20:40 - 21:10", title: "ตอบสนอง" },
-                    { time: "21:10 - 21:15", title: "ประกาศข่าว" }
-                ]
-            },
-            {
-                id: "day4",
-                date: "วันที่ 2 สิงหาคม 2026",
-                shortName: "2 ส.ค.",
-                items: [
-                    { time: "08:30 - 09:10", title: "นมัสการ" },
-                    { time: "09:10 - 09:20", title: "เคลื่อนไหวใน HS" },
-                    { time: "09:20 - 09:30", title: "ถวายทรัพย์ 5" },
-                    { time: "09:30 - 10:40", title: "สอน 5" },
-                    { time: "10:40 - 11:50", title: "สอน 6" },
-                    { time: "11:50 - 12:00", title: "Share Small Group" },
-                    { time: "12:00 - 12:10", title: "ขอบคุณวิทยากร" },
-                    { time: "12:10 - 12:30", title: "พิธีปิด" },
-                    { time: "12:30 - 12:30", title: "อธ ปิด กลับบ้าน" }
-                ]
+        // 🗂️ ฐานข้อมูลตารางค่ายทั้ง 4 วัน
+        const scheduleData = {
+            "day1": [
+                { time: "15:00 - 18:00", title: "ลงทะเบียน / รับเสื้อ", speaker: "อ.สุธาทิพย์", team: "ทะเบียน/ต้อนรับ", note: "Welcome Drink / มีน้ำ/ขนม", duration: "180 นาที", type: "general" },
+                { time: "17:00 - 18:00", title: "พักผ่อนตามอัธยาศัย / รับประทานอาหารเย็น", speaker: "ชาวค่าย", team: "โปรแกรม", note: "", duration: "60 นาที", type: "food" },
+                { time: "18:00 - 18:15", title: "VTR Title ค่าย", speaker: "media", team: "โปรแกรม (media)", note: "แนะนำค่าย", duration: "15 นาที", type: "media" },
+                { time: "18:15 - 18:30", title: "กล่าวต้อนรับ", speaker: "ศจ.สิทธิชัย", team: "ประธานองค์กร", note: "นิมิตค่ายเป็นภาคๆ ต่อจากภาคที่แล้ว", duration: "15 นาที", type: "ceremony" },
+                { time: "18:30 - 19:00", title: "พิธีเปิด", speaker: "อ.ณัฐพล", team: "โปรแกรม", note: "", duration: "30 นาที", type: "ceremony" },
+                { time: "19:00 - 21:15", title: "CVC Prayer Night", speaker: "อ.ชาญณรงค์, ทีมนมัสการ(อ.โดม, อ.มิว, พี่ชิน, พี่บาส)", team: "โปรแกรม", note: "เป็นเวลานมัสการอธิษฐานแสวงหาพระเจ้า", duration: "135 นาที", type: "worship" },
+                { time: "21:15 - 21:25", title: "ประกาศข่าว / อธิษฐานปิด", speaker: "อ.ชาญณรงค์", team: "โปรแกรม", note: "", duration: "10 นาที", type: "general" },
+                { time: "21:25 - 21:30", title: "ร้องเพลงสรรเสริญ", speaker: "อ.ชาญณรงค์", team: "โปรแกรม", note: "ขอให้อาจารย์ณัฐพลนำ 21.00 น.", duration: "5 นาที", type: "worship" }
+            ],
+            "day2": [
+                { time: "08:00 - 08:30", title: "Devotion ส่วนตัว", speaker: "อ.เคลา", team: "โปรแกรม", note: "เฝ้าเดี่ยวส่วนตัว/กลุ่มย่อย เตรียมใจก่อนเข้าประชุม", duration: "30 นาที", type: "worship" },
+                { time: "08:30 - 09:10", title: "นมัสการ", speaker: "อ.ตั้ม / นมัสการพัทยา อ.จิม", team: "โปรแกรม/นมัสการ", note: "", duration: "40 นาที", type: "worship" },
+                { time: "09:10 - 09:20", title: "เคลื่อนไหวใน HS", speaker: "อ.พรสวรรค์", team: "โปรแกรม", note: "", duration: "10 นาที", type: "worship" },
+                { time: "09:20 - 09:25", title: "ถวายทรัพย์ 1", speaker: "อ.พรสวรรค์", team: "โปรแกรม", note: "", duration: "5 นาที", type: "ceremony" },
+                { time: "09:25 - 09:30", title: "คำพยานชีวิต 1", speaker: "media", team: "โปรแกรม(media)", note: "", duration: "5 นาที", type: "media" },
+                { time: "09:30 - 10:40", title: "สอน 1", speaker: "ศจ.สิทธิชัย", team: "โปรแกรม", note: "", duration: "70 นาที", type: "teach" },
+                { time: "10:40 - 10:50", title: "Share Small Group", speaker: "อ.มีชัย", team: "โปรแกรม", note: "ให้นำแชร์แบ่งปันในสิ่งที่ได้เรียนรู้", duration: "10 นาที", type: "activity" },
+                { time: "10:50 - 12:00", title: "สอน 2", speaker: "อ.มีชัย", team: "โปรแกรม", note: "", duration: "70 นาที", type: "teach" },
+                { time: "12:00 - 12:10", title: "ถวายพระพร ร.10", speaker: "อ.พรสวรรค์", team: "โปรแกรม", note: "", duration: "10 นาที", type: "ceremony" },
+                { time: "12:10 - 12:15", title: "ประกาศข่าว", speaker: "อ.พรสวรรค์", team: "โปรแกรม", note: "", duration: "5 นาที", type: "general" },
+                { time: "12:15 - 14:00", title: "รับประทานอาหาร", speaker: "ชาวค่าย", team: "โปรแกรม", note: "", duration: "105 นาที", type: "food" },
+                { time: "14:00 - 16:00", title: "CVC Sport Game (ณ ห้องประชุม)", speaker: "อ.สีหพล", team: "โปรแกรม", note: "แสตนบาย หรือ ท่าเต้นประกอบเพลง / แบ่ง 10 คน", duration: "120 นาที", type: "activity" },
+                { time: "16:00 - 18:30", title: "อาหารเย็น / พักผ่อนตามอัธยาศัย", speaker: "ชาวค่าย", team: "โปรแกรม", note: "", duration: "150 นาที", type: "food" },
+                { time: "18:30 - 18:40", title: "VTR Title ค่าย", speaker: "media", team: "โปรแกรม(media)", note: "", duration: "10 นาที", type: "media" },
+                { time: "18:40 - 19:20", title: "นมัสการ", speaker: "ฝ่ายนมัสการ พิษณุโลก", team: "โปรแกรม/นมัสการ", note: "", duration: "40 นาที", type: "worship" },
+                { time: "19:20 - 19:30", title: "Moving in the Holy Spirit", speaker: "อ.ปรเมศวร์", team: "โปรแกรม", note: "", duration: "10 นาที", type: "worship" },
+                { time: "19:30 - 19:40", title: "ถวายทรัพย์ 2", speaker: "อ.ปรเมศวร์", team: "โปรแกรม", note: "", duration: "10 นาที", type: "ceremony" },
+                { time: "19:40 - 19:50", title: "มี VTR ก่อนการแสดงพิเศษ", speaker: "อ.เกียรติชัย, อ.วันทนีย์", team: "โปรแกรม", note: "", duration: "10 นาที", type: "media" },
+                { time: "19:50 - 19:55", title: "VTR เกี่ยวกับการ อธ, ความเชื่อ", speaker: "media", team: "โปรแกรม(media)", note: "", duration: "5 นาที", type: "media" },
+                { time: "19:55 - 20:40", title: "เทศนาฟื้นฟู 1", speaker: "A.Mike Thorley (อ.สุพรรษา แปล)", team: "โปรแกรม", note: "กิจกรรมพิเศษ", duration: "45 นาที", type: "teach" },
+                { time: "20:40 - 21:10", title: "ตอบสนอง", speaker: "ทีมนมัสการ", team: "โปรแกรม", note: "", duration: "30 นาที", type: "worship" },
+                { time: "21:10 - 21:15", title: "ประกาศข่าว", speaker: "อ.ปรเมศวร์", team: "โปรแกรม", note: "", duration: "5 นาที", type: "general" }
+            ],
+            "day3": [
+                { time: "08:00 - 08:30", title: "Devotion ส่วนตัว", speaker: "อ.บวรทรนง", team: "โปรแกรม", note: "เฝ้าเดี่ยวส่วนตัว/กลุ่มย่อย", duration: "30 นาที", type: "worship" },
+                { time: "08:30 - 09:10", title: "นมัสการ", speaker: "ดำรง / นมัสการ CVC สเปน", team: "โปรแกรม/นมัสการ", note: "", duration: "40 นาที", type: "worship" },
+                { time: "09:10 - 09:20", title: "เคลื่อนไหวใน HS", speaker: "อ.แสวง", team: "โปรแกรม", note: "", duration: "10 นาที", type: "worship" },
+                { time: "09:20 - 09:25", title: "ถวายทรัพย์ 3", speaker: "อ.แสวง", team: "โปรแกรม", note: "", duration: "5 นาที", type: "ceremony" },
+                { time: "09:25 - 09:30", title: "คำพยานชีวิต 2", speaker: "media", team: "โปรแกรม(media)", note: "", duration: "5 นาที", type: "media" },
+                { time: "09:30 - 09:50", title: "มอบสูจิบัตร", speaker: "อ.วันชัย", team: "ฝ่ายการศึกษา/โปรแกรม", note: "", duration: "20 นาที", type: "ceremony" },
+                { time: "09:50 - 11:00", title: "สอน 3", speaker: "ศจ.วันชัย", team: "โปรแกรม", note: "", duration: "70 นาที", type: "teach" },
+                { time: "11:00 - 12:10", title: "สอน 4", speaker: "ศจ.วันชัย", team: "โปรแกรม", note: "", duration: "70 นาที", type: "teach" },
+                { time: "12:10 - 12:20", title: "Share Small Group", speaker: "อ.วันชัย", team: "โปรแกรม", note: "", duration: "10 นาที", type: "activity" },
+                { time: "12:20 - 12:25", title: "ประกาศข่าว", speaker: "อ.แสวง", team: "โปรแกรม", note: "", duration: "5 นาที", type: "general" },
+                { time: "12:25 - 13:30", title: "รับประทานอาหาร", speaker: "ชาวค่าย", team: "โปรแกรม", note: "", duration: "65 นาที", type: "food" },
+                { time: "13:30 - 16:00", title: "Workshop / กลุ่มย่อยค่าย", speaker: "อ.อัญชลี", team: "โปรแกรม", note: "ให้ไปเข้าห้องประชุมตาม 5 ห้อง", duration: "150 นาที", type: "activity" },
+                { time: "16:00 - 18:30", title: "อาหารเย็น / พักผ่อนตามอัธยาศัย", speaker: "ชาวค่าย", team: "โปรแกรม", note: "", duration: "150 นาที", type: "food" },
+                { time: "18:30 - 18:40", title: "VTR Title ค่าย", speaker: "media", team: "โปรแกรม(media)", note: "VTR ภาพรวมของค่าย", duration: "10 นาที", type: "media" },
+                { time: "18:40 - 19:20", title: "นมัสการ", speaker: "ทีมอยุธยา / อ.โอ,น้อง จูเนียร์", team: "โปรแกรม/นมัสการ", note: "", duration: "40 นาที", type: "worship" },
+                { time: "19:20 - 19:30", title: "Moving in the Holy Spirit", speaker: "อ.พัณณิตา", team: "โปรแกรม", note: "", duration: "10 นาที", type: "worship" },
+                { time: "19:30 - 19:40", title: "ถวายทรัพย์ 4 (พันธกิจโลก)", speaker: "อ.พัณณิตา", team: "โปรแกรม", note: "", duration: "10 นาที", type: "ceremony" },
+                { time: "19:40 - 19:50", title: "การแสดงวัฒนธรรม", speaker: "ภาคที่ 5 / Ministry Night", team: "โปรแกรม", note: "ถวายเพื่อพันธกิจ", duration: "10 นาที", type: "activity" },
+                { time: "19:50 - 19:55", title: "VTR vision night", speaker: "media", team: "โปรแกรม(media)", note: "", duration: "5 นาที", type: "media" },
+                { time: "19:55 - 20:40", title: "เทศนาฟื้นฟู 2", speaker: "ศจ.ดร.ยศไกร", team: "โปรแกรม", note: "ถวายเพื่อพันธกิจ และส่งต่อภาคอื่นๆ", duration: "45 นาที", type: "teach" },
+                { time: "20:40 - 21:10", title: "ตอบสนอง", speaker: "ทีมนมัสการ", team: "โปรแกรม", note: "การวางตัวเพื่อพันธกิจ", duration: "30 นาที", type: "worship" },
+                { time: "21:10 - 21:15", title: "ประกาศข่าว", speaker: "อ.พัณณิตา", team: "โปรแกรม", note: "", duration: "5 นาที", type: "general" }
+            ],
+            "day4": [
+                { time: "08:30 - 09:10", title: "นมัสการ", speaker: "พะเยา / ทีมชาลี", team: "โปรแกรม(นมัสการ)", note: "โปรแกรมพิเศษ 3", duration: "40 นาที", type: "worship" },
+                { time: "09:10 - 09:20", title: "เคลื่อนไหวใน HS", speaker: "อ.บรรเสริฐ", team: "โปรแกรม", note: "", duration: "10 นาที", type: "worship" },
+                { time: "09:20 - 09:30", title: "ถวายทรัพย์ 5", speaker: "อ.บรรเสริฐ", team: "โปรแกรม", note: "", duration: "10 นาที", type: "ceremony" },
+                { time: "09:30 - 10:40", title: "สอน 5", speaker: "อ.ทศพักตร์", team: "โปรแกรม", note: "", duration: "70 นาที", type: "teach" },
+                { time: "10:40 - 11:50", title: "สอน 6", speaker: "ศจ.สิทธิชัย", team: "โปรแกรม", note: "", duration: "70 นาที", type: "teach" },
+                { time: "11:50 - 12:00", title: "Share Small Group", speaker: "อ.บรรเสริฐ", team: "โปรแกรม", note: "", duration: "10 นาที", type: "activity" },
+                { time: "12:00 - 12:10", title: "ขอบคุณวิทยากร", speaker: "อ.บรรเสริฐ", team: "โปรแกรม", note: "", duration: "10 นาที", type: "ceremony" },
+                { time: "12:10 - 12:30", title: "พิธีปิด", speaker: "อ.มีชัย", team: "โปรแกรม", note: "", duration: "20 นาที", type: "ceremony" },
+                { time: "12:30 - 12:30", title: "เดินทางกลับด้วยความปลอดภัย", speaker: "ชาวค่าย", team: "โปรแกรม", note: "ขอพระเจ้าอวยพร", duration: "-", type: "general" }
+            ]
+        };
+
+        // 🎨 ฟังก์ชันกำหนดสีกิจกรรม
+        function getTypeColor(type) {
+            switch(type) {
+                case 'food': return 'bg-orange-100 border-orange-200 text-orange-800';
+                case 'worship': return 'bg-purple-100 border-purple-200 text-purple-800';
+                case 'teach': return 'bg-green-100 border-green-200 text-green-800';
+                case 'activity': return 'bg-pink-100 border-pink-200 text-pink-800';
+                case 'ceremony': return 'bg-yellow-100 border-yellow-200 text-yellow-800';
+                case 'media': return 'bg-gray-100 border-gray-200 text-gray-800';
+                default: return 'bg-blue-50 border-blue-200 text-blue-800'; // general
             }
-        ];
+        }
 
-        let currentDayId = "day1";
+        // 🎯 เปลี่ยนแท็บวัน
+        function switchTab(dayKey) {
+            // อัปเดตปุ่มแท็บ
+            ["day1", "day2", "day3", "day4"].forEach(d => {
+                let btn = document.getElementById("btn-" + d);
+                if (d === dayKey) {
+                    btn.classList.remove("tab-inactive");
+                    btn.classList.add("tab-active");
+                } else {
+                    btn.classList.remove("tab-active");
+                    btn.classList.add("tab-inactive");
+                }
+            });
 
-        // ฟังก์ชันวาดปุ่มเลือกวัน
-        function renderDayButtons() {
-            const container = document.getElementById('daySelector');
-            container.innerHTML = '';
+            // สร้างตารางข้อมูล
+            const container = document.getElementById("schedule-container");
+            container.innerHTML = ""; // ล้างของเก่า
+
+            const items = scheduleData[dayKey];
             
-            scheduleData.forEach(day => {
-                const isActive = day.id === currentDayId;
-                const btnClass = isActive 
-                    ? "pastel-blue text-white shadow-md border-pastel-blue" 
-                    : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50";
+            items.forEach((item, index) => {
+                const colorClass = getTypeColor(item.type);
                 
-                const buttonHTML = `
-                    <button onclick="changeDay('${day.id}')" class="snap-center whitespace-nowrap px-6 py-2 rounded-full font-bold text-sm border transition-all ${btnClass}">
-                        ${day.shortName}
-                    </button>
+                // สร้างการ์ดของแต่ละกิจกรรม
+                const cardHtml = `
+                    <div class="flex mb-4 items-stretch opacity-0 animate-fade-in" style="animation-delay: ${index * 0.05}s; animation-fill-mode: forwards;">
+                        <!-- เวลา -->
+                        <div class="w-1/4 pr-3 text-right flex flex-col justify-start pt-2">
+                            <span class="text-sm font-bold text-gray-800 tracking-tight leading-tight">${item.time.replace(' - ', '<br><span class="text-xs text-gray-400 font-normal">ถึง</span><br>')}</span>
+                            <span class="text-[10px] text-gray-400 mt-1">${item.duration}</span>
+                        </div>
+                        
+                        <!-- เส้น Timeline -->
+                        <div class="flex flex-col items-center">
+                            <div class="w-3 h-3 rounded-full bg-blue-300 border-2 border-white shadow-sm mt-3 z-10"></div>
+                            <div class="w-0.5 h-full bg-blue-100 -mt-2"></div>
+                        </div>
+                        
+                        <!-- รายละเอียด -->
+                        <div class="w-3/4 pl-4 pb-2">
+                            <div class="${colorClass} border rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow">
+                                <h3 class="font-bold text-[15px] leading-tight mb-1">${item.title}</h3>
+                                ${item.speaker ? `<p class="text-[13px] font-semibold opacity-90 mb-1 flex items-center">
+                                    <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                    ${item.speaker}
+                                </p>` : ''}
+                                ${item.team ? `<p class="text-xs opacity-75 flex items-center">
+                                    <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                                    รับผิดชอบ: ${item.team}
+                                </p>` : ''}
+                                ${item.note ? `<div class="mt-2 pt-2 border-t border-black/5"><p class="text-xs font-medium italic opacity-80">📌 ${item.note}</p></div>` : ''}
+                            </div>
+                        </div>
+                    </div>
                 `;
-                container.innerHTML += buttonHTML;
+                container.innerHTML += cardHtml;
             });
         }
 
-        // ฟังก์ชันเปลี่ยนวัน
-        function changeDay(dayId) {
-            currentDayId = dayId;
-            renderDayButtons();
-            renderSchedule();
-        }
-
-        // ฟังก์ชันวาดกำหนดการลงหน้าเว็บ
-        function renderSchedule() {
-            const container = document.getElementById('scheduleContainer');
-            const day = scheduleData.find(d => d.id === currentDayId);
-            
-            let itemsHTML = '';
-            day.items.forEach(item => {
-                itemsHTML += `
-                    <div class="flex items-start border-b border-gray-100 last:border-0 py-4 hover:bg-gray-50 transition px-2 rounded-lg">
-                        <div class="w-1/3 text-pastel-blue font-bold text-sm mt-0.5">${item.time}</div>
-                        <div class="w-2/3 text-gray-800 font-medium pl-2">${item.title}</div>
-                    </div>
-                `;
-            });
-
-            const dayCard = `
-                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden animate-[fadeIn_0.3s_ease-in-out]">
-                    <div class="bg-gray-50 border-b border-gray-100 py-3 px-6 text-center">
-                        <span class="font-bold text-gray-700">${day.date}</span>
-                    </div>
-                    <div class="p-4 md:p-6">
-                        ${itemsHTML}
-                    </div>
-                </div>
-            `;
-            container.innerHTML = dayCard;
-        }
-
-        // เมื่อเปิดหน้าเว็บให้วาดข้อมูลทันที
+        // โหลดข้อมูลวันแรกขึ้นมาทันทีเมื่อเปิดเว็บ
         window.onload = () => {
-            renderDayButtons();
-            renderSchedule();
+            switchTab('day1');
         };
     </script>
+
     <style>
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
     </style>
 </body>
 </html>
