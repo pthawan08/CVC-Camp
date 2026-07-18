@@ -42,76 +42,76 @@
     </div>
 
     <script>
-        // 🗂️ ฐานข้อมูลตารางค่ายทั้ง 4 วัน
+        // 🗂️ ฐานข้อมูลตารางค่าย
         const scheduleData = {
             "day1": [
-                { time: "15:00 - 18:00", title: "ลงทะเบียน / รับเสื้อ", speaker: "อ.สุธาทิพย์", team: "ทะเบียน/ต้อนรับ", note: "Welcome Drink / มีน้ำ/ขนม", duration: "180 นาที", type: "general" },
-                { time: "17:00 - 18:00", title: "พักผ่อนตามอัธยาศัย / รับประทานอาหารเย็น", speaker: "ชาวค่าย", team: "โปรแกรม", note: "", duration: "60 นาที", type: "food" },
-                { time: "18:00 - 18:15", title: "VTR Title ค่าย", speaker: "media", team: "โปรแกรม (media)", note: "แนะนำค่าย", duration: "15 นาที", type: "media" },
-                { time: "18:15 - 18:30", title: "กล่าวต้อนรับ", speaker: "ศจ.สิทธิชัย", team: "ประธานองค์กร", note: "นิมิตค่ายเป็นภาคๆ ต่อจากภาคที่แล้ว", duration: "15 นาที", type: "ceremony" },
-                { time: "18:30 - 19:00", title: "พิธีเปิด", speaker: "อ.ณัฐพล", team: "โปรแกรม", note: "", duration: "30 นาที", type: "ceremony" },
-                { time: "19:00 - 21:15", title: "CVC Prayer Night", speaker: "อ.ชาญณรงค์, ทีมนมัสการ(อ.โดม, อ.มิว, พี่ชิน, พี่บาส)", team: "โปรแกรม", note: "เป็นเวลานมัสการอธิษฐานแสวงหาพระเจ้า", duration: "135 นาที", type: "worship" },
-                { time: "21:15 - 21:25", title: "ประกาศข่าว / อธิษฐานปิด", speaker: "อ.ชาญณรงค์", team: "โปรแกรม", note: "", duration: "10 นาที", type: "general" },
-                { time: "21:25 - 21:30", title: "ร้องเพลงสรรเสริญ", speaker: "อ.ชาญณรงค์", team: "โปรแกรม", note: "ขอให้อาจารย์ณัฐพลนำ 21.00 น.", duration: "5 นาที", type: "worship" }
+                { time: "15:00 - 18:00", title: "ลงทะเบียน / รับเสื้อ", type: "general" },
+                { time: "17:00 - 18:00", title: "พักผ่อนตามอัธยาศัย / รับประทานอาหารเย็น", type: "food" },
+                { time: "18:00 - 18:15", title: "VTR Title ค่าย", type: "media" },
+                { time: "18:15 - 18:30", title: "กล่าวต้อนรับ", type: "ceremony" },
+                { time: "18:30 - 19:00", title: "พิธีเปิด", type: "ceremony" },
+                { time: "19:00 - 21:15", title: "CVC Prayer Night", type: "worship" },
+                { time: "21:15 - 21:25", title: "ประกาศข่าว / อธิษฐานปิด", type: "general" },
+                { time: "21:25 - 21:30", title: "ร้องเพลงสรรเสริญ", type: "worship" }
             ],
             "day2": [
-                { time: "08:00 - 08:30", title: "Devotion ส่วนตัว", speaker: "อ.เคลา", team: "โปรแกรม", note: "เฝ้าเดี่ยวส่วนตัว/กลุ่มย่อย เตรียมใจก่อนเข้าประชุม", duration: "30 นาที", type: "worship" },
-                { time: "08:30 - 09:10", title: "นมัสการ", speaker: "อ.ตั้ม / นมัสการพัทยา อ.จิม", team: "โปรแกรม/นมัสการ", note: "", duration: "40 นาที", type: "worship" },
-                { time: "09:10 - 09:20", title: "เคลื่อนไหวใน HS", speaker: "อ.พรสวรรค์", team: "โปรแกรม", note: "", duration: "10 นาที", type: "worship" },
-                { time: "09:20 - 09:25", title: "ถวายทรัพย์ 1", speaker: "อ.พรสวรรค์", team: "โปรแกรม", note: "", duration: "5 นาที", type: "ceremony" },
-                { time: "09:25 - 09:30", title: "คำพยานชีวิต 1", speaker: "media", team: "โปรแกรม(media)", note: "", duration: "5 นาที", type: "media" },
-                { time: "09:30 - 10:40", title: "สอน 1", speaker: "ศจ.สิทธิชัย", team: "โปรแกรม", note: "", duration: "70 นาที", type: "teach" },
-                { time: "10:40 - 10:50", title: "Share Small Group", speaker: "อ.มีชัย", team: "โปรแกรม", note: "ให้นำแชร์แบ่งปันในสิ่งที่ได้เรียนรู้", duration: "10 นาที", type: "activity" },
-                { time: "10:50 - 12:00", title: "สอน 2", speaker: "อ.มีชัย", team: "โปรแกรม", note: "", duration: "70 นาที", type: "teach" },
-                { time: "12:00 - 12:10", title: "ถวายพระพร ร.10", speaker: "อ.พรสวรรค์", team: "โปรแกรม", note: "", duration: "10 นาที", type: "ceremony" },
-                { time: "12:10 - 12:15", title: "ประกาศข่าว", speaker: "อ.พรสวรรค์", team: "โปรแกรม", note: "", duration: "5 นาที", type: "general" },
-                { time: "12:15 - 14:00", title: "รับประทานอาหาร", speaker: "ชาวค่าย", team: "โปรแกรม", note: "", duration: "105 นาที", type: "food" },
-                { time: "14:00 - 16:00", title: "CVC Sport Game (ณ ห้องประชุม)", speaker: "อ.สีหพล", team: "โปรแกรม", note: "แสตนบาย หรือ ท่าเต้นประกอบเพลง / แบ่ง 10 คน", duration: "120 นาที", type: "activity" },
-                { time: "16:00 - 18:30", title: "อาหารเย็น / พักผ่อนตามอัธยาศัย", speaker: "ชาวค่าย", team: "โปรแกรม", note: "", duration: "150 นาที", type: "food" },
-                { time: "18:30 - 18:40", title: "VTR Title ค่าย", speaker: "media", team: "โปรแกรม(media)", note: "", duration: "10 นาที", type: "media" },
-                { time: "18:40 - 19:20", title: "นมัสการ", speaker: "ฝ่ายนมัสการ พิษณุโลก", team: "โปรแกรม/นมัสการ", note: "", duration: "40 นาที", type: "worship" },
-                { time: "19:20 - 19:30", title: "Moving in the Holy Spirit", speaker: "อ.ปรเมศวร์", team: "โปรแกรม", note: "", duration: "10 นาที", type: "worship" },
-                { time: "19:30 - 19:40", title: "ถวายทรัพย์ 2", speaker: "อ.ปรเมศวร์", team: "โปรแกรม", note: "", duration: "10 นาที", type: "ceremony" },
-                { time: "19:40 - 19:50", title: "มี VTR ก่อนการแสดงพิเศษ", speaker: "อ.เกียรติชัย, อ.วันทนีย์", team: "โปรแกรม", note: "", duration: "10 นาที", type: "media" },
-                { time: "19:50 - 19:55", title: "VTR เกี่ยวกับการ อธ, ความเชื่อ", speaker: "media", team: "โปรแกรม(media)", note: "", duration: "5 นาที", type: "media" },
-                { time: "19:55 - 20:40", title: "เทศนาฟื้นฟู 1", speaker: "A.Mike Thorley (อ.สุพรรษา แปล)", team: "โปรแกรม", note: "กิจกรรมพิเศษ", duration: "45 นาที", type: "teach" },
-                { time: "20:40 - 21:10", title: "ตอบสนอง", speaker: "ทีมนมัสการ", team: "โปรแกรม", note: "", duration: "30 นาที", type: "worship" },
-                { time: "21:10 - 21:15", title: "ประกาศข่าว", speaker: "อ.ปรเมศวร์", team: "โปรแกรม", note: "", duration: "5 นาที", type: "general" }
+                { time: "08:00 - 08:30", title: "Devotion ส่วนตัว", type: "worship" },
+                { time: "08:30 - 09:10", title: "นมัสการ", type: "worship" },
+                { time: "09:10 - 09:20", title: "เคลื่อนไหวใน HS", type: "worship" },
+                { time: "09:20 - 09:25", title: "ถวายทรัพย์ 1", type: "ceremony" },
+                { time: "09:25 - 09:30", title: "คำพยานชีวิต 1", type: "media" },
+                { time: "09:30 - 10:40", title: "สอน 1", type: "teach" },
+                { time: "10:40 - 10:50", title: "Share Small Group", type: "activity" },
+                { time: "10:50 - 12:00", title: "สอน 2", type: "teach" },
+                { time: "12:00 - 12:10", title: "ถวายพระพร ร.10", type: "ceremony" },
+                { time: "12:10 - 12:15", title: "ประกาศข่าว", type: "general" },
+                { time: "12:15 - 14:00", title: "รับประทานอาหาร", type: "food" },
+                { time: "14:00 - 16:00", title: "CVC Sport Game (ณ ห้องประชุม)", type: "activity" },
+                { time: "16:00 - 18:30", title: "อาหารเย็น / พักผ่อนตามอัธยาศัย", type: "food" },
+                { time: "18:30 - 18:40", title: "VTR Title ค่าย", type: "media" },
+                { time: "18:40 - 19:20", title: "นมัสการ", type: "worship" },
+                { time: "19:20 - 19:30", title: "Moving in the Holy Spirit", type: "worship" },
+                { time: "19:30 - 19:40", title: "ถวายทรัพย์ 2", type: "ceremony" },
+                { time: "19:40 - 19:50", title: "มี VTR ก่อนการแสดงพิเศษ", type: "media" },
+                { time: "19:50 - 19:55", title: "VTR เกี่ยวกับการ อธ, ความเชื่อ", type: "media" },
+                { time: "19:55 - 20:40", title: "เทศนาฟื้นฟู 1", type: "teach" },
+                { time: "20:40 - 21:10", title: "ตอบสนอง", type: "worship" },
+                { time: "21:10 - 21:15", title: "ประกาศข่าว", type: "general" }
             ],
             "day3": [
-                { time: "08:00 - 08:30", title: "Devotion ส่วนตัว", speaker: "อ.บวรทรนง", team: "โปรแกรม", note: "เฝ้าเดี่ยวส่วนตัว/กลุ่มย่อย", duration: "30 นาที", type: "worship" },
-                { time: "08:30 - 09:10", title: "นมัสการ", speaker: "ดำรง / นมัสการ CVC สเปน", team: "โปรแกรม/นมัสการ", note: "", duration: "40 นาที", type: "worship" },
-                { time: "09:10 - 09:20", title: "เคลื่อนไหวใน HS", speaker: "อ.แสวง", team: "โปรแกรม", note: "", duration: "10 นาที", type: "worship" },
-                { time: "09:20 - 09:25", title: "ถวายทรัพย์ 3", speaker: "อ.แสวง", team: "โปรแกรม", note: "", duration: "5 นาที", type: "ceremony" },
-                { time: "09:25 - 09:30", title: "คำพยานชีวิต 2", speaker: "media", team: "โปรแกรม(media)", note: "", duration: "5 นาที", type: "media" },
-                { time: "09:30 - 09:50", title: "มอบสูจิบัตร", speaker: "อ.วันชัย", team: "ฝ่ายการศึกษา/โปรแกรม", note: "", duration: "20 นาที", type: "ceremony" },
-                { time: "09:50 - 11:00", title: "สอน 3", speaker: "ศจ.วันชัย", team: "โปรแกรม", note: "", duration: "70 นาที", type: "teach" },
-                { time: "11:00 - 12:10", title: "สอน 4", speaker: "ศจ.วันชัย", team: "โปรแกรม", note: "", duration: "70 นาที", type: "teach" },
-                { time: "12:10 - 12:20", title: "Share Small Group", speaker: "อ.วันชัย", team: "โปรแกรม", note: "", duration: "10 นาที", type: "activity" },
-                { time: "12:20 - 12:25", title: "ประกาศข่าว", speaker: "อ.แสวง", team: "โปรแกรม", note: "", duration: "5 นาที", type: "general" },
-                { time: "12:25 - 13:30", title: "รับประทานอาหาร", speaker: "ชาวค่าย", team: "โปรแกรม", note: "", duration: "65 นาที", type: "food" },
-                { time: "13:30 - 16:00", title: "Workshop / กลุ่มย่อยค่าย", speaker: "อ.อัญชลี", team: "โปรแกรม", note: "ให้ไปเข้าห้องประชุมตาม 5 ห้อง", duration: "150 นาที", type: "activity" },
-                { time: "16:00 - 18:30", title: "อาหารเย็น / พักผ่อนตามอัธยาศัย", speaker: "ชาวค่าย", team: "โปรแกรม", note: "", duration: "150 นาที", type: "food" },
-                { time: "18:30 - 18:40", title: "VTR Title ค่าย", speaker: "media", team: "โปรแกรม(media)", note: "VTR ภาพรวมของค่าย", duration: "10 นาที", type: "media" },
-                { time: "18:40 - 19:20", title: "นมัสการ", speaker: "ทีมอยุธยา / อ.โอ,น้อง จูเนียร์", team: "โปรแกรม/นมัสการ", note: "", duration: "40 นาที", type: "worship" },
-                { time: "19:20 - 19:30", title: "Moving in the Holy Spirit", speaker: "อ.พัณณิตา", team: "โปรแกรม", note: "", duration: "10 นาที", type: "worship" },
-                { time: "19:30 - 19:40", title: "ถวายทรัพย์ 4 (พันธกิจโลก)", speaker: "อ.พัณณิตา", team: "โปรแกรม", note: "", duration: "10 นาที", type: "ceremony" },
-                { time: "19:40 - 19:50", title: "การแสดงวัฒนธรรม", speaker: "ภาคที่ 5 / Ministry Night", team: "โปรแกรม", note: "ถวายเพื่อพันธกิจ", duration: "10 นาที", type: "activity" },
-                { time: "19:50 - 19:55", title: "VTR vision night", speaker: "media", team: "โปรแกรม(media)", note: "", duration: "5 นาที", type: "media" },
-                { time: "19:55 - 20:40", title: "เทศนาฟื้นฟู 2", speaker: "ศจ.ดร.ยศไกร", team: "โปรแกรม", note: "ถวายเพื่อพันธกิจ และส่งต่อภาคอื่นๆ", duration: "45 นาที", type: "teach" },
-                { time: "20:40 - 21:10", title: "ตอบสนอง", speaker: "ทีมนมัสการ", team: "โปรแกรม", note: "การวางตัวเพื่อพันธกิจ", duration: "30 นาที", type: "worship" },
-                { time: "21:10 - 21:15", title: "ประกาศข่าว", speaker: "อ.พัณณิตา", team: "โปรแกรม", note: "", duration: "5 นาที", type: "general" }
+                { time: "08:00 - 08:30", title: "Devotion ส่วนตัว", type: "worship" },
+                { time: "08:30 - 09:10", title: "นมัสการ", type: "worship" },
+                { time: "09:10 - 09:20", title: "เคลื่อนไหวใน HS", type: "worship" },
+                { time: "09:20 - 09:25", title: "ถวายทรัพย์ 3", type: "ceremony" },
+                { time: "09:25 - 09:30", title: "คำพยานชีวิต 2", type: "media" },
+                { time: "09:30 - 09:50", title: "มอบสูจิบัตร", type: "ceremony" },
+                { time: "09:50 - 11:00", title: "สอน 3", type: "teach" },
+                { time: "11:00 - 12:10", title: "สอน 4", type: "teach" },
+                { time: "12:10 - 12:20", title: "Share Small Group", type: "activity" },
+                { time: "12:20 - 12:25", title: "ประกาศข่าว", type: "general" },
+                { time: "12:25 - 13:30", title: "รับประทานอาหาร", type: "food" },
+                { time: "13:30 - 16:00", title: "Workshop / กลุ่มย่อยค่าย", type: "activity" },
+                { time: "16:00 - 18:30", title: "อาหารเย็น / พักผ่อนตามอัธยาศัย", type: "food" },
+                { time: "18:30 - 18:40", title: "VTR Title ค่าย", type: "media" },
+                { time: "18:40 - 19:20", title: "นมัสการ", type: "worship" },
+                { time: "19:20 - 19:30", title: "Moving in the Holy Spirit", type: "worship" },
+                { time: "19:30 - 19:40", title: "ถวายทรัพย์ 4 (พันธกิจโลก)", type: "ceremony" },
+                { time: "19:40 - 19:50", title: "การแสดงวัฒนธรรม", type: "activity" },
+                { time: "19:50 - 19:55", title: "VTR vision night", type: "media" },
+                { time: "19:55 - 20:40", title: "เทศนาฟื้นฟู 2", type: "teach" },
+                { time: "20:40 - 21:10", title: "ตอบสนอง", type: "worship" },
+                { time: "21:10 - 21:15", title: "ประกาศข่าว", type: "general" }
             ],
             "day4": [
-                { time: "08:30 - 09:10", title: "นมัสการ", speaker: "พะเยา / ทีมชาลี", team: "โปรแกรม(นมัสการ)", note: "โปรแกรมพิเศษ 3", duration: "40 นาที", type: "worship" },
-                { time: "09:10 - 09:20", title: "เคลื่อนไหวใน HS", speaker: "อ.บรรเสริฐ", team: "โปรแกรม", note: "", duration: "10 นาที", type: "worship" },
-                { time: "09:20 - 09:30", title: "ถวายทรัพย์ 5", speaker: "อ.บรรเสริฐ", team: "โปรแกรม", note: "", duration: "10 นาที", type: "ceremony" },
-                { time: "09:30 - 10:40", title: "สอน 5", speaker: "อ.ทศพักตร์", team: "โปรแกรม", note: "", duration: "70 นาที", type: "teach" },
-                { time: "10:40 - 11:50", title: "สอน 6", speaker: "ศจ.สิทธิชัย", team: "โปรแกรม", note: "", duration: "70 นาที", type: "teach" },
-                { time: "11:50 - 12:00", title: "Share Small Group", speaker: "อ.บรรเสริฐ", team: "โปรแกรม", note: "", duration: "10 นาที", type: "activity" },
-                { time: "12:00 - 12:10", title: "ขอบคุณวิทยากร", speaker: "อ.บรรเสริฐ", team: "โปรแกรม", note: "", duration: "10 นาที", type: "ceremony" },
-                { time: "12:10 - 12:30", title: "พิธีปิด", speaker: "อ.มีชัย", team: "โปรแกรม", note: "", duration: "20 นาที", type: "ceremony" },
-                { time: "12:30 - 12:30", title: "เดินทางกลับด้วยความปลอดภัย", speaker: "ชาวค่าย", team: "โปรแกรม", note: "ขอพระเจ้าอวยพร", duration: "-", type: "general" }
+                { time: "08:30 - 09:10", title: "นมัสการ", type: "worship" },
+                { time: "09:10 - 09:20", title: "เคลื่อนไหวใน HS", type: "worship" },
+                { time: "09:20 - 09:30", title: "ถวายทรัพย์ 5", type: "ceremony" },
+                { time: "09:30 - 10:40", title: "สอน 5", type: "teach" },
+                { time: "10:40 - 11:50", title: "สอน 6", type: "teach" },
+                { time: "11:50 - 12:00", title: "Share Small Group", type: "activity" },
+                { time: "12:00 - 12:10", title: "ขอบคุณวิทยากร", type: "ceremony" },
+                { time: "12:10 - 12:30", title: "พิธีปิด", type: "ceremony" },
+                { time: "12:30 - 12:30", title: "เดินทางกลับด้วยความปลอดภัย", type: "general" }
             ]
         };
 
@@ -130,7 +130,6 @@
 
         // 🎯 เปลี่ยนแท็บวัน
         function switchTab(dayKey) {
-            // อัปเดตปุ่มแท็บ
             ["day1", "day2", "day3", "day4"].forEach(d => {
                 let btn = document.getElementById("btn-" + d);
                 if (d === dayKey) {
@@ -142,43 +141,32 @@
                 }
             });
 
-            // สร้างตารางข้อมูล
             const container = document.getElementById("schedule-container");
-            container.innerHTML = ""; // ล้างของเก่า
+            container.innerHTML = ""; 
 
             const items = scheduleData[dayKey];
             
             items.forEach((item, index) => {
                 const colorClass = getTypeColor(item.type);
                 
-                // สร้างการ์ดของแต่ละกิจกรรม
+                // ตัดข้อมูลที่เหลือแค่เวลา และชื่อรายการ เพื่อความเรียบง่าย
                 const cardHtml = `
                     <div class="flex mb-4 items-stretch opacity-0 animate-fade-in" style="animation-delay: ${index * 0.05}s; animation-fill-mode: forwards;">
                         <!-- เวลา -->
-                        <div class="w-1/4 pr-3 text-right flex flex-col justify-start pt-2">
+                        <div class="w-1/4 pr-3 text-right flex flex-col justify-center">
                             <span class="text-sm font-bold text-gray-800 tracking-tight leading-tight">${item.time.replace(' - ', '<br><span class="text-xs text-gray-400 font-normal">ถึง</span><br>')}</span>
-                            <span class="text-[10px] text-gray-400 mt-1">${item.duration}</span>
                         </div>
                         
                         <!-- เส้น Timeline -->
                         <div class="flex flex-col items-center">
-                            <div class="w-3 h-3 rounded-full bg-blue-300 border-2 border-white shadow-sm mt-3 z-10"></div>
-                            <div class="w-0.5 h-full bg-blue-100 -mt-2"></div>
+                            <div class="w-3 h-3 rounded-full bg-blue-300 border-2 border-white shadow-sm my-auto z-10"></div>
+                            <div class="w-0.5 h-full bg-blue-100 -mt-2 absolute -z-10"></div>
                         </div>
                         
-                        <!-- รายละเอียด -->
+                        <!-- รายละเอียด (ชื่อรายการอย่างเดียว) -->
                         <div class="w-3/4 pl-4 pb-2">
-                            <div class="${colorClass} border rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow">
-                                <h3 class="font-bold text-[15px] leading-tight mb-1">${item.title}</h3>
-                                ${item.speaker ? `<p class="text-[13px] font-semibold opacity-90 mb-1 flex items-center">
-                                    <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                                    ${item.speaker}
-                                </p>` : ''}
-                                ${item.team ? `<p class="text-xs opacity-75 flex items-center">
-                                    <svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
-                                    รับผิดชอบ: ${item.team}
-                                </p>` : ''}
-                                ${item.note ? `<div class="mt-2 pt-2 border-t border-black/5"><p class="text-xs font-medium italic opacity-80">📌 ${item.note}</p></div>` : ''}
+                            <div class="${colorClass} border rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow h-full flex items-center">
+                                <h3 class="font-bold text-[15px] leading-tight">${item.title}</h3>
                             </div>
                         </div>
                     </div>
