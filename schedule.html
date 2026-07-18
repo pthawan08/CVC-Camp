@@ -10,9 +10,15 @@
         body { font-family: 'Sarabun', sans-serif; background-color: #f4f7f6; }
         .tab-active { background-color: #2563EB; color: white; border-color: #2563EB; }
         .tab-inactive { background-color: white; color: #4B5563; border-color: #E5E7EB; }
-        /* ซ่อน Scrollbar ด้านล่างของปุ่มวัน */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* อนิเมชันตอนเปิดรูปผังที่นั่ง */
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .modal-animate { animation: popIn 0.3s ease-out forwards; }
     </style>
 </head>
 <body class="pb-20">
@@ -27,8 +33,8 @@
     </div>
 
     <!-- Tabs วันที่ -->
-    <div class="max-w-md mx-auto mt-4 px-4 sticky top-4 z-50">
-        <div class="flex space-x-2 overflow-x-auto no-scrollbar py-2">
+    <div class="max-w-md mx-auto mt-4 px-4 sticky top-4 z-40">
+        <div class="flex space-x-2 overflow-x-auto no-scrollbar py-2 bg-[#f4f7f6]">
             <button id="btn-day1" onclick="switchTab('day1')" class="tab-active flex-shrink-0 px-4 py-2 rounded-full font-bold text-sm shadow-sm transition-all border border-transparent whitespace-nowrap">พฤ. 30 ก.ค.</button>
             <button id="btn-day2" onclick="switchTab('day2')" class="tab-inactive flex-shrink-0 px-4 py-2 rounded-full font-bold text-sm shadow-sm transition-all border whitespace-nowrap">ศ. 31 ก.ค.</button>
             <button id="btn-day3" onclick="switchTab('day3')" class="tab-inactive flex-shrink-0 px-4 py-2 rounded-full font-bold text-sm shadow-sm transition-all border whitespace-nowrap">ส. 1 ส.ค.</button>
@@ -36,13 +42,51 @@
         </div>
     </div>
 
+    <!-- ปุ่มดูผังที่นั่ง -->
+    <div class="max-w-md mx-auto mt-3 px-4">
+        <button onclick="openSeatingModal()" class="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold py-3 rounded-2xl shadow-md flex items-center justify-center space-x-2 hover:opacity-90 transition">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+            <span>ดูผังที่นั่งห้องประชุม (Seating Chart)</span>
+        </button>
+    </div>
+
     <!-- Content รายการกำหนดการ -->
     <div class="max-w-md mx-auto mt-4 px-4 pb-10" id="schedule-container">
         <!-- ข้อมูลตารางจะถูกโหลดมาใส่ตรงนี้ด้วย Javascript -->
     </div>
 
+    <!-- ============================================== -->
+    <!-- ป๊อปอัป (Modal) สำหรับแสดงรูปผังที่นั่ง -->
+    <!-- ============================================== -->
+    <div id="seatingModal" class="fixed inset-0 bg-black/80 z-50 hidden flex flex-col items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl modal-animate relative">
+            
+            <!-- ปุ่มปิดมุมขวาบน -->
+            <button onclick="closeSeatingModal()" class="absolute top-4 right-4 bg-white/90 p-2 rounded-full shadow-sm text-gray-600 hover:text-red-500 hover:bg-red-50 transition z-10">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            
+            <div class="p-5 border-b border-gray-100 bg-blue-50">
+                <h3 class="text-lg font-bold text-blue-800 text-center">🗺️ ผังที่นั่งห้องประชุม</h3>
+                <p class="text-xs text-center text-blue-600 mt-1">ค่าย CVC Prayer #12</p>
+            </div>
+
+            <!-- ส่วนใส่รูปภาพผังที่นั่ง -->
+            <div class="p-4 flex justify-center bg-gray-50 min-h-[300px] items-center">
+                <!-- ⚠️ เปลี่ยนลิงก์รูปภาพผังที่นั่งตรงนี้นะครับ ⚠️ -->
+                <img src="https://via.placeholder.com/600x400.png?text=กำลังจัดทำผังที่นั่ง+รออัปเดตเร็วๆ+นี้" alt="ผังที่นั่ง" class="w-full h-auto rounded-xl shadow-sm border border-gray-200">
+            </div>
+            
+            <div class="p-4 bg-white">
+                <button onclick="closeSeatingModal()" class="w-full bg-gray-100 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-200 transition">ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================== -->
+
     <script>
-        // 🗂️ ฐานข้อมูลตารางค่าย
         const scheduleData = {
             "day1": [
                 { time: "15:00 - 18:00", title: "ลงทะเบียน / รับเสื้อ", type: "general" },
@@ -115,7 +159,6 @@
             ]
         };
 
-        // 🎨 ฟังก์ชันกำหนดสีกิจกรรม
         function getTypeColor(type) {
             switch(type) {
                 case 'food': return 'bg-orange-100 border-orange-200 text-orange-800';
@@ -124,20 +167,17 @@
                 case 'activity': return 'bg-pink-100 border-pink-200 text-pink-800';
                 case 'ceremony': return 'bg-yellow-100 border-yellow-200 text-yellow-800';
                 case 'media': return 'bg-gray-100 border-gray-200 text-gray-800';
-                default: return 'bg-blue-50 border-blue-200 text-blue-800'; // general
+                default: return 'bg-blue-50 border-blue-200 text-blue-800'; 
             }
         }
 
-        // 🎯 เปลี่ยนแท็บวัน
         function switchTab(dayKey) {
             ["day1", "day2", "day3", "day4"].forEach(d => {
                 let btn = document.getElementById("btn-" + d);
                 if (d === dayKey) {
-                    btn.classList.remove("tab-inactive");
-                    btn.classList.add("tab-active");
+                    btn.classList.remove("tab-inactive"); btn.classList.add("tab-active");
                 } else {
-                    btn.classList.remove("tab-active");
-                    btn.classList.add("tab-inactive");
+                    btn.classList.remove("tab-active"); btn.classList.add("tab-inactive");
                 }
             });
 
@@ -148,22 +188,15 @@
             
             items.forEach((item, index) => {
                 const colorClass = getTypeColor(item.type);
-                
-                // ตัดข้อมูลที่เหลือแค่เวลา และชื่อรายการ เพื่อความเรียบง่าย
                 const cardHtml = `
                     <div class="flex mb-4 items-stretch opacity-0 animate-fade-in" style="animation-delay: ${index * 0.05}s; animation-fill-mode: forwards;">
-                        <!-- เวลา -->
                         <div class="w-1/4 pr-3 text-right flex flex-col justify-center">
                             <span class="text-sm font-bold text-gray-800 tracking-tight leading-tight">${item.time.replace(' - ', '<br><span class="text-xs text-gray-400 font-normal">ถึง</span><br>')}</span>
                         </div>
-                        
-                        <!-- เส้น Timeline -->
                         <div class="flex flex-col items-center">
                             <div class="w-3 h-3 rounded-full bg-blue-300 border-2 border-white shadow-sm my-auto z-10"></div>
                             <div class="w-0.5 h-full bg-blue-100 -mt-2 absolute -z-10"></div>
                         </div>
-                        
-                        <!-- รายละเอียด (ชื่อรายการอย่างเดียว) -->
                         <div class="w-3/4 pl-4 pb-2">
                             <div class="${colorClass} border rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow h-full flex items-center">
                                 <h3 class="font-bold text-[15px] leading-tight">${item.title}</h3>
@@ -175,7 +208,15 @@
             });
         }
 
-        // โหลดข้อมูลวันแรกขึ้นมาทันทีเมื่อเปิดเว็บ
+        // ระบบเปิด-ปิด Modal
+        function openSeatingModal() {
+            document.getElementById('seatingModal').classList.remove('hidden');
+        }
+
+        function closeSeatingModal() {
+            document.getElementById('seatingModal').classList.add('hidden');
+        }
+
         window.onload = () => {
             switchTab('day1');
         };
