@@ -13,12 +13,17 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* อนิเมชันตอนเปิดรูปผังที่นั่ง */
         @keyframes popIn {
             0% { opacity: 0; transform: scale(0.95); }
             100% { opacity: 1; transform: scale(1); }
         }
         .modal-animate { animation: popIn 0.3s ease-out forwards; }
+        
+        /* ตั้งค่าสำหรับระบบซูม */
+        #zoom-wrapper {
+            transform-origin: top left;
+            transition: transform 0.2s ease-out;
+        }
     </style>
 </head>
 <body class="pb-20">
@@ -53,136 +58,110 @@
     </div>
 
     <!-- Content รายการกำหนดการ -->
-    <div class="max-w-md mx-auto mt-4 px-4 pb-10" id="schedule-container">
-        <!-- ข้อมูลตารางจะถูกโหลดมาใส่ตรงนี้ด้วย Javascript -->
-    </div>
+    <div class="max-w-md mx-auto mt-4 px-4 pb-10" id="schedule-container"></div>
 
     <!-- ============================================== -->
-    <!-- ป๊อปอัป (Modal) สำหรับแสดงผังที่นั่ง (แบบวาดตาราง) -->
+    <!-- ป๊อปอัป (Modal) สำหรับแสดงผังที่นั่ง (พร้อมระบบ Zoom) -->
     <!-- ============================================== -->
     <div id="seatingModal" class="fixed inset-0 bg-black/80 z-50 hidden flex flex-col items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl modal-animate relative flex flex-col max-h-[90vh]">
             
-            <!-- ปุ่มปิดมุมขวาบน -->
             <button onclick="closeSeatingModal()" class="absolute top-4 right-4 bg-white/90 p-2 rounded-full shadow-sm text-gray-600 hover:text-red-500 hover:bg-red-50 transition z-10">
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
             
-            <div class="p-5 border-b border-gray-100 bg-blue-50 flex-shrink-0">
-                <h3 class="text-lg font-bold text-blue-800 text-center">🗺️ ผังที่นั่งห้องประชุม</h3>
-                <p class="text-xs text-center text-blue-600 mt-1">ค่าย CVC Prayer #12</p>
+            <div class="p-4 border-b border-gray-100 bg-blue-50 flex-shrink-0">
+                <h3 class="text-lg font-bold text-blue-800 text-center pr-8">🗺️ ผังที่นั่งห้องประชุม</h3>
+                
+                <!-- แผงปุ่มควบคุมการซูม -->
+                <div class="flex justify-center items-center space-x-3 mt-3">
+                    <button onclick="zoomOut()" class="bg-white text-blue-600 border border-blue-200 px-3 py-1 rounded-lg font-bold shadow-sm hover:bg-blue-100 flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" /></svg> ซูมออก
+                    </button>
+                    <span id="zoom-level" class="text-xs font-bold text-gray-500 w-10 text-center">100%</span>
+                    <button onclick="zoomIn()" class="bg-blue-600 text-white px-3 py-1 rounded-lg font-bold shadow-sm hover:bg-blue-700 flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg> ซูมเข้า
+                    </button>
+                </div>
             </div>
 
-            <!-- ส่วนผังที่นั่ง (HTML Interactive) เลื่อนดูได้ -->
-            <div class="p-4 bg-gray-100 overflow-auto relative flex-1">
-                <p class="text-[10px] text-gray-500 text-center mb-2 animate-pulse sticky left-0 right-0">↔️ ปัดซ้าย-ขวา / เลื่อนขึ้น-ลง เพื่อดูผังแบบเต็ม</p>
+            <!-- พื้นที่สำหรับเลื่อนดูผัง -->
+            <div class="bg-gray-100 overflow-auto relative flex-1 p-4" id="scroll-container">
                 
-                <!-- คอนเทนเนอร์หลัก กำหนดความกว้างขั้นต่ำไม่ให้มันบีบตัวจนเละในมือถือ -->
-                <div class="min-w-[600px] bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col gap-4">
+                <!-- กล่องนี้จะถูกขยายขนาดด้วย Javascript -->
+                <div id="zoom-container" class="relative">
                     
-                    <!-- เวที -->
-                    <div class="w-full bg-gradient-to-b from-gray-800 to-gray-700 text-white text-center py-4 rounded-lg font-bold text-lg shadow-inner">
-                        เวที (Stage)
-                    </div>
-
-                    <!-- พื้นที่ที่นั่ง -->
-                    <div class="flex flex-col gap-3 relative mt-2">
-                        <!-- ไอคอนกล้อง (อิงตามรูป) -->
-                        <div class="absolute left-1/2 -ml-[14px] -top-2 bg-yellow-200 text-yellow-800 text-[9px] font-bold px-1.5 py-0.5 rounded border border-yellow-400 z-10 shadow-sm">
-                            🎥 กล้อง
-                        </div>
-
-                        <!-- แถวที่ 1 (10 แถวหน้า) -->
-                        <div class="grid grid-cols-4 gap-3">
-                            <div class="bg-blue-50 border border-blue-200 rounded p-2 flex items-center justify-center text-center h-20 hover:bg-blue-100 transition cursor-pointer">
-                                <div><span class="font-bold text-blue-800 text-sm">พิษณุโลก</span><br><span class="text-[10px] text-gray-500">8 x 10</span></div>
-                            </div>
-                            <div class="bg-green-50 border border-green-200 rounded p-2 flex items-center justify-center text-center h-20 hover:bg-green-100 transition cursor-pointer">
-                                <div><span class="font-bold text-green-800 text-sm">เชียงใหม่</span><br><span class="text-[10px] text-gray-500">9 x 10</span></div>
-                            </div>
-                            <div class="bg-purple-50 border border-purple-200 rounded p-2 flex items-center justify-center text-center h-20 hover:bg-purple-100 transition cursor-pointer">
-                                <div><span class="font-bold text-purple-800 text-sm">ชลบุรี</span><br><span class="text-[10px] text-gray-500">9 x 10</span></div>
-                            </div>
-                            <div class="bg-orange-50 border border-orange-200 rounded p-2 flex items-center justify-center text-center h-20 hover:bg-orange-100 transition cursor-pointer">
-                                <div><span class="font-bold text-orange-800 text-sm">โคราช</span><br><span class="text-[10px] text-gray-500">8 x 10</span></div>
-                            </div>
-                        </div>
-
-                        <!-- ทางเดินขวาง 1 -->
-                        <div class="w-full h-3 bg-gray-100 rounded-full my-1"></div>
-
-                        <!-- แถวที่ 2 -->
-                        <div class="grid grid-cols-4 gap-3">
-                            <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-20">
-                                <span class="text-xs text-gray-400">(ว่าง)</span>
-                            </div>
-                            <div class="bg-pink-50 border border-pink-200 rounded p-2 flex items-center justify-center text-center h-20 hover:bg-pink-100 transition cursor-pointer">
-                                <div><span class="font-bold text-pink-800 text-sm">อุดรธานี</span><br><span class="text-[10px] text-gray-500">9 x 10</span></div>
-                            </div>
-                            <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-20">
-                                <span class="text-xs text-gray-400">(ว่าง)</span>
-                            </div>
-                            <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-20">
-                                <span class="text-xs text-gray-400">(ว่าง)</span>
-                            </div>
-                        </div>
-
-                        <!-- ทางเดินขวาง 2 -->
-                        <div class="w-full h-3 bg-gray-100 rounded-full my-1"></div>
-
-                        <!-- แถวที่ 3 -->
-                        <div class="grid grid-cols-4 gap-3">
-                            <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-20">
-                                <span class="text-xs text-gray-400">(ว่าง)</span>
-                            </div>
-                            <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-20">
-                                <span class="text-xs text-gray-400">(ว่าง)</span>
-                            </div>
-                            <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-20">
-                                <span class="text-xs text-gray-400">(ว่าง)</span>
-                            </div>
-                            <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-20">
-                                <span class="text-xs text-gray-400">(ว่าง)</span>
-                            </div>
-                        </div>
+                    <div id="zoom-wrapper" class="min-w-[600px] bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col gap-4">
                         
-                        <!-- ทางเดินขวาง 3 -->
-                        <div class="w-full h-3 bg-gray-100 rounded-full my-1"></div>
+                        <div class="w-full bg-gradient-to-b from-gray-800 to-gray-700 text-white text-center py-4 rounded-lg font-bold text-lg shadow-inner">
+                            เวที (Stage)
+                        </div>
 
-                        <!-- แถวที่ 4 (5 แถวหลัง) -->
-                        <div class="grid grid-cols-4 gap-3">
-                            <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-12">
-                                <span class="text-xs text-gray-400">(ว่าง)</span>
+                        <div class="flex flex-col gap-3 relative mt-2">
+                            <div class="absolute left-1/2 -ml-[14px] -top-2 bg-yellow-200 text-yellow-800 text-[9px] font-bold px-1.5 py-0.5 rounded border border-yellow-400 z-10 shadow-sm">🎥 กล้อง</div>
+
+                            <!-- แถวที่ 1 -->
+                            <div class="grid grid-cols-4 gap-3">
+                                <div class="bg-blue-50 border border-blue-200 rounded p-2 flex items-center justify-center text-center h-20">
+                                    <div><span class="font-bold text-blue-800 text-sm">พิษณุโลก</span><br><span class="text-[10px] text-gray-500">8 x 10</span></div>
+                                </div>
+                                <div class="bg-green-50 border border-green-200 rounded p-2 flex items-center justify-center text-center h-20">
+                                    <div><span class="font-bold text-green-800 text-sm">เชียงใหม่</span><br><span class="text-[10px] text-gray-500">9 x 10</span></div>
+                                </div>
+                                <div class="bg-purple-50 border border-purple-200 rounded p-2 flex items-center justify-center text-center h-20">
+                                    <div><span class="font-bold text-purple-800 text-sm">ชลบุรี</span><br><span class="text-[10px] text-gray-500">9 x 10</span></div>
+                                </div>
+                                <div class="bg-orange-50 border border-orange-200 rounded p-2 flex items-center justify-center text-center h-20">
+                                    <div><span class="font-bold text-orange-800 text-sm">โคราช</span><br><span class="text-[10px] text-gray-500">8 x 10</span></div>
+                                </div>
                             </div>
-                            <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-12">
-                                <span class="text-xs text-gray-400">(ว่าง)</span>
+
+                            <div class="w-full h-3 bg-gray-100 rounded-full my-1"></div>
+
+                            <!-- แถวที่ 2 -->
+                            <div class="grid grid-cols-4 gap-3">
+                                <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-20"><span class="text-xs text-gray-400">(ว่าง)</span></div>
+                                <div class="bg-pink-50 border border-pink-200 rounded p-2 flex items-center justify-center text-center h-20">
+                                    <div><span class="font-bold text-pink-800 text-sm">อุดรธานี</span><br><span class="text-[10px] text-gray-500">9 x 10</span></div>
+                                </div>
+                                <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-20"><span class="text-xs text-gray-400">(ว่าง)</span></div>
+                                <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-20"><span class="text-xs text-gray-400">(ว่าง)</span></div>
                             </div>
-                            <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-12">
-                                <span class="text-xs text-gray-400">(ว่าง)</span>
+
+                            <div class="w-full h-3 bg-gray-100 rounded-full my-1"></div>
+
+                            <!-- แถวที่ 3 -->
+                            <div class="grid grid-cols-4 gap-3">
+                                <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-20"><span class="text-xs text-gray-400">(ว่าง)</span></div>
+                                <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-20"><span class="text-xs text-gray-400">(ว่าง)</span></div>
+                                <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-20"><span class="text-xs text-gray-400">(ว่าง)</span></div>
+                                <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-20"><span class="text-xs text-gray-400">(ว่าง)</span></div>
                             </div>
-                            <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-12">
-                                <span class="text-xs text-gray-400">(ว่าง)</span>
+                            
+                            <div class="w-full h-3 bg-gray-100 rounded-full my-1"></div>
+
+                            <!-- แถวที่ 4 -->
+                            <div class="grid grid-cols-4 gap-3">
+                                <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-12"><span class="text-xs text-gray-400">(ว่าง)</span></div>
+                                <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-12"><span class="text-xs text-gray-400">(ว่าง)</span></div>
+                                <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-12"><span class="text-xs text-gray-400">(ว่าง)</span></div>
+                                <div class="bg-gray-50 border border-gray-200 border-dashed rounded p-2 flex items-center justify-center text-center h-12"><span class="text-xs text-gray-400">(ว่าง)</span></div>
                             </div>
                         </div>
 
-                    </div>
-
-                    <!-- โซนโต๊ะควบคุมด้านหลัง -->
-                    <div class="flex justify-center gap-6 mt-2 pt-4 border-t border-gray-100">
-                        <div class="bg-gray-200 text-gray-700 text-[10px] font-bold px-3 py-1.5 rounded shadow-sm border border-gray-300">โต๊ะ.ปอป</div>
-                        <div class="bg-gray-200 text-gray-700 text-[10px] font-bold px-3 py-1.5 rounded shadow-sm border border-gray-300">โต๊ะโปรแกรม</div>
-                        <div class="bg-gray-200 text-gray-700 text-[10px] font-bold px-3 py-1.5 rounded shadow-sm border border-gray-300">ดรอป</div>
-                    </div>
-
-                    <!-- ประตูทางเข้า & ดรอป -->
-                    <div class="flex justify-between items-end mt-2 pt-2 border-t-2 border-gray-800">
-                        <div class="w-1/3 h-10 bg-gray-50 border-2 border-dashed border-gray-300 rounded flex items-center justify-center text-gray-400 text-xs font-bold">ดรอป</div>
-                        <div class="w-20 h-8 bg-red-600 text-white text-xs font-bold rounded-t-lg flex items-center justify-center shadow-md border-b-0 border border-red-700">
-                            🚪 ประตู
+                        <div class="flex justify-center gap-6 mt-2 pt-4 border-t border-gray-100">
+                            <div class="bg-gray-200 text-gray-700 text-[10px] font-bold px-3 py-1.5 rounded shadow-sm border border-gray-300">โต๊ะ.ปอป</div>
+                            <div class="bg-gray-200 text-gray-700 text-[10px] font-bold px-3 py-1.5 rounded shadow-sm border border-gray-300">โต๊ะโปรแกรม</div>
+                            <div class="bg-gray-200 text-gray-700 text-[10px] font-bold px-3 py-1.5 rounded shadow-sm border border-gray-300">ดรอป</div>
                         </div>
-                        <div class="w-1/3 h-10 bg-gray-50 border-2 border-dashed border-gray-300 rounded flex items-center justify-center text-gray-400 text-xs font-bold">ดรอป</div>
-                    </div>
 
+                        <div class="flex justify-between items-end mt-2 pt-2 border-t-2 border-gray-800">
+                            <div class="w-1/3 h-10 bg-gray-50 border-2 border-dashed border-gray-300 rounded flex items-center justify-center text-gray-400 text-xs font-bold">ดรอป</div>
+                            <div class="w-20 h-8 bg-red-600 text-white text-xs font-bold rounded-t-lg flex items-center justify-center shadow-md border-b-0 border border-red-700">🚪 ประตู</div>
+                            <div class="w-1/3 h-10 bg-gray-50 border-2 border-dashed border-gray-300 rounded flex items-center justify-center text-gray-400 text-xs font-bold">ดรอป</div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
             
@@ -194,7 +173,6 @@
     <!-- ============================================== -->
 
     <script>
-        // 🗂️ ฐานข้อมูลตารางค่าย
         const scheduleData = {
             "day1": [
                 { time: "15:00 - 18:00", title: "ลงทะเบียน / รับเสื้อ", type: "general" },
@@ -218,7 +196,7 @@
                 { time: "12:00 - 12:10", title: "ถวายพระพร ร.10", type: "ceremony" },
                 { time: "12:10 - 12:15", title: "ประกาศข่าว", type: "general" },
                 { time: "12:15 - 14:00", title: "รับประทานอาหาร", type: "food" },
-                { time: "14:00 - 16:00", title: "CVC Sport Game (ณ ห้องประชุม)", type: "activity" },
+                { time: "14:00 - 16:00", title: "CVC Sport Game", type: "activity" },
                 { time: "16:00 - 18:30", title: "อาหารเย็น / พักผ่อนตามอัธยาศัย", type: "food" },
                 { time: "18:30 - 18:40", title: "VTR Title ค่าย", type: "media" },
                 { time: "18:40 - 19:20", title: "นมัสการ", type: "worship" },
@@ -236,7 +214,7 @@
                 { time: "09:10 - 09:20", title: "เคลื่อนไหวใน HS", type: "worship" },
                 { time: "09:20 - 09:25", title: "ถวายทรัพย์ 3", type: "ceremony" },
                 { time: "09:25 - 09:30", title: "คำพยานชีวิต 2", type: "media" },
-                { time: "09:30 - 09:50", title: "มอบสูจิบัตร", type: "ceremony" },
+                { time: "09:30 - 09:50", title: "มอบวุฒิบัตร", type: "ceremony" },
                 { time: "09:50 - 11:00", title: "สอน 3", type: "teach" },
                 { time: "11:00 - 12:10", title: "สอน 4", type: "teach" },
                 { time: "12:10 - 12:20", title: "Share Small Group", type: "activity" },
@@ -316,8 +294,44 @@
             });
         }
 
+        // ==========================================
+        // ระบบ Zoom ผังที่นั่ง
+        // ==========================================
+        let currentZoom = 1.0;
+        
+        function updateZoomDisplay() {
+            document.getElementById('zoom-level').innerText = Math.round(currentZoom * 100) + '%';
+            
+            const wrapper = document.getElementById('zoom-wrapper');
+            const container = document.getElementById('zoom-container');
+            
+            // ขยายขนาด scale
+            wrapper.style.transform = `scale(${currentZoom})`;
+            
+            // ปรับขนาดความกว้าง/สูงของกล่องแม่ เพื่อให้ scrollbar ทำงานถูกต้องเวลาซูม
+            // ผังต้นฉบับกว้าง 600px สูงประมาณ 550px
+            container.style.width = `${600 * currentZoom}px`;
+            container.style.height = `${wrapper.offsetHeight * currentZoom}px`;
+        }
+
+        function zoomIn() {
+            if (currentZoom < 2.5) { // ซูมได้สูงสุด 250%
+                currentZoom += 0.25;
+                updateZoomDisplay();
+            }
+        }
+
+        function zoomOut() {
+            if (currentZoom > 0.5) { // ซูมออกสุดได้ที่ 50%
+                currentZoom -= 0.25;
+                updateZoomDisplay();
+            }
+        }
+
         function openSeatingModal() {
             document.getElementById('seatingModal').classList.remove('hidden');
+            currentZoom = 1.0; // รีเซ็ตการซูมทุกครั้งที่เปิด
+            updateZoomDisplay();
         }
 
         function closeSeatingModal() {
@@ -328,13 +342,5 @@
             switchTab('day1');
         };
     </script>
-
-    <style>
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
-    </style>
 </body>
 </html>
