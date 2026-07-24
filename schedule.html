@@ -12,7 +12,17 @@
         .tab-inactive { background-color: white; color: #4B5563; border-color: #E5E7EB; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        #zoom-wrapper { transform-origin: top left; transition: transform 0.2s ease-out; }
+        
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .modal-animate { animation: popIn 0.3s ease-out forwards; }
+        
+        #zoom-wrapper {
+            transform-origin: top left;
+            transition: transform 0.2s ease-out;
+        }
     </style>
 </head>
 <body class="pb-20">
@@ -48,7 +58,6 @@
 
     <!-- Content รายการกำหนดการ -->
     <div class="max-w-md mx-auto mt-4 px-4 pb-10" id="schedule-container">
-        <!-- ตัวกันเหนียว ถ้า JS ไม่ทำงาน จะค้างหน้านี้ -->
         <div class="text-center py-10 text-gray-500 font-bold bg-white rounded-2xl shadow-sm border border-gray-100">
             ⏳ กำลังโหลดตารางค่าย...
         </div>
@@ -162,7 +171,7 @@
     </div>
     <!-- ============================================== -->
 
-   <script>
+    <script>
         const scheduleData = {
             "day1": [
                 { time: "15:00 - 18:00", title: "ลงทะเบียน / รับเสื้อ", type: "general" },
@@ -231,7 +240,7 @@
                 { time: "11:50 - 12:00", title: "Share Small Group", type: "activity" },
                 { time: "12:00 - 12:10", title: "ขอบคุณวิทยากร", type: "ceremony" },
                 { time: "12:10 - 12:30", title: "พิธีปิด", type: "ceremony" },
-                { time: "12:30 เป็นต้นไป", title: "เดินทางกลับด้วยความปลอดภัย", type: "general" } // แก้ไขเวลาตรงนี้ให้สวยงาม
+                { time: "12:30 เป็นต้นไป", title: "เดินทางกลับด้วยความปลอดภัย", type: "general" }
             ]
         };
 
@@ -267,9 +276,8 @@
             
             items.forEach((item, index) => {
                 const colorClass = getTypeColor(item.type);
-                const isLastItem = index === items.length - 1; // เช็คว่าเป็นคิวสุดท้ายหรือเปล่า
+                const isLastItem = index === items.length - 1; 
                 
-                // ถ้ารูปแบบเวลามีขีด - ให้แปลงร่างเป็นคำว่า "ถึง" แต่ถ้าไม่มีขีด (เช่น คิวสุดท้าย) ก็ใช้ข้อความเดิมเลย
                 const timeText = (item.time && item.time.includes(' - ')) 
                     ? item.time.replace(' - ', '<br><span class="text-xs text-gray-400 font-normal">ถึง</span><br>') 
                     : item.time;
@@ -277,21 +285,21 @@
                 const cardHtml = `
                     <div class="flex mb-4 items-stretch relative">
                         <!-- เวลา -->
-                        <div class="w-1/4 pr-3 text-right flex flex-col justify-center">
+                        <div class="w-1/4 pr-2 text-right pt-4">
                             <span class="text-sm font-bold text-gray-800 tracking-tight leading-tight">${timeText}</span>
                         </div>
                         
-                        <!-- เส้น Timeline -->
-                        <div class="flex flex-col items-center relative">
+                        <!-- Timeline แบบยึดตำแหน่งแน่นอน ป้องกันการยืด -->
+                        <div class="relative w-4 flex justify-center flex-shrink-0">
                             <!-- จุดกลม -->
-                            <div class="w-3 h-3 rounded-full bg-blue-300 border-2 border-white shadow-sm my-auto z-10 relative"></div>
-                            <!-- เส้นลากยาว (ซ่อนถ้าเป็นคิวสุดท้าย) -->
-                            <div class="w-0.5 h-[150%] bg-blue-100 absolute top-1/2 -z-10 ${isLastItem ? 'hidden' : ''}"></div>
+                            <div class="w-3 h-3 rounded-full bg-blue-400 border-2 border-white shadow-sm z-10 mt-5 relative"></div>
+                            <!-- เส้นลากยาว -->
+                            ${!isLastItem ? '<div class="absolute top-5 w-0.5 bg-blue-200 z-0" style="bottom: -2.25rem;"></div>' : ''}
                         </div>
                         
-                        <!-- รายละเอียด -->
-                        <div class="w-3/4 pl-4 pb-2">
-                            <div class="${colorClass} border rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow h-full flex items-center">
+                        <!-- การ์ด -->
+                        <div class="w-3/4 pl-3">
+                            <div class="${colorClass} border rounded-2xl p-4 shadow-sm h-full flex items-center min-h-[4rem]">
                                 <h3 class="font-bold text-[15px] leading-tight">${item.title}</h3>
                             </div>
                         </div>
