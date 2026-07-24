@@ -13,6 +13,7 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
+        /* อนิเมชันตอนเปิดรูปผังที่นั่ง */
         @keyframes popIn {
             0% { opacity: 0; transform: scale(0.95); }
             100% { opacity: 1; transform: scale(1); }
@@ -58,7 +59,9 @@
     </div>
 
     <!-- Content รายการกำหนดการ -->
-    <div class="max-w-md mx-auto mt-4 px-4 pb-10" id="schedule-container"></div>
+    <div class="max-w-md mx-auto mt-4 px-4 pb-10" id="schedule-container">
+        <!-- ข้อมูลตารางจะถูกโหลดมาใส่ตรงนี้ด้วย Javascript -->
+    </div>
 
     <!-- ============================================== -->
     <!-- ป๊อปอัป (Modal) สำหรับแสดงผังที่นั่ง (พร้อมระบบ Zoom) -->
@@ -309,7 +312,6 @@
             wrapper.style.transform = `scale(${currentZoom})`;
             
             // ปรับขนาดความกว้าง/สูงของกล่องแม่ เพื่อให้ scrollbar ทำงานถูกต้องเวลาซูม
-            // ผังต้นฉบับกว้าง 600px สูงประมาณ 550px
             container.style.width = `${600 * currentZoom}px`;
             container.style.height = `${wrapper.offsetHeight * currentZoom}px`;
         }
