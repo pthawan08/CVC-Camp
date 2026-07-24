@@ -8,79 +8,69 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Sarabun', sans-serif; background-color: #f4f7f6; }
-        input[type="radio"] { display: none; }
-        input[type="radio"]:checked + div {
-            background-color: #2563EB;
-            color: white;
-            border-color: #2563EB;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body class="pb-20">
 
-    <!-- Header -->
-    <div class="bg-blue-600 shadow-md text-white px-4 py-8 rounded-b-3xl relative overflow-hidden">
-        <div class="absolute -right-10 -top-10 w-32 h-32 bg-white opacity-10 rounded-full"></div>
-        <div class="absolute -left-10 -bottom-10 w-24 h-24 bg-white opacity-10 rounded-full"></div>
-        <h1 class="text-xl font-bold text-center relative z-10 leading-relaxed">แบบประเมินความพึงพอใจ<br>ค่ายคริสตจักรแห่งนิมิต (CVC) "Prayer"</h1>
-        <p class="text-blue-100 text-sm text-center mt-2 relative z-10">วันที่ 30 ก.ค - 2 ส.ค 26</p>
-        <p class="text-blue-200 text-xs text-center mt-1 relative z-10">ณ หอประชุม ศรีวชิรโชติ ม.ราชภัฏพิบูลสงคราม จ.พิษณุโลก</p>
+    <!-- Header (ปรับเป็นไล่สี Gradient ฟ้า-ม่วง) -->
+    <div class="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 shadow-lg text-white px-4 py-8 rounded-b-[2rem] relative overflow-hidden">
+        <div class="absolute -right-10 -top-10 w-32 h-32 bg-white opacity-10 rounded-full blur-sm"></div>
+        <div class="absolute left-10 -bottom-10 w-24 h-24 bg-white opacity-10 rounded-full blur-md"></div>
+        <div class="absolute right-20 bottom-5 w-16 h-16 bg-yellow-300 opacity-20 rounded-full blur-sm"></div>
+        
+        <h1 class="text-xl font-bold text-center relative z-10 leading-relaxed drop-shadow-md">
+            แบบประเมินความพึงพอใจ<br>ค่ายคริสตจักรแห่งนิมิต (CVC) "Prayer"
+        </h1>
+        <p class="text-indigo-100 text-sm text-center mt-3 relative z-10 font-medium">📅 วันที่ 30 ก.ค. - 2 ส.ค. 2026</p>
+        <p class="text-indigo-200 text-xs text-center mt-1 relative z-10">📍 ณ หอประชุม ศรีวชิรโชติ ม.ราชภัฏพิบูลสงคราม จ.พิษณุโลก</p>
     </div>
 
     <form id="evaluationForm" class="max-w-md mx-auto mt-6 px-4 space-y-6">
         
-        <!-- ข้อมูลทั่วไป -->
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-            <h2 class="font-bold text-gray-800 border-b pb-2 mb-4 flex items-center">
-                <span class="bg-blue-100 text-blue-600 w-6 h-6 rounded-full inline-flex items-center justify-center text-sm mr-2">1</span> ข้อมูลทั่วไป
+        <!-- ข้อมูลทั่วไป (ธีมฟ้า) -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm border-t-4 border-t-blue-500 border-x border-b border-gray-100">
+            <h2 class="font-bold text-gray-800 border-b border-gray-100 pb-3 mb-4 flex items-center">
+                <span class="bg-blue-100 text-blue-600 w-7 h-7 rounded-full inline-flex items-center justify-center text-sm mr-2 shadow-inner">👤</span> ข้อมูลทั่วไป
             </h2>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-semibold text-gray-600 mb-1">ท่านเป็นสมาชิกคริสตจักรแห่งนิมิต <span class="text-red-500">*</span></label>
-                    <!-- เปลี่ยนเป็น input แบบมี list อ้างอิง -->
-                    <input type="text" id="churchName" list="churchListOptions" required placeholder="พิมพ์เพื่อค้นหาชื่อคริสตจักร..." class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-blue-50/50">
-                    <!-- DataList สำหรับทำ Autocomplete -->
-                    <datalist id="churchListOptions"></datalist>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-600 mb-1">จังหวัด <span class="text-red-500">*</span></label>
-                    <input type="text" id="province" required placeholder="ระบุจังหวัด..." class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300">
-                </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-600 mb-2">ท่านเป็นสมาชิกคริสตจักรแห่งนิมิต <span class="text-red-500">*</span></label>
+                <input type="text" id="churchName" list="churchListOptions" required placeholder="พิมพ์เพื่อค้นหาชื่อคริสตจักร..." class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-blue-50/30 transition">
+                <datalist id="churchListOptions"></datalist>
             </div>
         </div>
 
-        <div class="text-center px-4">
-            <p class="text-sm text-gray-500 bg-blue-50 py-2 px-4 rounded-full inline-block">📝 โปรดเลือกระดับความพึงพอใจของท่าน</p>
+        <div class="text-center px-4 pt-2">
+            <p class="text-sm font-bold text-gray-500 bg-white shadow-sm border border-gray-200 py-2 px-5 rounded-full inline-block">
+                ✨ โปรดเลือกระดับความพึงพอใจของท่าน
+            </p>
         </div>
 
         <!-- คอนเทนเนอร์สำหรับใส่การ์ดคำถาม -->
         <div id="questionsContainer" class="space-y-6"></div>
 
-        <!-- พระพรและข้อเสนอแนะ -->
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-4">
-            <h2 class="font-bold text-gray-800 border-b pb-2 mb-2 flex items-center">
-                <span class="bg-blue-100 text-blue-600 w-6 h-6 rounded-full inline-flex items-center justify-center text-sm mr-2">💬</span> ความคิดเห็นเพิ่มเติม
+        <!-- พระพรและข้อเสนอแนะ (ธีมชมพู) -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm border-t-4 border-t-pink-400 border-x border-b border-gray-100 space-y-4 mt-8">
+            <h2 class="font-bold text-gray-800 border-b border-gray-100 pb-3 mb-2 flex items-center">
+                <span class="bg-pink-100 text-pink-600 w-7 h-7 rounded-full inline-flex items-center justify-center text-sm mr-2 shadow-inner">💬</span> ความคิดเห็นเพิ่มเติม
             </h2>
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">พระพรที่ได้รับจากค่าย</label>
-                <textarea id="blessing" rows="3" placeholder="แบ่งปันพระพรที่ท่านได้รับ..." class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-300"></textarea>
+                <label class="block text-sm font-semibold text-gray-700 mb-2 text-pink-700">🕊️ พระพรที่ได้รับจากค่าย</label>
+                <textarea id="blessing" rows="3" placeholder="แบ่งปันสิ่งดีๆ ที่ท่านได้รับ..." class="w-full border border-pink-100 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-pink-300 bg-pink-50/30 transition"></textarea>
             </div>
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">ข้อเสนอแนะอื่นๆ</label>
-                <textarea id="suggestion" rows="3" placeholder="ข้อเสนอแนะเพื่อการพัฒนา..." class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-300"></textarea>
+                <label class="block text-sm font-semibold text-gray-700 mb-2 text-pink-700">💡 ข้อเสนอแนะอื่นๆ</label>
+                <textarea id="suggestion" rows="3" placeholder="ข้อเสนอแนะเพื่อการพัฒนาค่ายในครั้งต่อไป..." class="w-full border border-pink-100 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-pink-300 bg-pink-50/30 transition"></textarea>
             </div>
         </div>
 
         <!-- ปุ่มส่งแบบประเมิน -->
-        <button type="button" onclick="submitEvaluation()" id="submitBtn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg py-4 rounded-full shadow-lg hover:opacity-90 transition mt-4 mb-8">
-            ส่งแบบประเมิน
+        <button type="button" onclick="submitEvaluation()" id="submitBtn" class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-bold text-lg py-4 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all mt-6 mb-10 border border-indigo-700">
+            🚀 ส่งแบบประเมิน
         </button>
 
     </form>
 
     <script>
-        // 🗂️ ฐานข้อมูลคริสตจักร (ดึงมาจากระบบ Workshop)
         const churchData = {
             "CVC พิษณุโลก": ["BeOne", "BeTwo", "RU", "CL", "NU 1", "NU 2", "NU 3", "NewSeason A", "NewSeason B", "NGP A", "NGP B", "NGP C", "V-Gen A1", "V-Gen A2", "V-Gen B1", "V-Gen B2", "V-Gen B3", "Acts A", "Acts B", "Acts C", "Acts D", "เยรูซาเลม1", "เยรูซาเลม2", "Power Eagle 1", "Power Eagle 2", "Power Eagle 3", "Happiness 1", "Happiness 2", "Unity 1", "Unity 2"],
             "ภาคพันธกิจที่ 1": ["CVC ลำพูน", "CVC บ้านโฮ่ง", "CVC บ้านธิ", "CVC เวียงหนองล่อง", "CVC ป่าซาง", "CVC ทิพเนตร", "CVC แม่ฮ่องสอน", "CVC แม่สะเรียง", "CVC ขุนยวม", "CVC สบเมย", "CVC นครเชียงใหม่", "CVC นครลำปาง", "CVC วังเหนือ", "CVC แม่ทา", "CVC เมืองปาน", "CVC ลี้"],
@@ -90,27 +80,23 @@
             "ภาคพันธกิจที่ 5": ["CVC กำแพงเพชร", "CVC ขาณุวรลักษณ์", "CVC ไทรพัฒนา", "CVC เพชรบูรณ์", "CVC บ้านน้ำร้อน", "CVC สุโขทัย", "CVC กงไกรลาศ", "CVC พิจิตร", "CVC สามง่าม", "CVC บึงนารา", "CVC คลองขลุง", "CVC สากเหล็ก", "CVC เขาทราย", "CVC เข็กน้อย", "CVC วิเชียรบุรี", "CVC บ้านแม่ท่าแพ", "CVC บ้านห้วยหยวก", "CVC ห้วยมะนาว", "CVC สวรรคโลก", "CVC ไผ่ท่าโพธิ์", "CVC ห้วยแย้", "CVC โคราช", "CVC กลางหมื่น", "CVC ขอนแก่น", "CVC อุดรธานี", "CVC หนองคาย", "CVC กรุงเทพมหานคร", "CVC สมุทปราการ", "CVC กบินทร์บุรี (จ.ปราจีนบุรี)", "CVC ชลบุรี", "CVC เกาะสมุย (จ.สุราษฏร์ธานี)", "CVC มาบอำมฤต (จ.ชุมพร)", "CVC โป๊ะหมอ (หาดใหญ่)", "CVC ปราณบุรี (ประจวบคีรีขันธ์)", "CVC สเปน (บาเซโลน่า)", "CVC นอร์เวย์ ( ออสโล )", "CVC เบียล ( สวิตเซอร์แลนด์ )", "CVC บาเซิล ( สวิตเซอร์แลนด์ )", "CVC ธูน ( สวิตเซอร์แลนด์ )", "CVC นครหลวงเวียงจันทร์", "CVC หลัก 32 ( อุดมไซ ลาว )"]
         };
 
-        // ฟังก์ชันยัดรายชื่อใส่ Autocomplete
         function populateChurchDatalist() {
             const datalist = document.getElementById('churchListOptions');
             let allChurches = [];
-            
-            // ดึงชื่อออกมาทั้งหมดมารวมกัน
-            for (let region in churchData) {
-                allChurches = allChurches.concat(churchData[region]);
-            }
-            
-            // สร้างเป็นตัวเลือก <option>
+            for (let region in churchData) { allChurches = allChurches.concat(churchData[region]); }
             allChurches.forEach(church => {
-                let option = document.createElement('option');
-                option.value = church;
-                datalist.appendChild(option);
+                let option = document.createElement('option'); option.value = church; datalist.appendChild(option);
             });
         }
 
+        // 🗂️ ฐานข้อมูลคำถาม พร้อมกำหนดธีมสีให้แต่ละหมวด
         const surveyData = [
             {
                 category: "ด้านสถานที่จัดค่าย / ระยะเวลา / อาหาร",
+                icon: "🏕️",
+                themeBorder: "border-t-orange-400",
+                themeIcon: "bg-orange-100 text-orange-600",
+                themeText: "text-orange-800 border-orange-100",
                 questions: [
                     { id: "q1_1", text: "1. สถานที่สะอาดและมีความเหมาะสม" },
                     { id: "q1_2", text: "2. ความพร้อมของอุปกรณ์โสตทัศนูปกรณ์" },
@@ -119,6 +105,10 @@
             },
             {
                 category: "ด้านคำสอน / การนมัสการ",
+                icon: "📖",
+                themeBorder: "border-t-emerald-400",
+                themeIcon: "bg-emerald-100 text-emerald-600",
+                themeText: "text-emerald-800 border-emerald-100",
                 questions: [
                     { id: "q2_1", text: "1. เนื้อหาชัดเจน ตรงประเด็น และเข้าใจง่าย" },
                     { id: "q2_2", text: "2. สามารถนำมาประยุกต์ใช้ได้ในชีวิตประจำวัน" },
@@ -127,7 +117,11 @@
                 ]
             },
             {
-                category: "อื่นๆ",
+                category: "กิจกรรมอื่นๆ",
+                icon: "🎉",
+                themeBorder: "border-t-purple-400",
+                themeIcon: "bg-purple-100 text-purple-600",
+                themeText: "text-purple-800 border-purple-100",
                 questions: [
                     { id: "q3_1", text: "1. พิธีเปิด ปิดค่าย" },
                     { id: "q3_2", text: "2. วีดิทัศน์/คำพยาน/CVC NEWS" },
@@ -140,12 +134,33 @@
             }
         ];
 
+        // 🎨 ตัวเลือกคะแนนแบบมีสีสัน (ใช้ระบบ Peer ของ Tailwind)
         const ratingOptions = [
-            { value: "ดีมาก", label: "ดีมาก" },
-            { value: "ดี", label: "ดี" },
-            { value: "พอใช้", label: "พอใช้" },
-            { value: "ปรับปรุง", label: "ปรับปรุง" },
-            { value: "ไม่ได้เข้าร่วม", label: "ไม่ได้เข้าร่วม" }
+            { 
+                value: "ดีมาก", label: "ดีมาก", 
+                activeClass: "peer-checked:bg-emerald-500 peer-checked:border-emerald-500 peer-checked:text-white peer-checked:shadow-md", 
+                baseClass: "text-emerald-600 border-emerald-200 bg-emerald-50 hover:bg-emerald-100" 
+            },
+            { 
+                value: "ดี", label: "ดี", 
+                activeClass: "peer-checked:bg-blue-500 peer-checked:border-blue-500 peer-checked:text-white peer-checked:shadow-md", 
+                baseClass: "text-blue-600 border-blue-200 bg-blue-50 hover:bg-blue-100" 
+            },
+            { 
+                value: "พอใช้", label: "พอใช้", 
+                activeClass: "peer-checked:bg-amber-500 peer-checked:border-amber-500 peer-checked:text-white peer-checked:shadow-md", 
+                baseClass: "text-amber-600 border-amber-200 bg-amber-50 hover:bg-amber-100" 
+            },
+            { 
+                value: "ปรับปรุง", label: "ปรับปรุง", 
+                activeClass: "peer-checked:bg-orange-500 peer-checked:border-orange-500 peer-checked:text-white peer-checked:shadow-md", 
+                baseClass: "text-orange-600 border-orange-200 bg-orange-50 hover:bg-orange-100" 
+            },
+            { 
+                value: "ไม่ได้เข้าร่วม", label: "ไม่ร่วม", 
+                activeClass: "peer-checked:bg-gray-500 peer-checked:border-gray-500 peer-checked:text-white peer-checked:shadow-md", 
+                baseClass: "text-gray-500 border-gray-200 bg-gray-50 hover:bg-gray-100" 
+            }
         ];
 
         function renderQuestions() {
@@ -153,20 +168,26 @@
             let html = '';
 
             surveyData.forEach((section) => {
-                html += `<div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">`;
-                html += `<h2 class="font-bold text-blue-800 border-b pb-2 mb-4">${section.category}</h2>`;
+                // สร้างกล่องแบ่งหมวดหมู่ตามสี
+                html += `<div class="bg-white p-5 rounded-2xl shadow-sm border-t-4 ${section.themeBorder} border-x border-b border-gray-100">`;
+                html += `
+                    <h2 class="font-bold border-b pb-3 mb-5 flex items-center ${section.themeText}">
+                        <span class="${section.themeIcon} w-7 h-7 rounded-full inline-flex items-center justify-center text-sm mr-2 shadow-inner">${section.icon}</span> 
+                        ${section.category}
+                    </h2>
+                `;
                 html += `<div class="space-y-6">`;
 
                 section.questions.forEach((q) => {
                     html += `<div class="question-group">`;
-                    html += `<p class="font-semibold text-gray-700 text-sm mb-3">${q.text}</p>`;
+                    html += `<p class="font-semibold text-gray-700 text-[15px] mb-3 leading-snug">${q.text}</p>`;
                     html += `<div class="grid grid-cols-5 gap-1.5">`; 
 
                     ratingOptions.forEach(opt => {
                         html += `
                             <label class="block cursor-pointer">
-                                <input type="radio" name="${q.id}" value="${opt.value}" required>
-                                <div class="text-center py-2 px-1 text-[11px] sm:text-xs rounded-lg border border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100 transition h-full flex items-center justify-center break-words leading-tight">
+                                <input type="radio" name="${q.id}" value="${opt.value}" class="peer hidden" required>
+                                <div class="text-center py-2.5 px-0.5 text-[11px] sm:text-[13px] font-medium rounded-xl border transition-all duration-200 h-full flex items-center justify-center break-words leading-tight ${opt.baseClass} ${opt.activeClass}">
                                     ${opt.label}
                                 </div>
                             </label>
@@ -174,6 +195,8 @@
                     });
 
                     html += `</div></div>`;
+                    // เส้นคั่นระหว่างข้อ
+                    html += `<div class="w-full h-px bg-gray-50 my-2"></div>`;
                 });
 
                 html += `</div></div>`;
@@ -186,7 +209,7 @@
             const form = document.getElementById('evaluationForm');
             
             if (!form.checkValidity()) {
-                alert('⚠️ กรุณากรอกข้อมูลและเลือกคะแนนประเมินให้ครบทุกข้อครับ');
+                alert('⚠️ กรุณากรอกข้อมูลและเลือกคะแนนประเมินให้ครบทุกข้อครับ (หากข้อใดไม่ได้เข้าร่วม ให้เลือก "ไม่ร่วม")');
                 form.reportValidity();
                 return;
             }
@@ -198,7 +221,6 @@
 
             let formData = {
                 church: document.getElementById('churchName').value,
-                province: document.getElementById('province').value,
                 blessing: document.getElementById('blessing').value,
                 suggestion: document.getElementById('suggestion').value,
                 ratings: {}
@@ -214,7 +236,7 @@
             console.log("ข้อมูลที่เตรียมส่ง:", formData);
             
             setTimeout(() => {
-                alert('✅ ขอบคุณสำหรับการประเมินครับ! ระบบได้บันทึกข้อมูลเรียบร้อยแล้ว');
+                alert('🎉 ขอบคุณสำหรับการประเมินครับ! ระบบได้บันทึกข้อมูลของท่านเรียบร้อยแล้ว');
                 window.location.reload();
             }, 1000);
         }
