@@ -8,9 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Sarabun', sans-serif; background-color: #f4f7f6; }
-        /* ซ่อนวงกลม Radio Button เดิม */
         input[type="radio"] { display: none; }
-        /* สร้าง Style ตอนที่ปุ่มถูกเลือก */
         input[type="radio"]:checked + div {
             background-color: #2563EB;
             color: white;
@@ -40,7 +38,10 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-semibold text-gray-600 mb-1">ท่านเป็นสมาชิกคริสตจักรแห่งนิมิต <span class="text-red-500">*</span></label>
-                    <input type="text" id="churchName" required placeholder="ระบุชื่อคริสตจักร..." class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                    <!-- เปลี่ยนเป็น input แบบมี list อ้างอิง -->
+                    <input type="text" id="churchName" list="churchListOptions" required placeholder="พิมพ์เพื่อค้นหาชื่อคริสตจักร..." class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-blue-50/50">
+                    <!-- DataList สำหรับทำ Autocomplete -->
+                    <datalist id="churchListOptions"></datalist>
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-600 mb-1">จังหวัด <span class="text-red-500">*</span></label>
@@ -53,7 +54,7 @@
             <p class="text-sm text-gray-500 bg-blue-50 py-2 px-4 rounded-full inline-block">📝 โปรดเลือกระดับความพึงพอใจของท่าน</p>
         </div>
 
-        <!-- คอนเทนเนอร์สำหรับใส่การ์ดคำถาม (JS จะดึงมาใส่ตรงนี้) -->
+        <!-- คอนเทนเนอร์สำหรับใส่การ์ดคำถาม -->
         <div id="questionsContainer" class="space-y-6"></div>
 
         <!-- พระพรและข้อเสนอแนะ -->
@@ -79,7 +80,34 @@
     </form>
 
     <script>
-        // 🗂️ ฐานข้อมูลคำถามทั้งหมด (พิมพ์แก้จากตรงนี้ได้เลย)
+        // 🗂️ ฐานข้อมูลคริสตจักร (ดึงมาจากระบบ Workshop)
+        const churchData = {
+            "CVC พิษณุโลก": ["BeOne", "BeTwo", "RU", "CL", "NU 1", "NU 2", "NU 3", "NewSeason A", "NewSeason B", "NGP A", "NGP B", "NGP C", "V-Gen A1", "V-Gen A2", "V-Gen B1", "V-Gen B2", "V-Gen B3", "Acts A", "Acts B", "Acts C", "Acts D", "เยรูซาเลม1", "เยรูซาเลม2", "Power Eagle 1", "Power Eagle 2", "Power Eagle 3", "Happiness 1", "Happiness 2", "Unity 1", "Unity 2"],
+            "ภาคพันธกิจที่ 1": ["CVC ลำพูน", "CVC บ้านโฮ่ง", "CVC บ้านธิ", "CVC เวียงหนองล่อง", "CVC ป่าซาง", "CVC ทิพเนตร", "CVC แม่ฮ่องสอน", "CVC แม่สะเรียง", "CVC ขุนยวม", "CVC สบเมย", "CVC นครเชียงใหม่", "CVC นครลำปาง", "CVC วังเหนือ", "CVC แม่ทา", "CVC เมืองปาน", "CVC ลี้"],
+            "ภาคพันธกิจที่ 2": ["CVC เชียงราย", "CVC แม่สรวย", "CVC ห้วยนากาด", "CVC เวียงป่าเป้า", "CVC เชียงคำ", "CVC พะเยา", "CVC พะเยา 2", "CVC น่าน", "CVC แม่สาย", "CVC แพร่"],
+            "ภาคพันธกิจที่ 3": ["CVC บางระกำ", "CVC พรหมพิราม", "CVC บางกระทุ่ม", "CVC วังทอง", "CVC นครไทย", "CVC บ้านแยง", "CVC ชาตระการ", "CVC วัดโบสถ์", "CVC ชุมชุนชาวแพ", "CVC โตกำแพง", "CVC เขาไร่", "CVC เนินมะปราง", "CVC ทรัพย์ไพรวัลย์", "CVC เขาค้อ (ไฮแลนด์)", "CVC อุตรดิตถ์"],
+            "ภาคพันธกิจที่ 4": ["CVC นครแม่สอด", "CVC ห้วยกะโหลก", "CVC นครสวรรค์", "CVC ลาดยาว", "CVC อุทัยธานี", "CVC น้ำรอบ", "CVC ลานสัก", "CVC ชัยนาท", "CVC สุพรรณบุรี", "CVC พบพระ", "CVC อุ้มผาง", "CVC หนองบัว", "CVC วังน้ำขาว", "CVC บ้านหมี่", "CVC บางพล้อ", "CVC บรรพต", "CVC โกรกพระ", "CVC ตาคลี", "CVC ตากฟ้า", "CVC ชุมตาบง", "CVC แม่วงก์", "CVC แม่เปิน", "CVC อยุธยา", "CVC แม่ละมาด", "CVC อ.เมือง ตาก", "CVC ท่าสองยาง", "CVC สว่างอารมภ์", "CVC เมืองอุทัยธานี"],
+            "ภาคพันธกิจที่ 5": ["CVC กำแพงเพชร", "CVC ขาณุวรลักษณ์", "CVC ไทรพัฒนา", "CVC เพชรบูรณ์", "CVC บ้านน้ำร้อน", "CVC สุโขทัย", "CVC กงไกรลาศ", "CVC พิจิตร", "CVC สามง่าม", "CVC บึงนารา", "CVC คลองขลุง", "CVC สากเหล็ก", "CVC เขาทราย", "CVC เข็กน้อย", "CVC วิเชียรบุรี", "CVC บ้านแม่ท่าแพ", "CVC บ้านห้วยหยวก", "CVC ห้วยมะนาว", "CVC สวรรคโลก", "CVC ไผ่ท่าโพธิ์", "CVC ห้วยแย้", "CVC โคราช", "CVC กลางหมื่น", "CVC ขอนแก่น", "CVC อุดรธานี", "CVC หนองคาย", "CVC กรุงเทพมหานคร", "CVC สมุทปราการ", "CVC กบินทร์บุรี (จ.ปราจีนบุรี)", "CVC ชลบุรี", "CVC เกาะสมุย (จ.สุราษฏร์ธานี)", "CVC มาบอำมฤต (จ.ชุมพร)", "CVC โป๊ะหมอ (หาดใหญ่)", "CVC ปราณบุรี (ประจวบคีรีขันธ์)", "CVC สเปน (บาเซโลน่า)", "CVC นอร์เวย์ ( ออสโล )", "CVC เบียล ( สวิตเซอร์แลนด์ )", "CVC บาเซิล ( สวิตเซอร์แลนด์ )", "CVC ธูน ( สวิตเซอร์แลนด์ )", "CVC นครหลวงเวียงจันทร์", "CVC หลัก 32 ( อุดมไซ ลาว )"]
+        };
+
+        // ฟังก์ชันยัดรายชื่อใส่ Autocomplete
+        function populateChurchDatalist() {
+            const datalist = document.getElementById('churchListOptions');
+            let allChurches = [];
+            
+            // ดึงชื่อออกมาทั้งหมดมารวมกัน
+            for (let region in churchData) {
+                allChurches = allChurches.concat(churchData[region]);
+            }
+            
+            // สร้างเป็นตัวเลือก <option>
+            allChurches.forEach(church => {
+                let option = document.createElement('option');
+                option.value = church;
+                datalist.appendChild(option);
+            });
+        }
+
         const surveyData = [
             {
                 category: "ด้านสถานที่จัดค่าย / ระยะเวลา / อาหาร",
@@ -112,7 +140,6 @@
             }
         ];
 
-        // ตัวเลือกคะแนน
         const ratingOptions = [
             { value: "ดีมาก", label: "ดีมาก" },
             { value: "ดี", label: "ดี" },
@@ -121,12 +148,11 @@
             { value: "ไม่ได้เข้าร่วม", label: "ไม่ได้เข้าร่วม" }
         ];
 
-        // 🎨 ฟังก์ชันสร้างการ์ดคำถามแบบอัตโนมัติ
         function renderQuestions() {
             const container = document.getElementById('questionsContainer');
             let html = '';
 
-            surveyData.forEach((section, sIndex) => {
+            surveyData.forEach((section) => {
                 html += `<div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">`;
                 html += `<h2 class="font-bold text-blue-800 border-b pb-2 mb-4">${section.category}</h2>`;
                 html += `<div class="space-y-6">`;
@@ -134,7 +160,7 @@
                 section.questions.forEach((q) => {
                     html += `<div class="question-group">`;
                     html += `<p class="font-semibold text-gray-700 text-sm mb-3">${q.text}</p>`;
-                    html += `<div class="grid grid-cols-5 gap-1.5">`; // แบ่ง 5 คอลัมน์ให้กดง่ายๆ
+                    html += `<div class="grid grid-cols-5 gap-1.5">`; 
 
                     ratingOptions.forEach(opt => {
                         html += `
@@ -156,11 +182,9 @@
             container.innerHTML = html;
         }
 
-        // 🚀 ฟังก์ชันดักจับการกดปุ่มส่ง
         function submitEvaluation() {
             const form = document.getElementById('evaluationForm');
             
-            // เช็คว่ากรอกข้อมูลครบไหม
             if (!form.checkValidity()) {
                 alert('⚠️ กรุณากรอกข้อมูลและเลือกคะแนนประเมินให้ครบทุกข้อครับ');
                 form.reportValidity();
@@ -172,7 +196,6 @@
             btn.disabled = true;
             btn.classList.add('opacity-50', 'cursor-not-allowed');
 
-            // 📦 ดึงข้อมูลทั้งหมดมาเตรียมส่ง
             let formData = {
                 church: document.getElementById('churchName').value,
                 province: document.getElementById('province').value,
@@ -188,18 +211,18 @@
                 });
             });
 
-            // ⚠️ ตำแหน่งนี้สำหรับเขียนโค้ด fetch() ส่งไป Google Sheets (Apps Script) 
             console.log("ข้อมูลที่เตรียมส่ง:", formData);
             
-            // จำลองการบันทึกสำเร็จ
             setTimeout(() => {
                 alert('✅ ขอบคุณสำหรับการประเมินครับ! ระบบได้บันทึกข้อมูลเรียบร้อยแล้ว');
                 window.location.reload();
             }, 1000);
         }
 
-        // สั่งให้สร้างคำถามทันทีที่โหลดเว็บ
-        document.addEventListener('DOMContentLoaded', renderQuestions);
+        document.addEventListener('DOMContentLoaded', () => {
+            populateChurchDatalist();
+            renderQuestions();
+        });
     </script>
 </body>
 </html>
