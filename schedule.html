@@ -12,17 +12,7 @@
         .tab-inactive { background-color: white; color: #4B5563; border-color: #E5E7EB; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        @keyframes popIn {
-            0% { opacity: 0; transform: scale(0.95); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-        .modal-animate { animation: popIn 0.3s ease-out forwards; }
-        
-        #zoom-wrapper {
-            transform-origin: top left;
-            transition: transform 0.2s ease-out;
-        }
+        #zoom-wrapper { transform-origin: top left; transition: transform 0.2s ease-out; }
     </style>
 </head>
 <body class="pb-20">
@@ -58,14 +48,17 @@
 
     <!-- Content รายการกำหนดการ -->
     <div class="max-w-md mx-auto mt-4 px-4 pb-10" id="schedule-container">
-        <!-- ข้อมูลตารางจะถูกโหลดมาใส่ตรงนี้ด้วย Javascript -->
+        <!-- ตัวกันเหนียว ถ้า JS ไม่ทำงาน จะค้างหน้านี้ -->
+        <div class="text-center py-10 text-gray-500 font-bold bg-white rounded-2xl shadow-sm border border-gray-100">
+            ⏳ กำลังโหลดตารางค่าย...
+        </div>
     </div>
 
     <!-- ============================================== -->
     <!-- ป๊อปอัป (Modal) สำหรับแสดงผังที่นั่ง (พร้อมระบบ Zoom) -->
     <!-- ============================================== -->
     <div id="seatingModal" class="fixed inset-0 bg-black/80 z-50 hidden flex flex-col items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl modal-animate relative flex flex-col max-h-[90vh]">
+        <div class="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl relative flex flex-col max-h-[90vh]">
             
             <button onclick="closeSeatingModal()" class="absolute top-4 right-4 bg-white/90 p-2 rounded-full shadow-sm text-gray-600 hover:text-red-500 hover:bg-red-50 transition z-10">
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -74,7 +67,6 @@
             <div class="p-4 border-b border-gray-100 bg-blue-50 flex-shrink-0">
                 <h3 class="text-lg font-bold text-blue-800 text-center pr-8">🗺️ ผังที่นั่งห้องประชุม</h3>
                 
-                <!-- แผงปุ่มควบคุมการซูม -->
                 <div class="flex justify-center items-center space-x-3 mt-3">
                     <button onclick="zoomOut()" class="bg-white text-blue-600 border border-blue-200 px-3 py-1 rounded-lg font-bold shadow-sm hover:bg-blue-100 flex items-center">
                         <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" /></svg> ซูมออก
@@ -212,7 +204,7 @@
                 { time: "09:10 - 09:20", title: "เคลื่อนไหวใน HS", type: "worship" },
                 { time: "09:20 - 09:25", title: "ถวายทรัพย์ 3", type: "ceremony" },
                 { time: "09:25 - 09:30", title: "คำพยานชีวิต 2", type: "media" },
-                { time: "09:30 - 09:50", title: "มอบวุฒิบัตร", type: "ceremony" },
+                { time: "09:30 - 09:50", title: "มอบสูจิบัตร", type: "ceremony" },
                 { time: "09:50 - 11:00", title: "สอน 3", type: "teach" },
                 { time: "11:00 - 12:10", title: "สอน 4", type: "teach" },
                 { time: "12:10 - 12:20", title: "Share Small Group", type: "activity" },
@@ -278,7 +270,7 @@
                 const timeText = item.time ? item.time.replace(' - ', '<br><span class="text-xs text-gray-400 font-normal">ถึง</span><br>') : '';
                 
                 const cardHtml = `
-                    <div class="flex mb-4 items-stretch opacity-0 animate-fade-in" style="animation-delay: ${index * 0.05}s; animation-fill-mode: forwards;">
+                    <div class="flex mb-4 items-stretch">
                         <div class="w-1/4 pr-3 text-right flex flex-col justify-center">
                             <span class="text-sm font-bold text-gray-800 tracking-tight leading-tight">${timeText}</span>
                         </div>
@@ -297,9 +289,6 @@
             });
         }
 
-        // ==========================================
-        // ระบบ Zoom ผังที่นั่ง
-        // ==========================================
         let currentZoom = 1.0;
         
         function updateZoomDisplay() {
@@ -343,10 +332,8 @@
             if (modal) modal.classList.add('hidden');
         }
 
-        // ใช้ DOMContentLoaded เพื่อให้แน่ใจว่าโหลดข้อมูลเสร็จก่อนแสดงผล
-        document.addEventListener('DOMContentLoaded', () => {
-            switchTab('day1');
-        });
+        // โหลดข้อมูลขึ้นมาโชว์ทันที
+        switchTab('day1');
     </script>
 </body>
 </html>
