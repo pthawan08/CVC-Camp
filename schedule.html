@@ -162,7 +162,7 @@
     </div>
     <!-- ============================================== -->
 
-    <script>
+   <script>
         const scheduleData = {
             "day1": [
                 { time: "15:00 - 18:00", title: "ลงทะเบียน / รับเสื้อ", type: "general" },
@@ -231,7 +231,7 @@
                 { time: "11:50 - 12:00", title: "Share Small Group", type: "activity" },
                 { time: "12:00 - 12:10", title: "ขอบคุณวิทยากร", type: "ceremony" },
                 { time: "12:10 - 12:30", title: "พิธีปิด", type: "ceremony" },
-                { time: "12:30 - 12:30", title: "เดินทางกลับด้วยความปลอดภัย", type: "general" }
+                { time: "12:30 เป็นต้นไป", title: "เดินทางกลับด้วยความปลอดภัย", type: "general" } // แก้ไขเวลาตรงนี้ให้สวยงาม
             ]
         };
 
@@ -267,17 +267,29 @@
             
             items.forEach((item, index) => {
                 const colorClass = getTypeColor(item.type);
-                const timeText = item.time ? item.time.replace(' - ', '<br><span class="text-xs text-gray-400 font-normal">ถึง</span><br>') : '';
+                const isLastItem = index === items.length - 1; // เช็คว่าเป็นคิวสุดท้ายหรือเปล่า
+                
+                // ถ้ารูปแบบเวลามีขีด - ให้แปลงร่างเป็นคำว่า "ถึง" แต่ถ้าไม่มีขีด (เช่น คิวสุดท้าย) ก็ใช้ข้อความเดิมเลย
+                const timeText = (item.time && item.time.includes(' - ')) 
+                    ? item.time.replace(' - ', '<br><span class="text-xs text-gray-400 font-normal">ถึง</span><br>') 
+                    : item.time;
                 
                 const cardHtml = `
-                    <div class="flex mb-4 items-stretch">
+                    <div class="flex mb-4 items-stretch relative">
+                        <!-- เวลา -->
                         <div class="w-1/4 pr-3 text-right flex flex-col justify-center">
                             <span class="text-sm font-bold text-gray-800 tracking-tight leading-tight">${timeText}</span>
                         </div>
-                        <div class="flex flex-col items-center">
-                            <div class="w-3 h-3 rounded-full bg-blue-300 border-2 border-white shadow-sm my-auto z-10"></div>
-                            <div class="w-0.5 h-full bg-blue-100 -mt-2 absolute -z-10"></div>
+                        
+                        <!-- เส้น Timeline -->
+                        <div class="flex flex-col items-center relative">
+                            <!-- จุดกลม -->
+                            <div class="w-3 h-3 rounded-full bg-blue-300 border-2 border-white shadow-sm my-auto z-10 relative"></div>
+                            <!-- เส้นลากยาว (ซ่อนถ้าเป็นคิวสุดท้าย) -->
+                            <div class="w-0.5 h-[150%] bg-blue-100 absolute top-1/2 -z-10 ${isLastItem ? 'hidden' : ''}"></div>
                         </div>
+                        
+                        <!-- รายละเอียด -->
                         <div class="w-3/4 pl-4 pb-2">
                             <div class="${colorClass} border rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow h-full flex items-center">
                                 <h3 class="font-bold text-[15px] leading-tight">${item.title}</h3>
@@ -332,8 +344,9 @@
             if (modal) modal.classList.add('hidden');
         }
 
-        // โหลดข้อมูลขึ้นมาโชว์ทันที
-        switchTab('day1');
+        document.addEventListener('DOMContentLoaded', () => {
+            switchTab('day1');
+        });
     </script>
 </body>
 </html>
