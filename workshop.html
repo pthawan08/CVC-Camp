@@ -90,11 +90,11 @@
         };
 
         const workshops = [
-            { id: "ws1", title: "1. ชีวิตที่สนิทสนมกับพระเจ้า", icon: "🍇", color: "bg-emerald-50 border-emerald-200 text-emerald-800", max: 50 },
-            { id: "ws2", title: "2. การอธิษฐานเพื่อการรักษาโรค", icon: "❤️", color: "bg-red-50 border-red-200 text-red-800", max: 50 },
-            { id: "ws3", title: "3. การอธิษฐานที่เปลี่ยนชีวิต", icon: "🕊️", color: "bg-blue-50 border-blue-200 text-blue-800", max: 50 },
-            { id: "ws4", title: "4. สงครามฝ่ายวิญญาณ", icon: "🛡️", color: "bg-orange-50 border-orange-200 text-orange-800", max: 50 },
-            { id: "ws5", title: "5. กลุ่มเยาวชน (Youth) *รับเฉพาะอนุชน", icon: "⭐", color: "bg-yellow-50 border-yellow-200 text-yellow-800", max: 50 }
+            { id: "ws1", title: "1. ชีวิตที่สนิทสนมกับพระเจ้า", icon: "🍇", color: "bg-emerald-50 border-emerald-200 text-emerald-800" },
+            { id: "ws2", title: "2. การอธิษฐานเพื่อการรักษาโรค", icon: "❤️", color: "bg-red-50 border-red-200 text-red-800" },
+            { id: "ws3", title: "3. การอธิษฐานที่เปลี่ยนชีวิต", icon: "🕊️", color: "bg-blue-50 border-blue-200 text-blue-800" },
+            { id: "ws4", title: "4. สงครามฝ่ายวิญญาณ", icon: "🛡️", color: "bg-orange-50 border-orange-200 text-orange-800" },
+            { id: "ws5", title: "5. กลุ่มเยาวชน (Youth) *รับเฉพาะอนุชน", icon: "⭐", color: "bg-yellow-50 border-yellow-200 text-yellow-800" }
         ];
 
         window.currentCampTotal = 0; // เก็บยอดค่ายไว้คำนวณ
@@ -139,13 +139,12 @@
                                 <h3 class="font-bold text-sm leading-snug">${ws.title}</h3>
                             </div>
                             <div id="quota_${ws.id}" class="bg-white/80 px-2 py-1 rounded-lg shadow-sm border border-black/5 text-[10px] font-bold text-gray-500 whitespace-nowrap">
-                                ⏳ รอโหลดโควต้า...
+                                ⏳ รอโหลดยอดรวม...
                             </div>
                         </div>
                         <div class="space-y-2 mt-3">
                             <div>
                                 <label class="block text-xs font-semibold mb-1">จำนวนคนลงทะเบียน</label>
-                                <!-- เพิ่ม oninput="calculateTotals()" ตรงนี้เพื่อให้คำนวณทันทีที่พิมพ์ -->
                                 <input type="number" min="0" id="count_${ws.id}" oninput="calculateTotals()" placeholder="0" class="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400">
                             </div>
                             <div>
@@ -192,7 +191,7 @@
             if (!church) return;
 
             statusBox.className = "p-3 rounded-xl text-xs flex items-center space-x-2 bg-yellow-50 text-yellow-800 border border-yellow-200";
-            statusBox.innerHTML = "⏳ กำลังดึงข้อมูลโควต้าและข้อมูลเดิม...";
+            statusBox.innerHTML = "⏳ กำลังดึงข้อมูลยอดผู้ลงทะเบียน...";
             statusBox.classList.remove("hidden");
             document.getElementById("summaryBox").classList.add("hidden");
 
@@ -206,9 +205,8 @@
 
                 if (res.status === "success") {
                     statusBox.className = "p-3 rounded-xl text-xs flex items-center space-x-2 bg-green-50 text-green-800 border border-green-200";
-                    statusBox.innerHTML = "✅ ดึงข้อมูลสำเร็จ! กรุณาตรวจสอบยอดคงเหลือ";
+                    statusBox.innerHTML = "✅ ดึงข้อมูลสำเร็จ!";
                     
-                    // เซ็ตยอดรวมค่าย และโชว์กล่องสรุป
                     window.currentCampTotal = res.totalCampMembers || 0;
                     document.getElementById("summaryBox").classList.remove("hidden");
 
@@ -221,26 +219,17 @@
                         });
                     }
 
+                    // 🟢 อัปเดตป้ายโชว์แค่ยอดรวมทั้งหมดของแต่ละคลาส
                     if (res.globalTotals) {
                         workshops.forEach(ws => {
                             let used = res.globalTotals[ws.id] || 0;
-                            let remain = ws.max - used;
                             let badge = document.getElementById(`quota_${ws.id}`);
                             
-                            if (remain <= 0) {
-                                badge.innerHTML = `🔴 เต็มแล้ว (${used}/${ws.max})`;
-                                badge.className = "bg-red-100 px-2 py-1 rounded-lg shadow-sm border border-red-200 text-[10px] font-bold text-red-700 whitespace-nowrap";
-                            } else if (remain <= 10) {
-                                badge.innerHTML = `⚠️ เหลือ ${remain} ที่ (${used}/${ws.max})`;
-                                badge.className = "bg-orange-100 px-2 py-1 rounded-lg shadow-sm border border-orange-200 text-[10px] font-bold text-orange-700 whitespace-nowrap";
-                            } else {
-                                badge.innerHTML = `🟢 เหลือ ${remain} ที่ (${used}/${ws.max})`;
-                                badge.className = "bg-green-100 px-2 py-1 rounded-lg shadow-sm border border-green-200 text-[10px] font-bold text-green-700 whitespace-nowrap";
-                            }
+                            badge.innerHTML = `👥 ยอดคลาสนี้ ${used} คน`;
+                            badge.className = "bg-indigo-100 px-2 py-1 rounded-lg shadow-sm border border-indigo-200 text-[11px] font-bold text-indigo-700 whitespace-nowrap";
                         });
                     }
                     
-                    // สั่งคำนวณยอดทันทีหลังจากดึงข้อมูลเสร็จ
                     calculateTotals();
 
                 } else {
@@ -252,6 +241,14 @@
                 statusBox.innerHTML = "ℹ️ พร้อมลงทะเบียนใหม่ (ยังไม่มีข้อมูลเดิม)";
                 window.currentCampTotal = 0;
                 document.getElementById("summaryBox").classList.remove("hidden");
+                
+                // ถ้ายกดึงข้อมูลไม่สำเร็จ หรือเป็นคริสตจักรใหม่ ให้แสดงยอด 0 ไปก่อน
+                workshops.forEach(ws => {
+                    let badge = document.getElementById(`quota_${ws.id}`);
+                    badge.innerHTML = `👥 ยอดคลาสนี้ 0 คน`;
+                    badge.className = "bg-indigo-100 px-2 py-1 rounded-lg shadow-sm border border-indigo-200 text-[11px] font-bold text-indigo-700 whitespace-nowrap";
+                });
+
                 calculateTotals();
             }
         }
