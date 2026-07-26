@@ -82,7 +82,8 @@
             { id: "ws1", title: "1. การอธิษฐาน : ชีวิตที่สนิทสนมฯ", icon: "📖", color: "bg-emerald-50 border-emerald-200 text-emerald-800" },
             { id: "ws2", title: "2. การอธิษฐานในระดับครอบครัว", icon: "🏠", color: "bg-blue-50 border-blue-200 text-blue-800" },
             { id: "ws3", title: "3. การอธิษฐานเพื่อพันธกิจ/การประกาศ", icon: "🔥", color: "bg-orange-50 border-orange-200 text-orange-800" },
-            { id: "ws4", title: "4. การอธิษฐานขับเคลื่อนคริสตจักร", icon: "⛪", color: "bg-purple-50 border-purple-200 text-purple-800" }
+            { id: "ws4", title: "4. การอธิษฐานขับเคลื่อนคริสตจักร", icon: "⛪", color: "bg-purple-50 border-purple-200 text-purple-800" },
+            { id: "ws5", title: "5. การอธิษฐานสำหรับเยาวชน (Youth)", icon: "⚡", color: "bg-pink-50 border-pink-200 text-pink-800" }
         ];
 
         // สร้าง Dropdown ภาคพันธกิจ
@@ -140,7 +141,7 @@
             container.innerHTML = html;
         }
 
-        // ดึงข้อมูลการลงทะเบียนเดิมมาโชว์ (ปรับปรุงระบบเชื่อมต่อให้ผ่านตลอด)
+        // ดึงข้อมูลการลงทะเบียนเดิมมาโชว์
         async function onChurchChange() {
             const church = document.getElementById("churchSelect").value;
             const statusBox = document.getElementById("statusBox");
@@ -151,7 +152,6 @@
             statusBox.classList.remove("hidden");
 
             try {
-                // เพิ่ม redirect: 'follow' เพื่อทะลุกำแพง Google Apps Script
                 const response = await fetch(`${scriptURL}?action=getWorkshopData&church=${encodeURIComponent(church)}`, {
                     method: 'GET',
                     redirect: 'follow'
@@ -163,7 +163,6 @@
                     statusBox.className = "p-3 rounded-xl text-xs flex items-center space-x-2 bg-green-50 text-green-800 border border-green-200";
                     statusBox.innerHTML = "✅ ดึงข้อมูลสำเร็จ!";
                     
-                    // หยอดข้อมูลเดิมลงช่อง
                     if (res.data) {
                         workshops.forEach(ws => {
                             if (res.data[ws.id]) {
@@ -201,18 +200,19 @@
                 action: "saveWorkshop",
                 region: region,
                 church: church,
-                workshops: {}
+                w1: document.getElementById('count_ws1') ? document.getElementById('count_ws1').value : "",
+                w2: document.getElementById('count_ws2') ? document.getElementById('count_ws2').value : "",
+                w3: document.getElementById('count_ws3') ? document.getElementById('count_ws3').value : "",
+                w4: document.getElementById('count_ws4') ? document.getElementById('count_ws4').value : "",
+                w5: document.getElementById('count_ws5') ? document.getElementById('count_ws5').value : "",
+                w1n: document.getElementById('names_ws1') ? document.getElementById('names_ws1').value : "",
+                w2n: document.getElementById('names_ws2') ? document.getElementById('names_ws2').value : "",
+                w3n: document.getElementById('names_ws3') ? document.getElementById('names_ws3').value : "",
+                w4n: document.getElementById('names_ws4') ? document.getElementById('names_ws4').value : "",
+                w5n: document.getElementById('names_ws5') ? document.getElementById('names_ws5').value : ""
             };
 
-            workshops.forEach(ws => {
-                payload.workshops[ws.id] = {
-                    count: document.getElementById(`count_${ws.id}`).value || 0,
-                    names: document.getElementById(`names_${ws.id}`).value || ""
-                };
-            });
-
             try {
-                // ส่งแบบ text/plain และสั่ง redirect: 'follow'
                 const response = await fetch(scriptURL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
