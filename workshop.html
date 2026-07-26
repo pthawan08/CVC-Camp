@@ -8,296 +8,239 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Sarabun', sans-serif; background-color: #f4f7f6; }
-        .pastel-blue { background-color: #B0C4DE; }
-        .text-pastel-blue { color: #8FA8C8; }
-        input[type="number"]::-webkit-inner-spin-button, 
-        input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
-<body class="p-4 md:p-8 flex flex-col items-center min-h-screen pb-20">
+<body class="pb-20">
 
-    <div class="w-full max-w-xl bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mb-6 text-center relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-3 pastel-blue"></div>
-        <h1 class="text-xl md:text-2xl font-bold text-gray-800 mb-2">ลงทะเบียน ชั้นWorkshop</h1>
-        <p class="text-gray-500 text-sm">✨ ค่ายคริสตจักรที่ขับเคลื่อนด้วยการอธิษฐาน ✨</p>
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 shadow-lg text-white px-4 py-8 rounded-b-3xl relative overflow-hidden">
+        <div class="absolute -right-10 -top-10 w-32 h-32 bg-white opacity-10 rounded-full blur-sm"></div>
+        <div class="absolute -left-10 -bottom-10 w-24 h-24 bg-white opacity-10 rounded-full blur-sm"></div>
+        <h1 class="text-2xl font-bold text-center relative z-10">ลงทะเบียน ชั้น Workshop</h1>
+        <p class="text-indigo-100 text-sm text-center mt-1 relative z-10">✨ ค่ายคริสตจักรที่ขับเคลื่อนด้วยการอธิษฐาน ✨</p>
     </div>
 
-    <!-- Step 1: เลือกสังกัดของคุณ -->
-    <div class="w-full max-w-xl bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mb-6">
-        <h2 class="font-bold text-gray-700 mb-4 flex items-center"><span class="bg-blue-100 text-blue-600 rounded-full w-6 h-6 inline-flex items-center justify-center mr-2 text-sm">1</span> เลือกสังกัดของคุณ</h2>
+    <form id="workshopForm" class="max-w-md mx-auto mt-6 px-4 space-y-6">
         
-        <label class="block text-sm font-semibold text-gray-600 mb-2">ภาคพันธกิจ / สังกัดหลัก</label>
-        <select id="regionSelect" onchange="updateChurchList()" class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-300">
-            <option value="">-- กรุณาเลือกภาคพันธกิจ --</option>
-        </select>
-
-        <label class="block text-sm font-semibold text-gray-600 mb-2">คริสตจักร / หน่วย (แขวง)</label>
-        <select id="churchSelect" onchange="fetchTotalMembers()" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-gray-100" disabled>
-            <option value="">-- กรุณาเลือกคริสตจักร/หน่วย --</option>
-        </select>
-
-        <div id="totalMembersDisplay" class="mt-4 text-sm text-gray-700 hidden bg-blue-50 p-4 rounded-xl border border-blue-100 leading-relaxed"></div>
-    </div>
-
-    <!-- Step 2: ระบุจำนวนและรายชื่อ -->
-    <div class="w-full max-w-xl bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mb-6">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="font-bold text-gray-700 flex items-center"><span class="bg-blue-100 text-blue-600 rounded-full w-6 h-6 inline-flex items-center justify-center mr-2 text-sm">2</span> ระบุจำนวนคนและรายชื่อ</h2>
-        </div>
-        
-        <div class="space-y-4" id="workshopList">
+        <!-- 1. เลือกสังกัด -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+            <h2 class="font-bold text-gray-800 border-b border-gray-100 pb-2 flex items-center">
+                <span class="bg-blue-100 text-blue-600 w-6 h-6 rounded-full inline-flex items-center justify-center text-sm mr-2 shadow-inner">1</span> เลือกสังกัดของคุณ
+            </h2>
             
-            <!-- ชั้นที่ 1 -->
-            <div class="border border-gray-200 rounded-2xl p-4 flex flex-col gap-4 hover:border-blue-300 hover:shadow-md transition bg-white">
-                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-                    <div class="flex items-start gap-4 flex-1">
-                        <div class="w-12 h-12 shrink-0 bg-green-50 text-green-600 rounded-full flex items-center justify-center shadow-sm border border-green-100">
-                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-gray-800 text-lg">1. การอธิษฐาน : ชีวิตที่สนิทสนมฯ</h3>
-                            <p class="text-sm text-gray-600 mt-1 font-semibold">ผู้สอน: อ.วรพักตร์ และทีม</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-2 shrink-0 bg-gray-50 p-2 rounded-xl border border-gray-100">
-                        <label class="text-sm font-semibold text-gray-600">จำนวน</label>
-                        <input type="number" id="w1" min="0" placeholder="0" oninput="calculateCurrentTotal()" class="w-16 text-center border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 font-bold text-lg text-blue-600">
-                        <span class="text-sm text-gray-500">คน</span>
-                    </div>
-                </div>
-                <!-- ช่องกรอกชื่อ -->
-                <input type="text" id="w1_names" placeholder="📝 ระบุชื่อผู้เข้าเรียน (เว้นวรรคหรือลูกน้ำคั่น)" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 text-gray-700">
+            <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">ภาคพันธกิจ / สังกัดหลัก</label>
+                <select id="regionSelect" onchange="onRegionChange()" class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-50/50 text-gray-800 font-semibold">
+                    <option value="">-- เลือกภาคพันธกิจ --</option>
+                </select>
             </div>
 
-            <!-- ชั้นที่ 2 -->
-            <div class="border border-gray-200 rounded-2xl p-4 flex flex-col gap-4 hover:border-blue-300 hover:shadow-md transition bg-white">
-                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-                    <div class="flex items-start gap-4 flex-1">
-                        <div class="w-12 h-12 shrink-0 bg-orange-50 text-orange-500 rounded-full flex items-center justify-center shadow-sm border border-orange-100">
-                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-gray-800 text-lg">2. การอธิษฐานเพื่อการรักษาโรค</h3>
-                            <p class="text-sm text-gray-600 mt-1 font-semibold">ผู้สอน: อ.ทศพักตร์, อ.สรรเสริญ และทีม</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-2 shrink-0 bg-gray-50 p-2 rounded-xl border border-gray-100">
-                        <label class="text-sm font-semibold text-gray-600">จำนวน</label>
-                        <input type="number" id="w2" min="0" placeholder="0" oninput="calculateCurrentTotal()" class="w-16 text-center border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 font-bold text-lg text-blue-600">
-                        <span class="text-sm text-gray-500">คน</span>
-                    </div>
-                </div>
-                <input type="text" id="w2_names" placeholder="📝 ระบุชื่อผู้เข้าเรียน (เว้นวรรคหรือลูกน้ำคั่น)" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 text-gray-700">
+            <div>
+                <label class="block text-xs font-bold text-gray-500 mb-1">คริสตจักร / หน่วย (แขวง)</label>
+                <select id="churchSelect" onchange="onChurchChange()" class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-50/50 text-gray-800 font-semibold" disabled>
+                    <option value="">-- เลือกลิสต์คริสตจักร --</option>
+                </select>
             </div>
 
-            <!-- ชั้นที่ 3 -->
-            <div class="border border-gray-200 rounded-2xl p-4 flex flex-col gap-4 hover:border-blue-300 hover:shadow-md transition bg-white">
-                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-                    <div class="flex items-start gap-4 flex-1">
-                        <div class="w-12 h-12 shrink-0 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center shadow-sm border border-blue-100">
-                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" /></svg>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-gray-800 text-lg">3. การอธิษฐานที่เปลี่ยนชีวิต</h3>
-                            <p class="text-sm text-gray-600 mt-1 font-semibold">ผู้สอน: อ.กาญจนา, อ.พันทิวา, อ.สำลี</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-2 shrink-0 bg-gray-50 p-2 rounded-xl border border-gray-100">
-                        <label class="text-sm font-semibold text-gray-600">จำนวน</label>
-                        <input type="number" id="w3" min="0" placeholder="0" oninput="calculateCurrentTotal()" class="w-16 text-center border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 font-bold text-lg text-blue-600">
-                        <span class="text-sm text-gray-500">คน</span>
-                    </div>
-                </div>
-                <input type="text" id="w3_names" placeholder="📝 ระบุชื่อผู้เข้าเรียน (เว้นวรรคหรือลูกน้ำคั่น)" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 text-gray-700">
-            </div>
-
-            <!-- ชั้นที่ 4 -->
-            <div class="border border-gray-200 rounded-2xl p-4 flex flex-col gap-4 hover:border-blue-300 hover:shadow-md transition bg-white">
-                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-                    <div class="flex items-start gap-4 flex-1">
-                        <div class="w-12 h-12 shrink-0 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center shadow-sm border border-purple-100">
-                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-gray-800 text-lg">4. การทำยุทธอธิษฐาน</h3>
-                            <p class="text-sm text-gray-600 mt-1 font-semibold">ผู้สอน: ศจ.ลี ซัง ฮี และ ทีมเกาหลี</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-2 shrink-0 bg-gray-50 p-2 rounded-xl border border-gray-100">
-                        <label class="text-sm font-semibold text-gray-600">จำนวน</label>
-                        <input type="number" id="w4" min="0" placeholder="0" oninput="calculateCurrentTotal()" class="w-16 text-center border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 font-bold text-lg text-blue-600">
-                        <span class="text-sm text-gray-500">คน</span>
-                    </div>
-                </div>
-                <input type="text" id="w4_names" placeholder="📝 ระบุชื่อผู้เข้าเรียน (เว้นวรรคหรือลูกน้ำคั่น)" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 text-gray-700">
-            </div>
-
-            <!-- ชั้นที่ 5 -->
-            <div class="border border-gray-200 rounded-2xl p-4 flex flex-col gap-4 hover:border-blue-300 hover:shadow-md transition bg-white">
-                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-                    <div class="flex items-start gap-4 flex-1">
-                        <div class="w-12 h-12 shrink-0 bg-pink-50 text-pink-500 rounded-full flex items-center justify-center shadow-sm border border-pink-100">
-                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-gray-800 text-lg">5. YOUTH (เยาวชน)</h3>
-                            <p class="text-sm text-gray-500 mt-1">กิจกรรมเยาวชน ที่ทำให้เข้าใจการอธิษฐานในชีิวิตประจำวันมากขึ้น</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-2 shrink-0 bg-gray-50 p-2 rounded-xl border border-gray-100">
-                        <label class="text-sm font-semibold text-gray-600">จำนวน</label>
-                        <input type="number" id="w5" min="0" placeholder="0" oninput="calculateCurrentTotal()" class="w-16 text-center border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 font-bold text-lg text-blue-600">
-                        <span class="text-sm text-gray-500">คน</span>
-                    </div>
-                </div>
-                <input type="text" id="w5_names" placeholder="📝 ระบุชื่อผู้เข้าเรียน (เว้นวรรคหรือลูกน้ำคั่น)" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 text-gray-700">
-            </div>
-
+            <!-- กล่องแจ้งสถานะดึงข้อมูล -->
+            <div id="statusBox" class="hidden p-3 rounded-xl text-xs flex items-center space-x-2"></div>
         </div>
-    </div>
 
-    <button id="submitBtn" onclick="submitWorkshop()" class="w-full max-w-xl pastel-blue text-white font-bold text-lg py-4 rounded-full shadow-lg hover:opacity-90 transition mb-10">
-        บันทึกข้อมูล Workshop
-    </button>
+        <!-- 2. เลือกระบุจำนวนและรายชื่อ -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-5">
+            <h2 class="font-bold text-gray-800 border-b border-gray-100 pb-2 flex items-center">
+                <span class="bg-blue-100 text-blue-600 w-6 h-6 rounded-full inline-flex items-center justify-center text-sm mr-2 shadow-inner">2</span> ระบุจำนวนคนและรายชื่อ
+            </h2>
+
+            <!-- รายการ Workshop -->
+            <div id="workshopList" class="space-y-4">
+                <!-- Javascript จะสร้างการ์ด Workshop ตรงนี้ -->
+            </div>
+        </div>
+
+        <!-- ปุ่มลงทะเบียน -->
+        <button type="button" onclick="submitWorkshop()" id="submitBtn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg py-4 rounded-2xl shadow-lg hover:opacity-90 transition border border-indigo-700">
+            💾 บันทึกการลงทะเบียน Workshop
+        </button>
+
+    </form>
 
     <script>
+        // ⚠️ เอา Web App URL จาก Google Apps Script ของคุณเพลงมาวางตรงนี้ ⚠️
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzt3qj7QYYuKRG2b_o5jw9p06hSylXVQOCK9ef-UJ7C2B-n_289fS0ErYvI7uhDROJbcQ/exec";
+
         const churchData = {
             "CVC พิษณุโลก": ["BeOne", "BeTwo", "RU", "CL", "NU 1", "NU 2", "NU 3", "NewSeason A", "NewSeason B", "NGP A", "NGP B", "NGP C", "V-Gen A1", "V-Gen A2", "V-Gen B1", "V-Gen B2", "V-Gen B3", "Acts A", "Acts B", "Acts C", "Acts D", "เยรูซาเลม1", "เยรูซาเลม2", "Power Eagle 1", "Power Eagle 2", "Power Eagle 3", "Happiness 1", "Happiness 2", "Unity 1", "Unity 2"],
-            "ภาคพันธกิจที่ 1 (อ.อำนวย เจริญเรือง)": ["CVC ลำพูน", "CVC บ้านโฮ่ง", "CVC บ้านธิ", "CVC เวียงหนองล่อง", "CVC ป่าซาง", "CVC ทิพเนตร", "CVC แม่ฮ่องสอน", "CVC แม่สะเรียง", "CVC ขุนยวม", "CVC สบเมย", "CVC นครเชียงใหม่", "CVC นครลำปาง", "CVC วังเหนือ", "CVC แม่ทา", "CVC เมืองปาน", "CVC ลี้", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"],
-            "ภาคพันธกิจที่ 2 (อ.มีชัย ว่องวรวิทย์)": ["CVC เชียงราย", "CVC แม่สรวย", "CVC ห้วยนากาด", "CVC เวียงป่าเป้า", "CVC เชียงคำ", "CVC พะเยา", "CVC พะเยา 2", "CVC น่าน", "CVC แม่สาย", "CVC แพร่", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"],
-            "ภาคพันธกิจที่ 3 (อ.ยศไกร เกล็ดจีน)": ["CVC บางระกำ", "CVC พรหมพิราม", "CVC บางกระทุ่ม", "CVC วังทอง", "CVC นครไทย", "CVC บ้านแยง", "CVC ชาตระการ", "CVC วัดโบสถ์", "CVC ชุมชุนชาวแพ", "CVC โตกำแพง", "CVC เขาไร่", "CVC เนินมะปราง", "CVC ทรัพย์ไพรวัลย์", "CVC เขาค้อ (ไฮแลนด์)", "CVC อุตรดิตถ์", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"],
-            "ภาคพันธกิจที่ 4 (อ.วันชัย คำฟู)": ["CVC นครแม่สอด", "CVC ห้วยกะโหลก", "CVC นครสวรรค์", "CVC ลาดยาว", "CVC อุทัยธานี", "CVC น้ำรอบ", "CVC ลานสัก", "CVC ชัยนาท", "CVC สุพรรณบุรี", "CVC พบพระ", "CVC อุ้มผาง", "CVC หนองบัว", "CVC วังน้ำขาว", "CVC บ้านหมี่", "CVC บางพล้อ", "CVC บรรพต", "CVC โกรกพระ", "CVC ตาคลี", "CVC ตากฟ้า", "CVC ชุมตาบง", "CVC แม่วงก์", "CVC แม่เปิน", "CVC อยุธยา", "CVC แม่ละมาด", "CVC อ.เมือง ตาก", "CVC ท่าสองยาง", "CVC สว่างอารมภ์", "CVC เมืองอุทัยธานี", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"],
-            "ภาคพันธกิจที่ 5 Zone A (อ.ปรเมศวร์ รัตนเวฬุ)": ["CVC กำแพงเพชร", "CVC ขาณุวรลักษณ์", "CVC ไทรพัฒนา", "CVC เพชรบูรณ์", "CVC บ้านน้ำร้อน", "CVC สุโขทัย", "CVC กงไกรลาศ", "CVC พิจิตร", "CVC สามง่าม", "CVC บึงนารา", "CVC คลองขลุง", "CVC สากเหล็ก", "CVC เขาทราย", "CVC เข็กน้อย", "CVC วิเชียรบุรี", "CVC บ้านแม่ท่าแพ", "CVC บ้านห้วยหยวก", "CVC ห้วยมะนาว", "CVC สวรรคโลก", "CVC ไผ่ท่าโพธิ์", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"],
-            "ภาคพันธกิจที่ 5 Zone B (อ.บวรทรนง จิรทรัพย์เจริญ)": ["CVC ห้วยแย้", "CVC โคราช", "CVC กลางหมื่น", "CVC ขอนแก่น", "CVC อุดรธานี", "CVC หนองคาย", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"],
-            "ภาคพันธกิจที่ 5 Zone C (อ.อัจจณา ปราณี)": ["CVC กรุงเทพมหานคร", "CVC สมุทปราการ", "CVC กบินทร์บุรี (จ.ปราจีนบุรี)", "CVC ชลบุรี", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"],
-            "ภาคพันธกิจที่ 5 Zone D (อ.กาญจนา นาทศิโรรัตน์)": ["CVC เกาะสมุย (จ.สุราษฏร์ธานี)", "CVC มาบอำมฤต (จ.ชุมพร)", "CVC โป๊ะหมอ (หาดใหญ่)", "CVC ปราณบุรี (ประจวบคีรีขันธ์)", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"],
-            "ภาคพันธกิจที่ 5 Zone E (อ.พัณณิตา บุญย่านยาว)": ["CVC สเปน (บาเซโลน่า)", "CVC นอร์เวย์ ( ออสโล )", "CVC เบียล ( สวิตเซอร์แลนด์ )", "CVC บาเซิล ( สวิตเซอร์แลนด์ )", "CVC ธูน ( สวิตเซอร์แลนด์ )", "CVC นครหลวงเวียงจันทร์", "CVC หลัก 32 ( อุดมไซ ลาว )", "อื่นๆ (กรุณากรอกชื่อคริสตจักรในช่องถัดไป)"]
+            "ภาคพันธกิจที่ 1": ["CVC ลำพูน", "CVC บ้านโฮ่ง", "CVC บ้านธิ", "CVC เวียงหนองล่อง", "CVC ป่าซาง", "CVC ทิพเนตร", "CVC แม่ฮ่องสอน", "CVC แม่สะเรียง", "CVC ขุนยวม", "CVC สบเมย", "CVC นครเชียงใหม่", "CVC นครลำปาง", "CVC วังเหนือ", "CVC แม่ทา", "CVC เมืองปาน", "CVC ลี้"],
+            "ภาคพันธกิจที่ 2": ["CVC เชียงราย", "CVC แม่สรวย", "CVC ห้วยนากาด", "CVC เวียงป่าเป้า", "CVC เชียงคำ", "CVC พะเยา", "CVC พะเยา 2", "CVC น่าน", "CVC แม่สาย", "CVC แพร่"],
+            "ภาคพันธกิจที่ 3": ["CVC บางระกำ", "CVC พรหมพิราม", "CVC บางกระทุ่ม", "CVC วังทอง", "CVC นครไทย", "CVC บ้านแยง", "CVC ชาตระการ", "CVC วัดโบสถ์", "CVC ชุมชุนชาวแพ", "CVC โตกำแพง", "CVC เขาไร่", "CVC เนินมะปราง", "CVC ทรัพย์ไพรวัลย์", "CVC เขาค้อ (ไฮแลนด์)", "CVC อุตรดิตถ์"],
+            "ภาคพันธกิจที่ 4": ["CVC นครแม่สอด", "CVC ห้วยกะโหลก", "CVC นครสวรรค์", "CVC ลาดยาว", "CVC อุทัยธานี", "CVC น้ำรอบ", "CVC ลานสัก", "CVC ชัยนาท", "CVC สุพรรณบุรี", "CVC พบพระ", "CVC อุ้มผาง", "CVC หนองบัว", "CVC วังน้ำขาว", "CVC บ้านหมี่", "CVC บางพล้อ", "CVC บรรพต", "CVC โกรกพระ", "CVC ตาคลี", "CVC ตากฟ้า", "CVC ชุมตาบง", "CVC แม่วงก์", "CVC แม่เปิน", "CVC อยุธยา", "CVC แม่ละมาด", "CVC อ.เมือง ตาก", "CVC ท่าสองยาง", "CVC สว่างอารมภ์", "CVC เมืองอุทัยธานี"],
+            "ภาคพันธกิจที่ 5": ["CVC กำแพงเพชร", "CVC ขาณุวรลักษณ์", "CVC ไทรพัฒนา", "CVC เพชรบูรณ์", "CVC บ้านน้ำร้อน", "CVC สุโขทัย", "CVC กงไกรลาศ", "CVC พิจิตร", "CVC สามง่าม", "CVC บึงนารา", "CVC คลองขลุง", "CVC สากเหล็ก", "CVC เขาทราย", "CVC เข็กน้อย", "CVC วิเชียรบุรี", "CVC บ้านแม่ท่าแพ", "CVC บ้านห้วยหยวก", "CVC ห้วยมะนาว", "CVC สวรรคโลก", "CVC ไผ่ท่าโพธิ์", "CVC ห้วยแย้", "CVC โคราช", "CVC กลางหมื่น", "CVC ขอนแก่น", "CVC อุดรธานี", "CVC หนองคาย", "CVC กรุงเทพมหานคร", "CVC สมุทปราการ", "CVC กบินทร์บุรี (จ.ปราจีนบุรี)", "CVC ชลบุรี", "CVC เกาะสมุย (จ.สุราษฏร์ธานี)", "CVC มาบอำมฤต (จ.ชุมพร)", "CVC โป๊ะหมอ (หาดใหญ่)", "CVC ปราณบุรี (ประจวบคีรีขันธ์)", "CVC สเปน (บาเซโลน่า)", "CVC นอร์เวย์ ( ออสโล )", "CVC เบียล ( สวิตเซอร์แลนด์ )", "CVC บาเซิล ( สวิตเซอร์แลนด์ )", "CVC ธูน ( สวิตเซอร์แลนด์ )", "CVC นครหลวงเวียงจันทร์", "CVC หลัก 32 ( อุดมไซ ลาว )"]
         };
 
-        const regionSelect = document.getElementById("regionSelect");
-        const churchSelect = document.getElementById("churchSelect");
-        
-        // ⚠️ สำคัญมาก: เอา URL Web App ของคุณเพลงมาวางทับข้อความตรงนี้ครับ ⚠️
-        const scriptUrl = "https://script.google.com/macros/s/AKfycbzt3qj7QYYuKRG2b_o5jw9p06hSylXVQOCK9ef-UJ7C2B-n_289fS0ErYvI7uhDROJbcQ/exec"; 
-        
-        let fetchedTotal = 0; 
+        const workshops = [
+            { id: "ws1", title: "1. การอธิษฐาน : ชีวิตที่สนิทสนมฯ", icon: "📖", color: "bg-emerald-50 border-emerald-200 text-emerald-800" },
+            { id: "ws2", title: "2. การอธิษฐานในระดับครอบครัว", icon: "🏠", color: "bg-blue-50 border-blue-200 text-blue-800" },
+            { id: "ws3", title: "3. การอธิษฐานเพื่อพันธกิจ/การประกาศ", icon: "🔥", color: "bg-orange-50 border-orange-200 text-orange-800" },
+            { id: "ws4", title: "4. การอธิษฐานขับเคลื่อนคริสตจักร", icon: "⛪", color: "bg-purple-50 border-purple-200 text-purple-800" }
+        ];
 
-        window.onload = () => {
-            for (let region in churchData) {
-                let option = document.createElement("option"); option.value = region; option.textContent = region;
-                regionSelect.appendChild(option);
+        // สร้าง Dropdown ภาคพันธกิจ
+        function initRegions() {
+            const select = document.getElementById("regionSelect");
+            for (let r in churchData) {
+                let opt = document.createElement("option");
+                opt.value = r; opt.innerText = r;
+                select.appendChild(opt);
             }
-        };
+            renderWorkshops();
+        }
 
-        function updateChurchList() {
-            const selectedRegion = regionSelect.value;
-            churchSelect.innerHTML = '<option value="">-- กรุณาเลือกคริสตจักร/หน่วย --</option>'; 
-            document.getElementById("totalMembersDisplay").classList.add("hidden");
+        function onRegionChange() {
+            const reg = document.getElementById("regionSelect").value;
+            const churchSel = document.getElementById("churchSelect");
+            churchSel.innerHTML = '<option value="">-- เลือกลิสต์คริสตจักร --</option>';
             
-            // รีเซ็ตตัวเลขและชื่อ
-            ["w1","w2","w3","w4","w5", "w1_names","w2_names","w3_names","w4_names","w5_names"].forEach(id => document.getElementById(id).value = "");
-
-            if (selectedRegion) {
-                churchSelect.disabled = false;
-                churchData[selectedRegion].forEach(church => {
-                    let option = document.createElement("option"); option.value = church; option.textContent = church;
-                    churchSelect.appendChild(option);
+            if (reg && churchData[reg]) {
+                churchSel.disabled = false;
+                churchData[reg].forEach(c => {
+                    let opt = document.createElement("option");
+                    opt.value = c; opt.innerText = c;
+                    churchSel.appendChild(opt);
                 });
             } else {
-                churchSelect.disabled = true;
+                churchSel.disabled = true;
             }
         }
 
-        function fetchTotalMembers() {
-            const church = churchSelect.value;
-            const display = document.getElementById("totalMembersDisplay");
-            fetchedTotal = 0; 
-            
-            if (!church) { display.classList.add("hidden"); return; }
+        // แสดงการ์ดคลาส Workshop
+        function renderWorkshops() {
+            const container = document.getElementById("workshopList");
+            let html = "";
+            workshops.forEach(ws => {
+                html += `
+                    <div class="border rounded-2xl p-4 ${ws.color} transition">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <span class="text-2xl">${ws.icon}</span>
+                            <h3 class="font-bold text-sm leading-snug">${ws.title}</h3>
+                        </div>
+                        <div class="space-y-2 mt-3">
+                            <div>
+                                <label class="block text-xs font-semibold mb-1">จำนวนคนลงทะเบียน</label>
+                                <input type="number" min="0" id="count_${ws.id}" placeholder="0" class="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold mb-1">รายชื่อผู้เข้าร่วม (คั่นด้วยเครื่องหมายจุลภาค , )</label>
+                                <textarea id="names_${ws.id}" rows="2" placeholder="เช่น สมชาย ใจดี, สมหญิง มีสุข..." class="w-full border border-gray-300 rounded-xl px-3 py-2 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
 
-            display.classList.remove("hidden");
-            display.innerHTML = "⏳ <i>กำลังดึงข้อมูลจากระบบ...</i>";
+        // ดึงข้อมูลการลงทะเบียนเดิมมาโชว์ (ปรับปรุงระบบเชื่อมต่อให้ผ่านตลอด)
+        async function onChurchChange() {
+            const church = document.getElementById("churchSelect").value;
+            const statusBox = document.getElementById("statusBox");
+            if (!church) return;
 
-            fetch(scriptUrl, {
-                method: 'POST',
-                body: JSON.stringify({ action: "getChurchTotal", church: church })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.result === "success"){
-                    fetchedTotal = data.total;
+            statusBox.className = "p-3 rounded-xl text-xs flex items-center space-x-2 bg-yellow-50 text-yellow-800 border border-yellow-200";
+            statusBox.innerHTML = "⏳ กำลังดึงข้อมูลการลงทะเบียนเดิม...";
+            statusBox.classList.remove("hidden");
+
+            try {
+                // เพิ่ม redirect: 'follow' เพื่อทะลุกำแพง Google Apps Script
+                const response = await fetch(`${scriptURL}?action=getWorkshopData&church=${encodeURIComponent(church)}`, {
+                    method: 'GET',
+                    redirect: 'follow'
+                });
+
+                const res = await response.json();
+
+                if (res.status === "success") {
+                    statusBox.className = "p-3 rounded-xl text-xs flex items-center space-x-2 bg-green-50 text-green-800 border border-green-200";
+                    statusBox.innerHTML = "✅ ดึงข้อมูลสำเร็จ!";
                     
-                    // ดึงตัวเลขและรายชื่อเก่ามาใส่
-                    document.getElementById("w1").value = data.w1 > 0 ? data.w1 : "";
-                    document.getElementById("w2").value = data.w2 > 0 ? data.w2 : "";
-                    document.getElementById("w3").value = data.w3 > 0 ? data.w3 : "";
-                    document.getElementById("w4").value = data.w4 > 0 ? data.w4 : "";
-                    document.getElementById("w5").value = data.w5 > 0 ? data.w5 : "";
-
-                    document.getElementById("w1_names").value = data.w1n || "";
-                    document.getElementById("w2_names").value = data.w2n || "";
-                    document.getElementById("w3_names").value = data.w3n || "";
-                    document.getElementById("w4_names").value = data.w4n || "";
-                    document.getElementById("w5_names").value = data.w5n || "";
-
-                    calculateCurrentTotal(); 
-                } else { display.innerHTML = "❌ ไม่สามารถดึงข้อมูลได้ กรุณากรอกตามจำนวนจริง"; }
-            })
-            .catch(error => { display.innerHTML = "❌ ระบบขัดข้อง ไม่สามารถดึงข้อมูลได้ (แต่ยังบันทึกคลาสได้ปกตินะครับ)"; });
+                    // หยอดข้อมูลเดิมลงช่อง
+                    if (res.data) {
+                        workshops.forEach(ws => {
+                            if (res.data[ws.id]) {
+                                document.getElementById(`count_${ws.id}`).value = res.data[ws.id].count || "";
+                                document.getElementById(`names_${ws.id}`).value = res.data[ws.id].names || "";
+                            }
+                        });
+                    }
+                } else {
+                    throw new Error("Data error");
+                }
+            } catch (err) {
+                console.error(err);
+                statusBox.className = "p-3 rounded-xl text-xs flex items-center space-x-2 bg-blue-50 text-blue-800 border border-blue-200";
+                statusBox.innerHTML = "ℹ️ พร้อมลงทะเบียนใหม่ (ยังไม่มีข้อมูลเดิม)";
+            }
         }
 
-        function calculateCurrentTotal() {
-            const display = document.getElementById("totalMembersDisplay");
-            if (fetchedTotal === 0) return;
+        // ส่งข้อมูลลงทะเบียนไปบันทึก
+        async function submitWorkshop() {
+            const region = document.getElementById("regionSelect").value;
+            const church = document.getElementById("churchSelect").value;
 
-            const currentSum = ["w1","w2","w3","w4","w5"].reduce((sum, id) => sum + (parseInt(document.getElementById(id).value) || 0), 0);
-            
-            display.innerHTML = `
-                📌 สมัครค่ายไว้ทั้งหมด: <b class="text-lg text-blue-700">${fetchedTotal}</b> คน<br>
-                ✅ เลือกลงคลาสไปแล้ว: <b class="text-lg ${currentSum > fetchedTotal ? 'text-red-500' : 'text-green-600'}">${currentSum}</b> คน<br>
-                <span class="text-xs text-gray-500 mt-1 block">*หากตัวเลขไม่ครบ สามารถกดบันทึกได้เลยครับ ไม่บังคับยอดครับ</span>
-            `;
-        }
-
-        function submitWorkshop() {
-            const region = regionSelect.value; const church = churchSelect.value;
-            if (!region || !church) { alert("⚠️ กรุณาเลือกภาคพันธกิจ และ คริสตจักร/หน่วย ให้ครบถ้วนครับ"); return; }
+            if (!region || !church) {
+                alert("⚠️ กรุณาเลือกภาคพันธกิจ และคริสตจักรให้ครบถ้วนก่อนครับ");
+                return;
+            }
 
             const btn = document.getElementById("submitBtn");
-            btn.innerHTML = "⏳ กำลังบันทึกข้อมูล..."; btn.disabled = true; btn.classList.add("opacity-50", "cursor-not-allowed");
+            btn.innerHTML = "⏳ กำลังบันทึกข้อมูล...";
+            btn.disabled = true;
+            btn.classList.add("opacity-50", "cursor-not-allowed");
 
-            fetch(scriptUrl, {
-                method: 'POST',
-                body: JSON.stringify({
-                    action: "saveWorkshop",
-                    region: region, church: church,
-                    w1: document.getElementById("w1").value || 0,
-                    w2: document.getElementById("w2").value || 0,
-                    w3: document.getElementById("w3").value || 0,
-                    w4: document.getElementById("w4").value || 0,
-                    w5: document.getElementById("w5").value || 0,
-                    w1n: document.getElementById("w1_names").value,
-                    w2n: document.getElementById("w2_names").value,
-                    w3n: document.getElementById("w3_names").value,
-                    w4n: document.getElementById("w4_names").value,
-                    w5n: document.getElementById("w5_names").value
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.result === "success"){
-                    alert("✅ บันทึกข้อมูล Workshop เรียบร้อยแล้ว!");
-                    window.location.reload(); 
-                } else {
-                    alert("❌ เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
-                    btn.innerHTML = "บันทึกข้อมูล Workshop"; btn.disabled = false; btn.classList.remove("opacity-50", "cursor-not-allowed");
-                }
-            })
-            .catch(error => {
-                alert("❌ ระบบขัดข้อง กรุณาลองใหม่อีกครั้ง");
-                btn.innerHTML = "บันทึกข้อมูล Workshop"; btn.disabled = false; btn.classList.remove("opacity-50", "cursor-not-allowed");
+            let payload = {
+                action: "saveWorkshop",
+                region: region,
+                church: church,
+                workshops: {}
+            };
+
+            workshops.forEach(ws => {
+                payload.workshops[ws.id] = {
+                    count: document.getElementById(`count_${ws.id}`).value || 0,
+                    names: document.getElementById(`names_${ws.id}`).value || ""
+                };
             });
+
+            try {
+                // ส่งแบบ text/plain และสั่ง redirect: 'follow'
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    redirect: 'follow',
+                    body: JSON.stringify(payload)
+                });
+
+                const res = await response.json();
+
+                if (res.status === "success") {
+                    alert("🎉 บันทึกการลงทะเบียน Workshop เรียบร้อยแล้วครับ!");
+                    window.location.reload();
+                } else {
+                    alert("❌ เกิดข้อผิดพลาดในการบันทึก กรุณาลองใหม่อีกครั้ง");
+                    btn.innerHTML = "💾 บันทึกการลงทะเบียน Workshop";
+                    btn.disabled = false;
+                    btn.classList.remove("opacity-50", "cursor-not-allowed");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("❌ เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาตรวจสอบลิงก์ scriptURL");
+                btn.innerHTML = "💾 บันทึกการลงทะเบียน Workshop";
+                btn.disabled = false;
+                btn.classList.remove("opacity-50", "cursor-not-allowed");
+            }
         }
+
+        document.addEventListener("DOMContentLoaded", initRegions);
     </script>
 </body>
 </html>
