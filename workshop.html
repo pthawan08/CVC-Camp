@@ -293,7 +293,8 @@
 
                 const res = await response.json();
 
-                if (res.status === "success") {
+                // 🟢 แก้ไขตรงนี้: ให้รองรับทั้งคำว่า status และ result โค้ดจะได้คุยกันรู้เรื่องครับ!
+                if (res.status === "success" || res.result === "success") {
                     alert("🎉 บันทึกการลงทะเบียน Workshop เรียบร้อยแล้วครับ!");
                     window.location.reload();
                 } else {
