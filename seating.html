@@ -16,14 +16,14 @@
             transition: transform 0.2s ease-out; 
         }
         
-        /* สไตล์สำหรับกล่องที่นั่ง ขยายฟอนต์ให้ใหญ่ขึ้น */
+        /* สไตล์สำหรับกล่องที่นั่ง */
         .seat { 
             border: 1px solid #000; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             text-align: center; 
-            font-size: 15px; /* ใหญ่ขึ้น */
+            font-size: 15px;
             font-weight: 700; 
             padding: 4px;
             color: #111;
@@ -61,22 +61,19 @@
         <p class="text-[11px] font-bold text-gray-500">💡 ใช้นิ้วเลื่อนซ้าย-ขวา ขึ้น-ลง เพื่อดูแผนผังส่วนอื่นๆ ได้</p>
     </div>
 
-    <!-- พื้นที่แสดงผังที่นั่ง (เพิ่ม text-center เพื่อให้อยู่กึ่งกลาง) -->
+    <!-- พื้นที่แสดงผังที่นั่ง -->
     <div class="flex-1 overflow-auto mt-3 mx-2 mb-4 bg-gray-200 rounded-2xl border-2 border-gray-300 shadow-inner relative no-scrollbar text-center" id="scroll-container">
         
-        <!-- ใช้ inline-block เพื่อให้มันอยู่กึ่งกลางกล่องแม่เสมอ -->
         <div id="zoom-container" class="inline-block relative my-6 text-left">
             
-            <!-- ขยายฐานความกว้างเป็น 1440px -->
             <div id="zoom-wrapper" class="w-[1440px] mx-auto bg-white p-5 border border-gray-300 flex flex-col shadow-md">
                 
                 <!-- เวที -->
                 <div class="w-full text-center py-2 font-bold text-2xl mb-1 border border-black bg-gray-50">เวที</div>
                 <div class="w-full text-center py-1.5 font-bold text-base mb-2 border border-black bg-gray-50">เว้นระยะห่าง</div>
 
-                <!-- แถวที่ 1 (ขยายความสูงเป็น 320px) -->
+                <!-- แถวที่ 1 -->
                 <div class="grid grid-cols-6 gap-x-4 h-[320px]">
-                    <!-- Col 1 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#fcd5b4]" style="flex: 2;">นครเชียงใหม่</div>
                         <div class="seat bg-[#fcd5b4]" style="flex: 2;">นครลำปาง</div>
@@ -85,7 +82,6 @@
                         <div class="seat bg-[#fcd5b4]" style="flex: 1;">แม่ทา</div>
                         <div class="seat bg-[#fcd5b4]" style="flex: 1;">ลี้</div>
                     </div>
-                    <!-- Col 2 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#d8e4bc]" style="flex: 2;">เชียงราย</div>
                         <div class="seat bg-[#d8e4bc]" style="flex: 2;">เชียงคำ</div>
@@ -93,7 +89,6 @@
                         <div class="seat bg-[#d8e4bc]" style="flex: 1;">น่าน</div>
                         <div class="seat bg-[#fcd5b4]" style="flex: 1;">บ้านโฮ่ง</div>
                     </div>
-                    <!-- Col 3 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#ff00ff] text-white" style="flex: 1;">ที่นั่งผู้นำ</div>
                         <div class="seat bg-[#ebf1de]" style="flex: 1;">แม่สรวย</div>
@@ -102,20 +97,17 @@
                         <div class="seat bg-[#ebf1de]" style="flex: 1;">พะเยา 2</div>
                         <div class="seat bg-[#ebf1de]" style="flex: 1;">แพร่</div>
                     </div>
-                    <!-- Col 4 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#ff00ff] text-white" style="flex: 1;">ที่นั่งผู้นำ</div>
                         <div class="seat bg-[#b8cce4]" style="flex: 2;">สวิตเซอร์แลนด์ + สมุทรปราการ</div>
                         <div class="seat bg-[#7592a8]" style="flex: 3;">บ้านแยง+สปป.ลาว</div>
                         <div class="seat bg-[#b8cce4]" style="flex: 3;">เพชรบูรณ์</div>
                     </div>
-                    <!-- Col 5 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#e5b9b7]" style="flex: 6;">นครสวรรค์</div>
                         <div class="seat bg-[#e5b9b7]" style="flex: 1;">ลาดยาว</div>
                         <div class="seat bg-[#e5b9b7]" style="flex: 1;">บ้านหมี่</div>
                     </div>
-                    <!-- Col 6 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#e5b9b7]" style="flex: 6;">นครแม่สอด</div>
                         <div class="seat bg-[#e5b9b7]" style="flex: 1;">พบพระ</div>
@@ -127,7 +119,6 @@
 
                 <!-- แถวที่ 2 -->
                 <div class="grid grid-cols-6 gap-x-4 h-[320px]">
-                    <!-- Col 1 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#fcd5b4]" style="flex: 3;">แม่ฮ่องสอน</div>
                         <div class="seat bg-[#fcd5b4]" style="flex: 3;">แม่สะเรียง</div>
@@ -135,14 +126,12 @@
                         <div class="seat bg-[#fcd5b4]" style="flex: 1;">สบเมย</div>
                         <div class="seat bg-[#fcd5b4]" style="flex: 1;">ป่าซาง</div>
                     </div>
-                    <!-- Col 2 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#fcd5b4]" style="flex: 6;">ลำพูน</div>
                         <div class="seat bg-[#b8cce4]" style="flex: 1;">ห้วยมะนาว</div>
                         <div class="seat bg-[#e5b9b7]" style="flex: 1;">ไผ่ท่าโพธิ์</div>
                         <div class="seat bg-[#e5b9b7]" style="flex: 1;">วังน้ำขาว</div>
                     </div>
-                    <!-- Col 3 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#b8cce4]" style="flex: 5;">สุโขทัย</div>
                         <div class="seat bg-[#d9d9d9]" style="flex: 1;">กงไกรลาศ</div>
@@ -150,7 +139,6 @@
                         <div class="seat bg-[#b8cce4]" style="flex: 1;">บ้านห้วยหยวก</div>
                         <div class="seat bg-[#b8cce4]" style="flex: 1;">บึงนาราง</div>
                     </div>
-                    <!-- Col 4 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#b8cce4]" style="flex: 1;">วิเชียรบุรี</div>
                         <div class="seat bg-[#b8cce4]" style="flex: 1;">เข็กน้อย</div>
@@ -159,7 +147,6 @@
                         <div class="seat bg-[#b8cce4]" style="flex: 1;">สากเหล็ก</div>
                         <div class="seat bg-[#b8cce4]" style="flex: 1;">สามง่าม</div>
                     </div>
-                    <!-- Col 5 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#e5b9b7]" style="flex: 3;">อุทัยธานี</div>
                         <div class="seat bg-[#e5b9b7]" style="flex: 3;">น้ำรอบ</div>
@@ -167,7 +154,6 @@
                         <div class="seat bg-[#e5b9b7]" style="flex: 1;">ลานสัก</div>
                         <div class="seat bg-[#e5b9b7]" style="flex: 1;">สุพรรณบุรี</div>
                     </div>
-                    <!-- Col 6 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#b8cce4]" style="flex: 3;">กบินทร์บุรี</div>
                         <div class="seat bg-[#b8cce4]" style="flex: 1;">ชลบุรี</div>
@@ -182,9 +168,8 @@
                     <div class="bg-gray-800 w-64 h-6"></div>
                 </div>
 
-                <!-- แถวที่ 3 (ขยายความสูงเป็น 260px) -->
+                <!-- แถวที่ 3 (จุดที่เพิ่มการเว้นแถวสีเทา) -->
                 <div class="grid grid-cols-6 gap-x-4 h-[260px]">
-                    <!-- Col 1 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#b7dee8]" style="flex: 2;">พรหมพิราม</div>
                         <div class="seat bg-[#b7dee8]" style="flex: 2;">วัดโบสถ์</div>
@@ -193,32 +178,31 @@
                         <div class="seat bg-[#b7dee8]" style="flex: 1;">โตกำแพง</div>
                         <div class="seat bg-[#b7dee8]" style="flex: 1;">เนินมะปราง</div>
                     </div>
-                    <!-- Col 2 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#92cddc]" style="flex: 3;">อุตรดิตถ์</div>
                         <div class="seat bg-[#92cddc]" style="flex: 2;">บางกระทุ่ม</div>
                         <div class="seat bg-[#92cddc]" style="flex: 2;">ชาติตระการ</div>
                         <div class="seat bg-[#92cddc]" style="flex: 2;">เขาค้อ ไฮแลนด์</div>
                     </div>
-                    <!-- Col 3 -->
+                    <!-- Col 3: เพิ่มแถวสีเทาว่างด้านบน -->
                     <div class="flex flex-col h-full">
+                        <div class="seat bg-gray-700" style="flex: 1;"></div>
                         <div class="seat bg-[#b8cce4]" style="flex: 2;">คลองขลุง</div>
                         <div class="seat bg-[#b8cce4]" style="flex: 2;">ขาณุวรลักษณ์</div>
                         <div class="seat bg-[#b8cce4]" style="flex: 3;">ไทรพัฒนา</div>
                         <div class="seat bg-[#b8cce4]" style="flex: 2;">บ้านแม่ท่าแพ</div>
                     </div>
-                    <!-- Col 4 -->
+                    <!-- Col 4: เพิ่มแถวสีเทาว่างด้านบน (กำแพงเพชร) -->
                     <div class="flex flex-col h-full">
-                        <div class="seat bg-[#b8cce4]" style="flex: 1;">กำแพงเพชร</div>
+                        <div class="seat bg-gray-700" style="flex: 1;"></div>
+                        <div class="seat bg-[#b8cce4]" style="flex: 9;">กำแพงเพชร</div>
                     </div>
-                    <!-- Col 5 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#b8cce4]" style="flex: 1;">ห้วยแย้</div>
                         <div class="seat bg-[#b8cce4]" style="flex: 1;">ขอนแก่น</div>
                         <div class="seat bg-[#b8cce4]" style="flex: 1;">กลางหมื่น</div>
                         <div class="seat bg-[#fcd5b4]" style="flex: 6;">Power Gen 2A</div>
                     </div>
-                    <!-- Col 6 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#fcd5b4]" style="flex: 3;">Power Gen 2B</div>
                         <div class="seat bg-[#fcd5b4]" style="flex: 6;">Power Gen 2C</div>
@@ -229,33 +213,27 @@
 
                 <!-- แถวที่ 4 -->
                 <div class="grid grid-cols-6 gap-x-4 h-[260px]">
-                    <!-- Col 1 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#b7dee8]" style="flex: 3;">บางระกำ</div>
                         <div class="seat bg-[#fcd5b4]" style="flex: 6;">NU</div>
                     </div>
-                    <!-- Col 2 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#92cddc]" style="flex: 2;">ชุมชนชาวแพ</div>
                         <div class="seat bg-[#92cddc]" style="flex: 2;">วังทอง</div>
                         <div class="seat bg-[#fcd5b4]" style="flex: 5;">Beteen</div>
                     </div>
-                    <!-- Col 3 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#fcd5b4]" style="flex: 5;">NGP</div>
                         <div class="seat bg-[#fcd5b4]" style="flex: 4;">CRU</div>
                     </div>
-                    <!-- Col 4 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#fcd5b4]" style="flex: 4;">เยรูซาเล็ม</div>
                         <div class="seat bg-[#fcd5b4]" style="flex: 3;">Gsus 7</div>
                         <div class="border border-transparent" style="flex: 2;"></div>
                     </div>
-                    <!-- Col 5 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#fcd5b4]" style="flex: 1;">Acts</div>
                     </div>
-                    <!-- Col 6 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#fcd5b4]" style="flex: 4;">V-Gen B</div>
                         <div class="seat bg-[#fcd5b4]" style="flex: 5;">V-Gen A</div>
@@ -293,7 +271,6 @@
             if (zoomLabel) zoomLabel.innerText = Math.round(currentZoom * 100) + '%';
             if (wrapper) wrapper.style.transform = `scale(${currentZoom})`;
             
-            // ปรับขนาด Container ให้ขยายตาม Zoom (อิงจากฐาน 1440px)
             if (container && wrapper) {
                 container.style.width = `${1440 * currentZoom}px`;
                 container.style.height = `${wrapper.offsetHeight * currentZoom}px`;
@@ -317,7 +294,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             updateZoomDisplay();
             
-            // ให้หน้าจอเริ่มตรงกลางแผนผังเสมอ
             setTimeout(() => {
                 const scrollContainer = document.getElementById('scroll-container');
                 const zoomContainer = document.getElementById('zoom-container');
