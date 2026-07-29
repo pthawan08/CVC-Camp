@@ -10,18 +10,22 @@
         body { font-family: 'Sarabun', sans-serif; background-color: #f4f7f6; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        #zoom-wrapper { transform-origin: top center; transition: transform 0.2s ease-out; }
         
-        /* สไตล์สำหรับกล่องที่นั่ง */
+        #zoom-wrapper { 
+            transform-origin: top center; 
+            transition: transform 0.2s ease-out; 
+        }
+        
+        /* สไตล์สำหรับกล่องที่นั่ง ขยายฟอนต์ให้ใหญ่ขึ้น */
         .seat { 
             border: 1px solid #000; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             text-align: center; 
-            font-size: 13px; 
+            font-size: 15px; /* ใหญ่ขึ้น */
             font-weight: 700; 
-            padding: 2px;
+            padding: 4px;
             color: #111;
         }
     </style>
@@ -57,18 +61,21 @@
         <p class="text-[11px] font-bold text-gray-500">💡 ใช้นิ้วเลื่อนซ้าย-ขวา ขึ้น-ลง เพื่อดูแผนผังส่วนอื่นๆ ได้</p>
     </div>
 
-    <!-- พื้นที่แสดงผังที่นั่ง -->
-    <div class="flex-1 overflow-auto mt-3 mx-2 mb-4 bg-gray-200 rounded-2xl border-2 border-gray-300 shadow-inner relative no-scrollbar" id="scroll-container">
-        <div id="zoom-container" class="relative m-4">
+    <!-- พื้นที่แสดงผังที่นั่ง (เพิ่ม text-center เพื่อให้อยู่กึ่งกลาง) -->
+    <div class="flex-1 overflow-auto mt-3 mx-2 mb-4 bg-gray-200 rounded-2xl border-2 border-gray-300 shadow-inner relative no-scrollbar text-center" id="scroll-container">
+        
+        <!-- ใช้ inline-block เพื่อให้มันอยู่กึ่งกลางกล่องแม่เสมอ -->
+        <div id="zoom-container" class="inline-block relative my-6 text-left">
             
-            <div id="zoom-wrapper" class="min-w-[1200px] max-w-[1200px] mx-auto bg-white p-4 border border-gray-300 flex flex-col">
+            <!-- ขยายฐานความกว้างเป็น 1440px -->
+            <div id="zoom-wrapper" class="w-[1440px] mx-auto bg-white p-5 border border-gray-300 flex flex-col shadow-md">
                 
                 <!-- เวที -->
-                <div class="w-full text-center py-2 font-bold text-xl mb-1 border border-black">เวที</div>
-                <div class="w-full text-center py-1 font-bold text-sm mb-2 border border-black">เว้นระยะห่าง</div>
+                <div class="w-full text-center py-2 font-bold text-2xl mb-1 border border-black bg-gray-50">เวที</div>
+                <div class="w-full text-center py-1.5 font-bold text-base mb-2 border border-black bg-gray-50">เว้นระยะห่าง</div>
 
-                <!-- แถวที่ 1 -->
-                <div class="grid grid-cols-6 gap-x-4 h-[260px]">
+                <!-- แถวที่ 1 (ขยายความสูงเป็น 320px) -->
+                <div class="grid grid-cols-6 gap-x-4 h-[320px]">
                     <!-- Col 1 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#fcd5b4]" style="flex: 2;">นครเชียงใหม่</div>
@@ -116,10 +123,10 @@
                     </div>
                 </div>
 
-                <div class="w-full text-center py-2 font-bold text-lg my-2">ทางเดิน</div>
+                <div class="w-full text-center py-2 font-bold text-xl my-2">ทางเดิน</div>
 
                 <!-- แถวที่ 2 -->
-                <div class="grid grid-cols-6 gap-x-4 h-[260px]">
+                <div class="grid grid-cols-6 gap-x-4 h-[320px]">
                     <!-- Col 1 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#fcd5b4]" style="flex: 3;">แม่ฮ่องสอน</div>
@@ -170,13 +177,13 @@
                     </div>
                 </div>
 
-                <div class="w-full flex items-center justify-center py-2 my-2">
-                    <span class="font-bold text-lg mr-4">เว้นทางเดิน และจุดควบคุม เครื่องเสียง</span>
-                    <div class="bg-gray-800 w-48 h-6"></div>
+                <div class="w-full flex items-center justify-center py-3 my-2">
+                    <span class="font-bold text-xl mr-4">เว้นทางเดิน และจุดควบคุม เครื่องเสียง</span>
+                    <div class="bg-gray-800 w-64 h-6"></div>
                 </div>
 
-                <!-- แถวที่ 3 -->
-                <div class="grid grid-cols-6 gap-x-4 h-[220px]">
+                <!-- แถวที่ 3 (ขยายความสูงเป็น 260px) -->
+                <div class="grid grid-cols-6 gap-x-4 h-[260px]">
                     <!-- Col 1 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#b7dee8]" style="flex: 2;">พรหมพิราม</div>
@@ -218,10 +225,10 @@
                     </div>
                 </div>
 
-                <div class="w-full text-center py-2 font-bold text-lg my-2">ทางเดิน</div>
+                <div class="w-full text-center py-2 font-bold text-xl my-2">ทางเดิน</div>
 
                 <!-- แถวที่ 4 -->
-                <div class="grid grid-cols-6 gap-x-4 h-[220px]">
+                <div class="grid grid-cols-6 gap-x-4 h-[260px]">
                     <!-- Col 1 -->
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#b7dee8]" style="flex: 3;">บางระกำ</div>
@@ -255,20 +262,20 @@
                     </div>
                 </div>
 
-                <div class="w-full text-center py-2 font-bold text-lg my-2 border-b-2 border-black">ทางเดิน</div>
+                <div class="w-full text-center py-2 font-bold text-xl my-2 border-b-2 border-black">ทางเดิน</div>
 
                 <!-- Footer -->
-                <div class="flex justify-center items-start gap-12 mt-4 relative pb-10">
-                    <div class="seat px-4 bg-white">วุฒิบัตร</div>
+                <div class="flex justify-center items-start gap-12 mt-6 relative pb-12">
+                    <div class="seat px-6 py-2 bg-white">วุฒิบัตร</div>
                     
-                    <div class="flex flex-col gap-4">
-                        <div class="seat px-6 bg-white">โต๊ะโปรแกรม</div>
-                        <div class="seat px-6 bg-white">โต๊ะ.ป๊อป</div>
+                    <div class="flex flex-col gap-5">
+                        <div class="seat px-8 py-2 bg-white">โต๊ะโปรแกรม</div>
+                        <div class="seat px-8 py-2 bg-white">โต๊ะ อ.ป๊อป</div>
                     </div>
                     
-                    <div class="seat px-8 py-2 bg-white">Backdrop</div>
+                    <div class="seat px-10 py-3 bg-white">Backdrop</div>
 
-                    <div class="absolute right-[20%] top-0 seat bg-red-600 text-white border-red-700 px-6 py-2 text-lg">ประตู</div>
+                    <div class="absolute right-[20%] top-0 seat bg-red-600 text-white border-red-700 px-8 py-3 text-xl">ประตู</div>
                 </div>
 
             </div>
@@ -286,8 +293,9 @@
             if (zoomLabel) zoomLabel.innerText = Math.round(currentZoom * 100) + '%';
             if (wrapper) wrapper.style.transform = `scale(${currentZoom})`;
             
+            // ปรับขนาด Container ให้ขยายตาม Zoom (อิงจากฐาน 1440px)
             if (container && wrapper) {
-                container.style.width = `${1200 * currentZoom}px`;
+                container.style.width = `${1440 * currentZoom}px`;
                 container.style.height = `${wrapper.offsetHeight * currentZoom}px`;
             }
         }
@@ -309,12 +317,14 @@
         document.addEventListener('DOMContentLoaded', () => {
             updateZoomDisplay();
             
-            // ให้หน้าจอเริ่มตรงกลางแผนผัง
-            const scrollContainer = document.getElementById('scroll-container');
-            const zoomContainer = document.getElementById('zoom-container');
-            if(scrollContainer && zoomContainer) {
-                scrollContainer.scrollLeft = (zoomContainer.offsetWidth - scrollContainer.offsetWidth) / 2;
-            }
+            // ให้หน้าจอเริ่มตรงกลางแผนผังเสมอ
+            setTimeout(() => {
+                const scrollContainer = document.getElementById('scroll-container');
+                const zoomContainer = document.getElementById('zoom-container');
+                if(scrollContainer && zoomContainer) {
+                    scrollContainer.scrollLeft = (zoomContainer.offsetWidth - scrollContainer.offsetWidth) / 2;
+                }
+            }, 100);
         });
     </script>
 </body>
