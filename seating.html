@@ -66,11 +66,11 @@
         
         <div id="zoom-container" class="inline-block relative my-6 text-left">
             
-            <div id="zoom-wrapper" class="w-[1440px] mx-auto bg-white p-5 border border-gray-300 flex flex-col shadow-md">
+            <div id="zoom-wrapper" class="w-[1440px] mx-auto bg-white p-5 pb-0 border border-gray-300 flex flex-col shadow-md">
                 
                 <!-- เวที -->
                 <div class="w-full text-center py-2 font-bold text-2xl mb-1 border border-black bg-gray-50">เวที</div>
-              <div class="w-full text-center py-2 font-bold text-xl my-2">ทางเดิน</div>
+                <div class="w-full text-center py-1.5 font-bold text-base mb-2 border border-black bg-gray-50">เว้นระยะห่าง</div>
 
                 <!-- แถวที่ 1 -->
                 <div class="grid grid-cols-6 gap-x-4 h-[320px]">
@@ -167,7 +167,7 @@
                     เว้นทางเดิน และจุดควบคุม เครื่องเสียง
                 </div>
 
-                <!-- แถวที่ 3 (🟢 อัปเดตบล็อกอุตรดิตถ์-เขาค้อตามบรีฟครับ) -->
+                <!-- แถวที่ 3 -->
                 <div class="grid grid-cols-6 gap-x-4 h-[320px]">
                     <div class="flex flex-col h-full">
                         <div class="seat bg-[#b7dee8]" style="flex: 2;">พรหมพิราม</div>
@@ -177,16 +177,13 @@
                         <div class="seat bg-[#b7dee8]" style="flex: 1;">โดกำแพง</div>
                         <div class="seat bg-[#b7dee8]" style="flex: 2;">เนินมะปราง</div>
                     </div>
-                    
-                    <!-- 🟢 คอลัมน์ที่ปรับแก้เพิ่มแถบเทาด้านล่าง -->
                     <div class="flex flex-col h-full">
-                        <div class="seat bg-[#92cddc]" style="flex: 3;">อุตรดิตถ์</div>
-                        <div class="seat bg-[#92cddc]" style="flex: 2;">บางกระทุ่ม</div>
-                        <div class="seat bg-[#92cddc]" style="flex: 2;">ชาติตระการ)</div>
-                        <div class="seat bg-[#92cddc]" style="flex: 2;">เขาค้อ ไฮแลนด์)</div>
+                        <div class="seat bg-[#92cddc]" style="flex: 3;">อุตรดิตถ์ (25/27)</div>
+                        <div class="seat bg-[#92cddc]" style="flex: 2;">บางกระทุ่ม (15/18)</div>
+                        <div class="seat bg-[#92cddc]" style="flex: 2;">ชาติตระการ (13/18)</div>
+                        <div class="seat bg-[#92cddc]" style="flex: 2;">เขาค้อ ไฮแลนด์ (10/18)</div>
                         <div class="seat bg-gray-700" style="flex: 1;"></div>
                     </div>
-
                     <div class="flex flex-col h-full">
                         <div class="seat bg-gray-700" style="flex: 1;"></div>
                         <div class="seat bg-[#b8cce4]" style="flex: 2;">คลองขลุง</div>
@@ -242,20 +239,34 @@
                     </div>
                 </div>
 
-                <div class="w-full text-center py-2 font-bold text-xl my-2 border-b-2 border-black">ทางเดิน</div>
-
-                <!-- Footer -->
-                <div class="flex justify-center items-start gap-12 mt-6 relative pb-12">
-                    <div class="seat px-6 py-2 bg-white">วุฒิบัตร</div>
+                <!-- Footer ด้านล่างสุด (ปรับตามรูปใหม่) -->
+                <div class="w-full h-36 relative mt-6 border-b-[4px] border-black">
                     
-                    <div class="flex flex-col gap-5">
-                        <div class="seat px-8 py-2 bg-white">โต๊ะโปรแกรม</div>
-                        <div class="seat px-8 py-2 bg-white">โต๊ะ อ.ป๊อป</div>
+                    <!-- ห้องพยาบาล (มุมซ้ายล่าง) -->
+                    <div class="absolute left-[-20px] bottom-0 w-[120px] h-[70px] border-t-2 border-r-2 border-black flex items-center justify-center bg-white z-10">
+                        <span class="text-red-600 font-bold text-[16px]">ห้องพยาบาล</span>
                     </div>
-                    
-                    <div class="seat px-10 py-3 bg-white">Backdrop</div>
 
-                    <div class="absolute right-[20%] top-0 seat bg-red-600 text-white border-red-700 px-8 py-3 text-xl">ประตู</div>
+                    <!-- วุฒิบัตร -->
+                    <div class="absolute top-2" style="left: 15%;">
+                        <div class="seat px-6 py-1.5 bg-white">วุฒิบัตร</div>
+                    </div>
+
+                    <!-- โต๊ะโปรแกรม & โต๊ะ อ.ป๊อป -->
+                    <div class="absolute top-2 flex flex-col gap-4" style="left: 23%;">
+                        <div class="seat px-6 py-1.5 bg-white">โต๊ะโปรแกรม</div>
+                        <div class="seat px-8 py-1.5 bg-white">โต๊ะ อ.ป๊อป</div>
+                    </div>
+
+                    <!-- ประตู (ทับเส้นขอบล่าง) -->
+                    <div class="absolute bottom-[-2px] z-10" style="left: 46%;">
+                        <div class="seat bg-red-600 text-white border-red-800 px-16 py-1.5 text-lg">ประตู</div>
+                    </div>
+
+                    <!-- Backdrop -->
+                    <div class="absolute top-2" style="left: 60%;">
+                        <div class="seat px-24 py-2 bg-white">Backdrop</div>
+                    </div>
                 </div>
 
             </div>
