@@ -33,8 +33,10 @@
                 <span class="bg-blue-100 text-blue-600 w-7 h-7 rounded-full inline-flex items-center justify-center text-sm mr-2 shadow-inner">👤</span> ข้อมูลทั่วไป
             </h2>
             <div>
-                <label class="block text-sm font-semibold text-gray-600 mb-2">ท่านเป็นสมาชิกคริสตจักรแห่งนิมิต <span class="text-red-500">*</span></label>
-                <input type="text" id="churchName" list="churchListOptions" required placeholder="พิมพ์เพื่อค้นหาชื่อคริสตจักร..." class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-blue-50/30 transition">
+                <!-- 🟢 เปลี่ยนจากบังคับ เป็น (ไม่บังคับ) -->
+                <label class="block text-sm font-semibold text-gray-600 mb-2">ท่านเป็นสมาชิกคริสตจักรแห่งนิมิต <span class="text-gray-400 font-normal text-xs">(ไม่บังคับ)</span></label>
+                <!-- 🟢 เอาคำสั่ง required ออก เพื่อปลดล็อกให้ว่างได้ -->
+                <input type="text" id="churchName" list="churchListOptions" placeholder="พิมพ์ชื่อคริสตจักร (หรือไม่ระบุก็ได้)..." class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-blue-50/30 transition">
                 <datalist id="churchListOptions"></datalist>
             </div>
         </div>
@@ -71,14 +73,14 @@
     </form>
 
     <script>
-        // ⚠️ เอา Web App URL จาก Google Apps Script มาวางตรงนี้ ⚠️
+        // ⚠️ ลิงก์ Google Apps Script ของคุณเพลง ⚠️
         const scriptURL = "https://script.google.com/macros/s/AKfycbzt3qj7QYYuKRG2b_o5jw9p06hSylXVQOCK9ef-UJ7C2B-n_289fS0ErYvI7uhDROJbcQ/exec"; 
         
         const churchData = {
             "CVC พิษณุโลก": ["BeOne", "BeTwo", "RU", "CL", "NU 1", "NU 2", "NU 3", "NewSeason A", "NewSeason B", "NGP A", "NGP B", "NGP C", "V-Gen A1", "V-Gen A2", "V-Gen B1", "V-Gen B2", "V-Gen B3", "Acts A", "Acts B", "Acts C", "Acts D", "เยรูซาเลม1", "เยรูซาเลม2", "Power Eagle 1", "Power Eagle 2", "Power Eagle 3", "Happiness 1", "Happiness 2", "Unity 1", "Unity 2"],
             "ภาคพันธกิจที่ 1": ["CVC ลำพูน", "CVC บ้านโฮ่ง", "CVC บ้านธิ", "CVC เวียงหนองล่อง", "CVC ป่าซาง", "CVC ทิพเนตร", "CVC แม่ฮ่องสอน", "CVC แม่สะเรียง", "CVC ขุนยวม", "CVC สบเมย", "CVC นครเชียงใหม่", "CVC นครลำปาง", "CVC วังเหนือ", "CVC แม่ทา", "CVC เมืองปาน", "CVC ลี้"],
             "ภาคพันธกิจที่ 2": ["CVC เชียงราย", "CVC แม่สรวย", "CVC ห้วยนากาด", "CVC เวียงป่าเป้า", "CVC เชียงคำ", "CVC พะเยา", "CVC พะเยา 2", "CVC น่าน", "CVC แม่สาย", "CVC แพร่"],
-            "ภาคพันธกิจที่ 3": ["CVC บางระกำ", "CVC พรหมพิราม", "CVC บางกระทุ่ม", "CVC วังทอง", "CVC นครไทย", "CVC บ้านแยง", "CVC ชาตระการ", "CVC วัดโบสถ์", "CVC ชุมชุนชาวแพ", "CVC โตกำแพง", "CVC เขาไร่", "CVC เนินมะปราง", "CVC ทรัพย์ไพรวัลย์", "CVC เขาค้อ (ไฮแลนด์)", "CVC อุตรดิตถ์"],
+            "ภาคพันธกิจที่ 3": ["CVC บางระกำ", "CVC พรหมพิราม", "CVC บางกระทุ่ม", "CVC วังทอง", "CVC นครไทย", "CVC บ้านแยง", "CVC ชาติตระการ", "CVC วัดโบสถ์", "CVC ชุมชุนชาวแพ", "CVC โตกำแพง", "CVC เขาไร่", "CVC เนินมะปราง", "CVC ทรัพย์ไพรวัลย์", "CVC เขาค้อ (ไฮแลนด์)", "CVC อุตรดิตถ์"],
             "ภาคพันธกิจที่ 4": ["CVC นครแม่สอด", "CVC ห้วยกะโหลก", "CVC นครสวรรค์", "CVC ลาดยาว", "CVC อุทัยธานี", "CVC น้ำรอบ", "CVC ลานสัก", "CVC ชัยนาท", "CVC สุพรรณบุรี", "CVC พบพระ", "CVC อุ้มผาง", "CVC หนองบัว", "CVC วังน้ำขาว", "CVC บ้านหมี่", "CVC บางพล้อ", "CVC บรรพต", "CVC โกรกพระ", "CVC ตาคลี", "CVC ตากฟ้า", "CVC ชุมตาบง", "CVC แม่วงก์", "CVC แม่เปิน", "CVC อยุธยา", "CVC แม่ละมาด", "CVC อ.เมือง ตาก", "CVC ท่าสองยาง", "CVC สว่างอารมภ์", "CVC เมืองอุทัยธานี"],
             "ภาคพันธกิจที่ 5": ["CVC กำแพงเพชร", "CVC ขาณุวรลักษณ์", "CVC ไทรพัฒนา", "CVC เพชรบูรณ์", "CVC บ้านน้ำร้อน", "CVC สุโขทัย", "CVC กงไกรลาศ", "CVC พิจิตร", "CVC สามง่าม", "CVC บึงนารา", "CVC คลองขลุง", "CVC สากเหล็ก", "CVC เขาทราย", "CVC เข็กน้อย", "CVC วิเชียรบุรี", "CVC บ้านแม่ท่าแพ", "CVC บ้านห้วยหยวก", "CVC ห้วยมะนาว", "CVC สวรรคโลก", "CVC ไผ่ท่าโพธิ์", "CVC ห้วยแย้", "CVC โคราช", "CVC กลางหมื่น", "CVC ขอนแก่น", "CVC อุดรธานี", "CVC หนองคาย", "CVC กรุงเทพมหานคร", "CVC สมุทปราการ", "CVC กบินทร์บุรี (จ.ปราจีนบุรี)", "CVC ชลบุรี", "CVC เกาะสมุย (จ.สุราษฏร์ธานี)", "CVC มาบอำมฤต (จ.ชุมพร)", "CVC โป๊ะหมอ (หาดใหญ่)", "CVC ปราณบุรี (ประจวบคีรีขันธ์)", "CVC สเปน (บาเซโลน่า)", "CVC นอร์เวย์ ( ออสโล )", "CVC เบียล ( สวิตเซอร์แลนด์ )", "CVC บาเซิล ( สวิตเซอร์แลนด์ )", "CVC ธูน ( สวิตเซอร์แลนด์ )", "CVC นครหลวงเวียงจันทร์", "CVC หลัก 32 ( อุดมไซ ลาว )"]
         };
@@ -158,7 +160,7 @@
                 baseClass: "text-orange-600 border-orange-200 bg-orange-50 hover:bg-orange-100" 
             },
             { 
-                value: "ไม่ได้เข้าร่วม", label: "ไม่ได้เข้าร่วม", 
+                value: "ไม่ได้เข้าร่วม", label: "ไม่ได้เข้าร่วมโปรแกรม", 
                 activeClass: "peer-checked:bg-gray-500 peer-checked:border-gray-500 peer-checked:text-white peer-checked:shadow-md", 
                 baseClass: "text-gray-500 border-gray-200 bg-gray-50 hover:bg-gray-100" 
             }
@@ -186,6 +188,7 @@
                     ratingOptions.forEach(opt => {
                         html += `
                             <label class="block cursor-pointer">
+                                <!-- 🟢 ยังคงบังคับให้เลือกคะแนน (required) เหมือนเดิม -->
                                 <input type="radio" name="${q.id}" value="${opt.value}" class="peer hidden" required>
                                 <div class="text-center py-2.5 px-0.5 text-[11px] sm:text-[13px] font-medium rounded-xl border transition-all duration-200 h-full flex items-center justify-center break-words leading-tight ${opt.baseClass} ${opt.activeClass}">
                                     ${opt.label}
@@ -204,14 +207,12 @@
             container.innerHTML = html;
         }
 
-        // ==========================================
-        // ฟังก์ชันส่งข้อมูลเข้า Google Sheets
-        // ==========================================
         async function submitEvaluation() {
             const form = document.getElementById('evaluationForm');
             
+            // 🟢 ฟังก์ชันนี้จะเช็คเฉพาะตัวเลือกคะแนน (Radio) เพราะเราเอา required ออกจากช่องพิมพ์ชื่อแล้ว
             if (!form.checkValidity()) {
-                alert('⚠️ กรุณากรอกข้อมูลและเลือกคะแนนประเมินให้ครบทุกข้อครับ');
+                alert('⚠️ กรุณาเลือกคะแนนประเมินให้ครบทุกข้อครับ (ชื่อคริสตจักรไม่ต้องระบุก็ได้)');
                 form.reportValidity();
                 return;
             }
@@ -222,14 +223,14 @@
             btn.classList.add('opacity-50', 'cursor-not-allowed');
 
             let formData = {
-                action: "evaluate", // ระบุชื่อ action ให้ Google Sheets รู้
-                church: document.getElementById('churchName').value,
+                action: "evaluate", 
+                // 🟢 ถ้าผู้ใช้ไม่พิมพ์ชื่อ ระบบจะส่งคำว่า "ไม่ระบุ" เข้าไปใน Google Sheets แทนให้สวยๆ
+                church: document.getElementById('churchName').value || "ไม่ระบุ",
                 blessing: document.getElementById('blessing').value,
                 suggestion: document.getElementById('suggestion').value,
                 ratings: {}
             };
 
-            // กวาดคะแนนจากทุกข้อ
             surveyData.forEach(section => {
                 section.questions.forEach(q => {
                     const selected = document.querySelector(`input[name="${q.id}"]:checked`);
@@ -238,7 +239,6 @@
             });
 
             try {
-                // 🟢 แก้ไขตรงนี้: ส่งข้อมูลแบบ text/plain และ redirect: 'follow' เพื่อทะลุกำแพง CORS
                 const response = await fetch(scriptURL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -248,10 +248,9 @@
 
                 const result = await response.json();
 
-                // ดักจับ response ให้รองรับทั้ง status และ result เผื่อเหนียว
                 if (result.status === "success" || result.result === "success") {
                     alert('🎉 ขอบคุณสำหรับการประเมินครับ! ระบบได้บันทึกข้อมูลเรียบร้อยแล้ว');
-                    window.location.reload(); // รีเฟรชหน้าเว็บให้เป็นฟอร์มเปล่า
+                    window.location.reload(); 
                 } else {
                     alert('❌ เกิดข้อผิดพลาดในการบันทึก กรุณาลองใหม่อีกครั้ง');
                     btn.innerHTML = '🚀 ส่งแบบประเมิน';
